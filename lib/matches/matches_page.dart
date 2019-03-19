@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:predictions/drawer_menu.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
 import 'package:predictions/matches/matches_provider.dart';
 import 'package:predictions/matches/model/football_match.dart';
@@ -9,24 +10,33 @@ class MatchesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final matchesBloc = MatchesProvider.of(context);
 
-    return StreamBuilder<Map<String, Map<String, List<FootballMatch>>>>(
-      stream: matchesBloc.groupedMatches,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Map<String, List<FootballMatch>>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Matches"),
+        elevation: 0.0,
+      ),
+      drawer: DrawerMenu(),
+      body: StreamBuilder<Map<String, Map<String, List<FootballMatch>>>>(
+        stream: matchesBloc.groupedMatches,
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, Map<String, List<FootballMatch>>>>
+                snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-        if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
-        }
+          if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          }
 
-        return _buildMatchesList(snapshot.data);
-      },
+          return _buildMatchesList(snapshot.data);
+        },
+      ),
     );
   }
 
-  Widget _buildMatchesList(Map<String, Map<String, List<FootballMatch>>> matches) {
+  Widget _buildMatchesList(
+      Map<String, Map<String, List<FootballMatch>>> matches) {
     final nearestDateKey =
         getNearestDateKey(matches.keys.toList(), DateTime.now());
     final nearestDateIndex = matches.keys.toList().indexOf(nearestDateKey);

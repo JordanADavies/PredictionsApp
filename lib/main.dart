@@ -19,13 +19,7 @@ class PredictionsApp extends StatelessWidget {
     return MatchesProvider(
       child: MaterialApp(
         theme: theme,
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text(""),
-            elevation: 0.0,
-          ),
-          body: MatchesPage(),
-        ),
+        home: MatchesPage(),
       ),
     );
   }
