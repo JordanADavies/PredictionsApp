@@ -9,13 +9,16 @@ class PreviousMatchListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        _buildScoreRow(),
-        Text(
-            "${match.homeProjectedGoals} proj. ${match.awayProjectedGoals}"),
-        Text("${match.homeSpiRating} SPI ${match.awaySpiRating}"),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          _buildScoreRow(),
+          _buildProjectGoalsRow(),
+          _buildSpiRatingRow(),
+          _buildImportanceRow(),
+        ],
+      ),
     );
   }
 
@@ -34,6 +37,72 @@ class PreviousMatchListItem extends StatelessWidget {
         Expanded(
           child: Text(
             match.awayTeam,
+            textAlign: TextAlign.start,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProjectGoalsRow() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            "${match.homeProjectedGoals}",
+            textAlign: TextAlign.end,
+          ),
+        ),
+        SizedBox(width: 8.0),
+        Text("proj."),
+        SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            "${match.awayProjectedGoals}",
+            textAlign: TextAlign.start,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSpiRatingRow() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            "${match.homeSpiRating}",
+            textAlign: TextAlign.end,
+          ),
+        ),
+        SizedBox(width: 8.0),
+        Text("SPI"),
+        SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            "${match.awaySpiRating}",
+            textAlign: TextAlign.start,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImportanceRow() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            "${match.homeImportance}",
+            textAlign: TextAlign.end,
+          ),
+        ),
+        SizedBox(width: 8.0),
+        Text("imp."),
+        SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            "${match.awayImportance}",
             textAlign: TextAlign.start,
           ),
         ),

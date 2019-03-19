@@ -25,6 +25,7 @@ class PrematchCard extends StatelessWidget {
             children: <Widget>[
               _buildProjectedGoalsCard(),
               _buildRatingCard(),
+              _buildImportanceCard(),
               _buildProbabilityCard(),
             ],
           ),
@@ -73,6 +74,30 @@ class PrematchCard extends StatelessWidget {
           Expanded(
             child: Text(
               "${match.awaySpiRating}",
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImportanceCard() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              "${match.homeImportance}",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Text("imp."),
+          Expanded(
+            child: Text(
+              "${match.awayImportance}",
               textAlign: TextAlign.center,
             ),
           ),
