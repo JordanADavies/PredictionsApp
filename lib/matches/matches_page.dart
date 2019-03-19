@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
 import 'package:predictions/matches/matches_provider.dart';
-import 'package:predictions/matches/model/match.dart';
+import 'package:predictions/matches/model/football_match.dart';
 
 class MatchesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchesBloc = MatchesProvider.of(context);
 
-    return StreamBuilder<Map<String, Map<String, List<Match>>>>(
+    return StreamBuilder<Map<String, Map<String, List<FootballMatch>>>>(
       stream: matchesBloc.groupedMatches,
       builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Map<String, List<Match>>>> snapshot) {
+          AsyncSnapshot<Map<String, Map<String, List<FootballMatch>>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -26,7 +26,7 @@ class MatchesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMatchesList(Map<String, Map<String, List<Match>>> matches) {
+  Widget _buildMatchesList(Map<String, Map<String, List<FootballMatch>>> matches) {
     final nearestDateKey =
         getNearestDateKey(matches.keys.toList(), DateTime.now());
     final nearestDateIndex = matches.keys.toList().indexOf(nearestDateKey);
@@ -58,7 +58,7 @@ class MatchesPage extends StatelessWidget {
 
 class _MatchesDayList extends StatelessWidget {
   final String title;
-  final Map<String, List<Match>> matches;
+  final Map<String, List<FootballMatch>> matches;
 
   const _MatchesDayList({Key key, @required this.title, @required this.matches})
       : super(key: key);
@@ -100,7 +100,7 @@ class _MatchesDayList extends StatelessWidget {
 
 class _MatchesLeagueList extends StatelessWidget {
   final String leagueName;
-  final List<Match> matches;
+  final List<FootballMatch> matches;
 
   const _MatchesLeagueList(
       {Key key, @required this.leagueName, @required this.matches})
@@ -130,7 +130,7 @@ class _MatchesLeagueList extends StatelessWidget {
 }
 
 class _MatchListItem extends StatelessWidget {
-  final Match match;
+  final FootballMatch match;
 
   const _MatchListItem({Key key, @required this.match}) : super(key: key);
 

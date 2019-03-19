@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:predictions/matches/model/match.dart';
+import 'package:predictions/matches/model/football_match.dart';
 
 class PrematchCard extends StatelessWidget {
-  final Match match;
+  final FootballMatch match;
 
   const PrematchCard({Key key, @required this.match}) : super(key: key);
 

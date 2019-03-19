@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:csv/csv.dart';
 import 'package:http/http.dart';
-import 'package:predictions/matches/model/match.dart';
+import 'package:predictions/matches/model/football_match.dart';
 
 class MatchesApi {
   static const _url = "https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv";
 
-  Future<List<Match>> fetchMatches() async {
+  Future<List<FootballMatch>> fetchMatches() async {
     final response = await get(_url);
     final csvString = utf8.decode(response.bodyBytes);
 
@@ -17,7 +17,7 @@ class MatchesApi {
     return _parseMatches(result);
   }
 
-  Future<List<Match>> _parseMatches(List csvMatches) async {
-    return csvMatches.map((match) => Match.fromCsv(match)).toList();
+  Future<List<FootballMatch>> _parseMatches(List csvMatches) async {
+    return csvMatches.map((match) => FootballMatch.fromCsv(match)).toList();
   }
 }

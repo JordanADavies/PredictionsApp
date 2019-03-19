@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:predictions/matches/match_details/previous_matches/last5_home/last5_home_bloc.dart';
+import 'package:predictions/matches/match_details/previous_matches/previous_match_list_item.dart';
 import 'package:predictions/matches/matches_provider.dart';
-import 'package:predictions/matches/model/match.dart';
+import 'package:predictions/matches/model/football_match.dart';
 
 class Last5HomeCard extends StatefulWidget {
-  final Match match;
+  final FootballMatch match;
 
   const Last5HomeCard({Key key, @required this.match}) : super(key: key);
 
@@ -59,47 +60,18 @@ class _Last5HomeCardState extends State<Last5HomeCard> {
   }
 
   Widget _buildLast5Home() {
-    return StreamBuilder<List<Match>>(
+    return StreamBuilder<List<FootballMatch>>(
       stream: _last5Bloc.homeMatches,
-      builder: (BuildContext context, AsyncSnapshot<List<Match>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: snapshot.data.map(_buildLast5RowItem).toList(),
+          children: snapshot.data.map((m) => PreviousMatchListItem(match: m)).toList(),
         );
       },
-    );
-  }
-
-  Widget _buildLast5RowItem(Match match) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(
-            match.homeTeam,
-            textAlign: TextAlign.end,
-          ),
-        ),
-        SizedBox(width: 8.0),
-        Column(
-          children: <Widget>[
-            Text("${match.homeFinalScore}-${match.awayFinalScore}"),
-            Text(
-                "${match.homeProjectedGoals} proj. ${match.awayProjectedGoals}"),
-            Text("${match.homeSpiRating} SPI ${match.awaySpiRating}"),
-          ],
-        ),
-        SizedBox(width: 8.0),
-        Expanded(
-          child: Text(
-            match.awayTeam,
-            textAlign: TextAlign.start,
-          ),
-        ),
-      ],
     );
   }
 }

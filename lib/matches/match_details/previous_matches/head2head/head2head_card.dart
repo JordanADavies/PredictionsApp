@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:predictions/matches/match_details/previous_matches/head2head/head2head_bloc.dart';
 import 'package:predictions/matches/matches_provider.dart';
-import 'package:predictions/matches/model/match.dart';
+import 'package:predictions/matches/model/football_match.dart';
 
 class Head2HeadCard extends StatefulWidget {
-  final Match match;
+  final FootballMatch match;
 
   const Head2HeadCard({Key key, @required this.match}) : super(key: key);
 
@@ -55,9 +55,9 @@ class _Head2HeadCardState extends State<Head2HeadCard> {
   }
 
   Widget _buildHead2Head() {
-    return StreamBuilder<List<Match>>(
+    return StreamBuilder<List<FootballMatch>>(
       stream: _head2HeadBloc.head2HeadMatches,
-      builder: (BuildContext context, AsyncSnapshot<List<Match>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -70,7 +70,7 @@ class _Head2HeadCardState extends State<Head2HeadCard> {
     );
   }
 
-  Widget _buildHead2HeadRowItem(Match match) {
+  Widget _buildHead2HeadRowItem(FootballMatch match) {
     return Row(
       children: <Widget>[
         Expanded(

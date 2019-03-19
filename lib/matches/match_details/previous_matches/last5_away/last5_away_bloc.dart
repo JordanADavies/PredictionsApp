@@ -2,25 +2,25 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:predictions/matches/matches_bloc.dart';
-import 'package:predictions/matches/model/match.dart';
+import 'package:predictions/matches/model/football_match.dart';
 
 class Last5AwayBloc {
   final MatchesBloc matchesBloc;
-  final Match match;
+  final FootballMatch match;
 
-  StreamController<List<Match>> _awayMatches = StreamController();
+  StreamController<List<FootballMatch>> _awayMatches = StreamController();
 
   Last5AwayBloc({@required this.matchesBloc, @required this.match}) {
     matchesBloc.allMatches.listen(_fetchLast5Matches);
   }
 
-  Stream<List<Match>> get awayMatches => _awayMatches.stream;
+  Stream<List<FootballMatch>> get awayMatches => _awayMatches.stream;
 
   void dispose() {
     _awayMatches.close();
   }
 
-  void _fetchLast5Matches(List<Match> allMatches) {
+  void _fetchLast5Matches(List<FootballMatch> allMatches) {
     final awayMatches = allMatches
         .where((m) => m.awayTeam == match.awayTeam && m.hasBeenPlayed())
         .toList();

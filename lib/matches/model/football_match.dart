@@ -1,4 +1,4 @@
-class Match {
+class FootballMatch {
   final String date;
   final int leagueId;
   final String league;
@@ -22,8 +22,8 @@ class Match {
   final double homeAdjustedScore;
   final double awayAdjustedScore;
 
-  factory Match.fromCsv(List match) {
-    return Match._(
+  factory FootballMatch.fromCsv(List match) {
+    return FootballMatch._(
       match[0],
       match[1],
       match[2],
@@ -49,7 +49,7 @@ class Match {
     );
   }
 
-  Match._(
+  FootballMatch._(
       this.date,
       this.leagueId,
       this.league,
