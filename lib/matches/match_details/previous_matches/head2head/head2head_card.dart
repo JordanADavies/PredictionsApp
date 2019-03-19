@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:predictions/matches/match_details/previous_matches/head2head/head2head_bloc.dart';
+import 'package:predictions/matches/match_details/previous_matches/previous_match_list_item.dart';
 import 'package:predictions/matches/matches_provider.dart';
 import 'package:predictions/matches/model/football_match.dart';
 
@@ -57,45 +58,19 @@ class _Head2HeadCardState extends State<Head2HeadCard> {
   Widget _buildHead2Head() {
     return StreamBuilder<List<FootballMatch>>(
       stream: _head2HeadBloc.head2HeadMatches,
-      builder: (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: snapshot.data.map(_buildHead2HeadRowItem).toList(),
+          children: snapshot.data
+              .map((m) => PreviousMatchListItem(match: m))
+              .toList(),
         );
       },
-    );
-  }
-
-  Widget _buildHead2HeadRowItem(FootballMatch match) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(
-            match.homeTeam,
-            textAlign: TextAlign.end,
-          ),
-        ),
-        SizedBox(width: 8.0),
-        Column(
-          children: <Widget>[
-            Text("${match.homeFinalScore}-${match.awayFinalScore}"),
-            Text(
-                "${match.homeProjectedGoals} proj. ${match.awayProjectedGoals}"),
-            Text("${match.homeSpiRating} SPI ${match.awaySpiRating}"),
-          ],
-        ),
-        SizedBox(width: 8.0),
-        Expanded(
-          child: Text(
-            match.awayTeam,
-            textAlign: TextAlign.start,
-          ),
-        ),
-      ],
     );
   }
 }

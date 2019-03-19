@@ -4,10 +4,22 @@ import 'package:predictions/matches/model/football_match.dart';
 class PreviousMatchListItem extends StatelessWidget {
   final FootballMatch match;
 
-  const PreviousMatchListItem({Key key, @required this.match}) : super(key: key);
+  const PreviousMatchListItem({Key key, @required this.match})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        _buildScoreRow(),
+        Text(
+            "${match.homeProjectedGoals} proj. ${match.awayProjectedGoals}"),
+        Text("${match.homeSpiRating} SPI ${match.awaySpiRating}"),
+      ],
+    );
+  }
+
+  Widget _buildScoreRow() {
     return Row(
       children: <Widget>[
         Expanded(
@@ -17,14 +29,7 @@ class PreviousMatchListItem extends StatelessWidget {
           ),
         ),
         SizedBox(width: 8.0),
-        Column(
-          children: <Widget>[
-            Text("${match.homeFinalScore}-${match.awayFinalScore}"),
-            Text(
-                "${match.homeProjectedGoals} proj. ${match.awayProjectedGoals}"),
-            Text("${match.homeSpiRating} SPI ${match.awaySpiRating}"),
-          ],
-        ),
+        Text("${match.homeFinalScore}-${match.awayFinalScore}"),
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
