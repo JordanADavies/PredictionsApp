@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:predictions/matches/match_details/last5/last5_bloc.dart';
+import 'package:predictions/matches/match_details/previous_matches/last5/last5_bloc.dart';
 import 'package:predictions/matches/matches_provider.dart';
 import 'package:predictions/matches/model/match.dart';
 
@@ -44,14 +44,16 @@ class _Last5CardState extends State<Last5Card> {
             style: Theme.of(context).textTheme.subtitle,
           ),
         ),
-        Material(
-          type: MaterialType.card,
-          child: Column(
-            children: <Widget>[
-              _buildLast5Home(),
-              SizedBox(height: 12.0),
-              _buildLast5Away(),
-            ],
+        Expanded(
+          child: Material(
+            type: MaterialType.card,
+            child: ListView(
+              children: <Widget>[
+                _buildLast5Home(),
+                SizedBox(height: 12.0),
+                _buildLast5Away(),
+              ],
+            ),
           ),
         )
       ],

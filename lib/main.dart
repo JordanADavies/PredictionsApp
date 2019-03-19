@@ -21,7 +21,7 @@ class PredictionsApp extends StatelessWidget {
         theme: theme,
         home: Scaffold(
           appBar: AppBar(
-            title: Text("Matches"),
+            title: Text(""),
             elevation: 0.0,
           ),
           body: MatchesPage(),
