@@ -155,7 +155,7 @@ class PredictionTrackingBloc {
       return false;
     }
 
-    return match.homeProjectedGoals < 1 || match.awayProjectedGoals < 1;
+    return match.homeProjectedGoals < 0.5 || match.awayProjectedGoals < 0.5;
   }
 
   bool _bttsNoPredictedCorrectly(FootballMatch match) {
