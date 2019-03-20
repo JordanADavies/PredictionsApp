@@ -21,9 +21,9 @@ class Head2HeadBloc {
   }
 
   void _fetchHead2HeadMatches(List<FootballMatch> allMatches) {
-    final head2HeadMatches = allMatches.where((m) => m.hasBeenPlayed() &&
+    final head2HeadMatches = allMatches.where((m) => m != match && m.hasBeenPlayed() &&
         ((m.homeTeam == match.homeTeam && m.awayTeam == match.awayTeam) ||
-        (m.homeTeam == match.awayTeam && m.awayTeam == match.homeTeam)));
+        (m.homeTeam == match.awayTeam && m.awayTeam == match.homeTeam))).toList();
     _head2HeadMatches.add(head2HeadMatches.toList().reversed.toList());
   }
 }

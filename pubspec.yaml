@@ -25,6 +25,7 @@ dependencies:
   http: any
   intl: any
   rxdart: any
+  quiver: any
 
 dev_dependencies:
   flutter_test:

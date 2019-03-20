@@ -22,7 +22,7 @@ class Last5AwayBloc {
 
   void _fetchLast5Matches(List<FootballMatch> allMatches) {
     final awayMatches = allMatches
-        .where((m) => m.awayTeam == match.awayTeam && m.hasBeenPlayed())
+        .where((m) => m != match && m.awayTeam == match.awayTeam && m.hasBeenPlayed())
         .toList();
     final sortedAwayMatches = awayMatches.length > 5
         ? awayMatches.sublist(awayMatches.length - 5).reversed.toList()

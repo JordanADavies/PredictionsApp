@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:intl/intl.dart';
 import 'package:predictions/data/api/matches_api.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:rxdart/subjects.dart';
@@ -16,18 +15,10 @@ class MatchesBloc {
   Future _loadMatches() async {
     final api = MatchesApi();
     final matches = await api.fetchMatches();
-    final thisYearsMatches = matches.where(_matchWasPlayedThisYear).toList();
-    allMatches.add(thisYearsMatches);
+    allMatches.add(matches);
 
-    final grouped = _groupMatches(thisYearsMatches);
+    final grouped = _groupMatches(matches);
     groupedMatches.add(grouped);
-  }
-
-  bool _matchWasPlayedThisYear(FootballMatch match) {
-    final formatter = DateFormat("yyyy-MM-dd");
-    final date = formatter.parse(match.date);
-
-    return date.year == 2019 || (date.year == 2018 && date.month > 8);
   }
 
   Map<String, Map<String, List<FootballMatch>>> _groupMatches(List<FootballMatch> matches) {

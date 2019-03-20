@@ -1,3 +1,5 @@
+import 'package:quiver/core.dart';
+
 class FootballMatch {
   final String date;
   final int leagueId;
@@ -76,4 +78,18 @@ class FootballMatch {
   bool hasBeenPlayed() {
     return homeFinalScore != null && awayFinalScore != null;
   }
+
+  @override
+  bool operator ==(other) {
+    return other is FootballMatch &&
+        date == other.date &&
+        homeTeam == other.homeTeam &&
+        awayTeam == other.awayTeam;
+  }
+
+  @override
+  int get hashCode => hash3(date, homeTeam, awayTeam);
+
+  @override
+  String toString() => "$date, $homeTeam vs $awayTeam";
 }
