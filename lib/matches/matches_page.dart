@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/drawer_menu.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
-import 'package:predictions/data/matches_provider.dart';
-import 'package:predictions/prediction_tracking/prediction_tracking_page.dart';
 
 class MatchesPage extends StatelessWidget {
   @override
@@ -13,14 +12,6 @@ class MatchesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Matches"),
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.filter),
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => PredictionTrackingPage()));
-              })
-        ],
       ),
       drawer: DrawerMenu(),
       body: _buildMatchesPage(context),
