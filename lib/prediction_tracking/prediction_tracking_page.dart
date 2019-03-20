@@ -12,7 +12,6 @@ class PredictionTrackingPage extends StatefulWidget {
 
 class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
   PredictionTrackingBloc trackingBloc;
-  String filterType = FilterType.WinLoseDraw;
 
   @override
   void didChangeDependencies() {
@@ -29,44 +28,15 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
         elevation: 0.0,
       ),
       drawer: DrawerMenu(),
-      body: Column(
-        children: <Widget>[
-          _buildFilter(),
-          Expanded(child: _buildPredictionTrackingPage(context)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilter() {
-    final filters = FilterType.values;
-    return Wrap(
-      spacing: 8.0,
-      children: filters.map(_buildFilterChip).toList(),
-    );
-  }
-
-  Widget _buildFilterChip(String filter) {
-    return ChoiceChip(
-      selected: filterType == filter,
-      label: Text(filter),
-      onSelected: (bool selected) {
-        if (selected) {
-          trackingBloc.trackingType.add(filter);
-        }
-
-        setState(() {
-          filterType = selected ? filter : null;
-        });
-      },
+      body: _buildPredictionTrackingPage(context),
     );
   }
 
   Widget _buildPredictionTrackingPage(BuildContext context) {
-    return StreamBuilder<List<FootballMatch>>(
+    return StreamBuilder<PredictionTracking>(
       stream: trackingBloc.trackedMatches,
       builder:
-          (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
+          (BuildContext context, AsyncSnapshot<PredictionTracking> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -75,30 +45,27 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
           children: <Widget>[
             Expanded(
               child: ListView(
-                children:
-                    snapshot.data.map((m) => _MatchListItem(match: m)).toList(),
+                key: PageStorageKey("Predictions"),
+                children: snapshot.data.matches
+                    .map((m) => _MatchListItem(
+                          match: m,
+                          correctlyPredicted: snapshot
+                              .data.correctlyPredictedMatches
+                              .contains(m),
+                        ))
+                    .toList(),
               ),
             ),
-            _buildTrackingTotals(),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "${snapshot.data.percentageCorrect.toStringAsFixed(2)}% correct",
+                  style: Theme.of(context).textTheme.subhead,
+                ),
+              ),
+            ),
           ],
-        );
-      },
-    );
-  }
-
-  Widget _buildTrackingTotals() {
-    return StreamBuilder<String>(
-      stream: trackingBloc.trackedTotals,
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        final text = snapshot.connectionState == ConnectionState.waiting
-            ? "..."
-            : snapshot.data;
-
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(text, style: Theme.of(context).textTheme.subhead),
-          ),
         );
       },
     );
@@ -107,13 +74,17 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
 
 class _MatchListItem extends StatelessWidget {
   final FootballMatch match;
+  final bool correctlyPredicted;
 
-  const _MatchListItem({Key key, @required this.match}) : super(key: key);
+  const _MatchListItem(
+      {Key key, @required this.match, @required this.correctlyPredicted})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).backgroundColor,
+      color:
+          correctlyPredicted ? Colors.green : Theme.of(context).backgroundColor,
       child: ListTile(
         title: Text("${match.homeTeam} vs ${match.awayTeam}"),
         trailing: _buildTrailing(),
