@@ -57,12 +57,18 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
 
   Widget _buildTrackingTotals() {
     return StreamBuilder<String>(
+      stream: trackingBloc.trackedTotals,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("...");
-        }
+        final text = snapshot.connectionState == ConnectionState.waiting
+            ? "..."
+            : snapshot.data;
 
-        return Text(snapshot.data);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(text, style: Theme.of(context).textTheme.subhead),
+          ),
+        );
       },
     );
   }
