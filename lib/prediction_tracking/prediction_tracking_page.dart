@@ -61,6 +61,7 @@ class _MatchListItem extends StatelessWidget {
       color: Theme.of(context).backgroundColor,
       child: ListTile(
         title: Text("${match.homeTeam} vs ${match.awayTeam}"),
+        subtitle: Text(match.date),
         trailing: _buildTrailing(),
         onTap: () => _showMatchDetails(context),
       ),
