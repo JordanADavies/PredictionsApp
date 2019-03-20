@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/drawer_menu.dart';
+import 'package:predictions/matches/match_details/match_details_page.dart';
 import 'package:predictions/prediction_tracking/prediction_tracking_bloc.dart';
 
 class PredictionTrackingPage extends StatefulWidget {
@@ -11,6 +12,7 @@ class PredictionTrackingPage extends StatefulWidget {
 
 class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
   PredictionTrackingBloc trackingBloc;
+  String filterType = FilterType.WinLoseDraw;
 
   @override
   void didChangeDependencies() {
@@ -27,7 +29,36 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
         elevation: 0.0,
       ),
       drawer: DrawerMenu(),
-      body: _buildPredictionTrackingPage(context),
+      body: Column(
+        children: <Widget>[
+          _buildFilter(),
+          Expanded(child: _buildPredictionTrackingPage(context)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilter() {
+    final filters = FilterType.values;
+    return Wrap(
+      spacing: 8.0,
+      children: filters.map(_buildFilterChip).toList(),
+    );
+  }
+
+  Widget _buildFilterChip(String filter) {
+    return ChoiceChip(
+      selected: filterType == filter,
+      label: Text(filter),
+      onSelected: (bool selected) {
+        if (selected) {
+          trackingBloc.trackingType.add(filter);
+        }
+
+        setState(() {
+          filterType = selected ? filter : null;
+        });
+      },
     );
   }
 
@@ -86,6 +117,7 @@ class _MatchListItem extends StatelessWidget {
       child: ListTile(
         title: Text("${match.homeTeam} vs ${match.awayTeam}"),
         trailing: _buildTrailing(),
+        onTap: () => _showMatchDetails(context),
       ),
     );
   }
@@ -94,5 +126,14 @@ class _MatchListItem extends StatelessWidget {
     return match.hasBeenPlayed()
         ? Text("${match.homeFinalScore}-${match.awayFinalScore}")
         : SizedBox();
+  }
+
+  void _showMatchDetails(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => MatchDetailsPage(match: match),
+      ),
+    );
   }
 }
