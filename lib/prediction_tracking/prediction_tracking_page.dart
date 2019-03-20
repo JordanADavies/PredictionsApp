@@ -17,7 +17,7 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final matchesBloc = MatchesProvider.of(context);
-    trackingBloc = PredictionTrackingBloc(matchesBloc: matchesBloc);
+    trackingBloc ??= PredictionTrackingBloc(matchesBloc: matchesBloc);
   }
 
   @override
@@ -33,39 +33,17 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
   }
 
   Widget _buildPredictionTrackingPage(BuildContext context) {
-    return StreamBuilder<PredictionTracking>(
+    return StreamBuilder<List<FootballMatch>>(
       stream: trackingBloc.trackedMatches,
       builder:
-          (BuildContext context, AsyncSnapshot<PredictionTracking> snapshot) {
+          (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView(
-                key: PageStorageKey("Predictions"),
-                children: snapshot.data.matches
-                    .map((m) => _MatchListItem(
-                          match: m,
-                          correctlyPredicted: snapshot
-                              .data.correctlyPredictedMatches
-                              .contains(m),
-                        ))
-                    .toList(),
-              ),
-            ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "${snapshot.data.percentageCorrect.toStringAsFixed(2)}% correct",
-                  style: Theme.of(context).textTheme.subhead,
-                ),
-              ),
-            ),
-          ],
+        return ListView(
+          key: PageStorageKey("Predictions"),
+          children: snapshot.data.map((m) => _MatchListItem(match: m)).toList(),
         );
       },
     );
@@ -74,17 +52,13 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
 
 class _MatchListItem extends StatelessWidget {
   final FootballMatch match;
-  final bool correctlyPredicted;
 
-  const _MatchListItem(
-      {Key key, @required this.match, @required this.correctlyPredicted})
-      : super(key: key);
+  const _MatchListItem({Key key, @required this.match}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color:
-          correctlyPredicted ? Colors.green : Theme.of(context).backgroundColor,
+      color: Theme.of(context).backgroundColor,
       child: ListTile(
         title: Text("${match.homeTeam} vs ${match.awayTeam}"),
         trailing: _buildTrailing(),
