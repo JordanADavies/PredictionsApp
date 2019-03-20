@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:predictions/matches/model/football_match.dart';
+import 'package:predictions/data/model/football_match.dart';
 
 class PostmatchCard extends StatelessWidget {
   final FootballMatch match;

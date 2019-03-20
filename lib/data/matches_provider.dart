@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:predictions/matches/matches_bloc.dart';
+import 'package:predictions/data/matches_bloc.dart';
 
 class MatchesProvider extends InheritedWidget {
   final MatchesBloc matchesBloc;

@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/drawer_menu.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
-import 'package:predictions/matches/matches_provider.dart';
-import 'package:predictions/matches/model/football_match.dart';
+import 'package:predictions/data/matches_provider.dart';
 
 class MatchesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final matchesBloc = MatchesProvider.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Matches"),
         elevation: 0.0,
       ),
       drawer: DrawerMenu(),
-      body: StreamBuilder<Map<String, Map<String, List<FootballMatch>>>>(
-        stream: matchesBloc.groupedMatches,
-        builder: (BuildContext context,
-            AsyncSnapshot<Map<String, Map<String, List<FootballMatch>>>>
-                snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+      body: _buildMatchesPage(context),
+    );
+  }
 
-          if (snapshot.hasError) {
-            return Center(child: Text("${snapshot.error}"));
-          }
+  Widget _buildMatchesPage(BuildContext context) {
+    final matchesBloc = MatchesProvider.of(context);
+    return StreamBuilder<Map<String, Map<String, List<FootballMatch>>>>(
+      stream: matchesBloc.groupedMatches,
+      initialData: matchesBloc.groupedMatches.value,
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Map<String, List<FootballMatch>>>>
+              snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-          return _buildMatchesList(snapshot.data);
-        },
-      ),
+        if (snapshot.hasError) {
+          return Center(child: Text("${snapshot.error}"));
+        }
+
+        return _buildMatchesList(snapshot.data);
+      },
     );
   }
 

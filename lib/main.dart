@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:predictions/matches/matches_page.dart';
-import 'package:predictions/matches/matches_provider.dart';
+import 'package:predictions/data/matches_provider.dart';
 
 void main() => runApp(PredictionsApp());
 

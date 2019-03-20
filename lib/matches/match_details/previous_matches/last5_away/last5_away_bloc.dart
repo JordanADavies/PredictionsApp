@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:predictions/matches/matches_bloc.dart';
-import 'package:predictions/matches/model/football_match.dart';
+import 'package:predictions/data/matches_bloc.dart';
+import 'package:predictions/data/model/football_match.dart';
 
 class Last5AwayBloc {
   final MatchesBloc matchesBloc;

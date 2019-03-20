@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/match_details/previous_matches/last5_away/last5_away_bloc.dart';
 import 'package:predictions/matches/match_details/previous_matches/previous_match_list_item.dart';
-import 'package:predictions/matches/matches_provider.dart';
-import 'package:predictions/matches/model/football_match.dart';
+import 'package:predictions/data/matches_provider.dart';
 
 class Last5AwayCard extends StatefulWidget {
   final FootballMatch match;

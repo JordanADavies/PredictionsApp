@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:predictions/main.dart';
+import 'package:predictions/matches/matches_page.dart';
+import 'package:predictions/prediction_tracking/prediction_tracking_page.dart';
 
 class DrawerMenu extends StatelessWidget {
   @override
@@ -22,14 +23,14 @@ class DrawerMenu extends StatelessWidget {
             title: Text("Matches"),
             onTap: () {
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => PredictionsApp()));
+                  MaterialPageRoute(builder: (context) => MatchesPage()));
             },
           ),
           ListTile(
-            title: Text('Testing'),
+            title: Text("Prediction tracking"),
             onTap: () {
-              // Update the state of the app
-              // ...
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => PredictionTrackingPage()));
             },
           ),
         ],

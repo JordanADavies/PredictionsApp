@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/match_details/postmatch_card.dart';
 import 'package:predictions/matches/match_details/prematch_card.dart';
 import 'package:predictions/matches/match_details/previous_matches/previous_matches_card.dart';
-import 'package:predictions/matches/model/football_match.dart';
 
 class MatchDetailsPage extends StatelessWidget {
   final FootballMatch match;

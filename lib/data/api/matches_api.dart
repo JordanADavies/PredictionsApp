@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:csv/csv.dart';
 import 'package:http/http.dart';
-import 'package:predictions/matches/model/football_match.dart';
+import 'package:predictions/data/model/football_match.dart';
 
 class MatchesApi {
   static const _url = "https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv";
