@@ -14,6 +14,7 @@ class PreviousMatchListItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _buildScoreRow(),
+          _buildExpectedGoalsRow(),
           _buildProjectGoalsRow(),
           _buildSpiRatingRow(),
           _buildImportanceRow(),
@@ -37,6 +38,32 @@ class PreviousMatchListItem extends StatelessWidget {
         Expanded(
           child: Text(
             match.awayTeam,
+            textAlign: TextAlign.start,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpectedGoalsRow() {
+    if (match.homeExpectedGoals == null || match.awayExpectedGoals == null) {
+      return SizedBox();
+    }
+
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            "${match.homeExpectedGoals}",
+            textAlign: TextAlign.end,
+          ),
+        ),
+        SizedBox(width: 8.0),
+        Text("xG"),
+        SizedBox(width: 8.0),
+        Expanded(
+          child: Text(
+            "${match.awayExpectedGoals}",
             textAlign: TextAlign.start,
           ),
         ),
