@@ -42,39 +42,75 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
         return Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                key: PageStorageKey("Predictions"),
-                children: predictionTracking.upcomingMatches
-                    .map((m) => _MatchListItem(
-                          match: m,
-                          correctlyPredicted: predictionTracking
-                              .predictedCorrectlyMatches
-                              .contains(m),
-                        ))
-                    .toList(),
-              ),
+              child: _buildPredictionResults(predictionTracking),
             ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      "${predictionTracking.percentageCorrect.toStringAsFixed(2)}% correctly predicted.",
-                      style: Theme.of(context).textTheme.subhead,
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      predictionTracking.summary,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _buildPredictionSummary(predictionTracking),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildPredictionResults(PredictionTracking predictionTracking) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: <Widget>[
+          Container(
+            color: Theme.of(context).secondaryHeaderColor,
+            child: TabBar(
+              tabs: [
+                Tab(text: "Complete"),
+                Tab(text: "Upcoming"),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                ListView(
+                  key: PageStorageKey("CompletedPredictions"),
+                  children: predictionTracking.predictedMatches
+                      .map((m) => _MatchListItem(
+                            match: m,
+                            correctlyPredicted: predictionTracking
+                                .predictedCorrectlyMatches
+                                .contains(m),
+                          ))
+                      .toList(),
+                ),
+                ListView(
+                  key: PageStorageKey("UpcomingPredictions"),
+                  children: predictionTracking.upcomingMatches
+                      .map((m) => _MatchListItem(match: m))
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPredictionSummary(PredictionTracking predictionTracking) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              "${predictionTracking.percentageCorrect.toStringAsFixed(2)}% correctly predicted.",
+              style: Theme.of(context).textTheme.subhead,
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              predictionTracking.summary,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -84,7 +120,7 @@ class _MatchListItem extends StatelessWidget {
   final bool correctlyPredicted;
 
   const _MatchListItem(
-      {Key key, @required this.match, @required this.correctlyPredicted})
+      {Key key, @required this.match, this.correctlyPredicted = false})
       : super(key: key);
 
   @override
