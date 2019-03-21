@@ -8,11 +8,7 @@ class DrawerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the Drawer if there isn't enough vertical
-      // space to fit everything.
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
@@ -38,6 +34,24 @@ class DrawerMenu extends StatelessWidget {
                       Under3PredictionTrackingBloc(matchesBloc: matchesBloc);
                   return PredictionTrackingPage(
                     title: "U2.5 Predictions",
+                    predictionBloc: predictionBloc,
+                  );
+                },
+              );
+              Navigator.of(context).pushReplacement(pageRoute);
+            },
+          ),
+          ListTile(
+            title: Text("BTTS No Predictions"),
+            onTap: () {
+              final pageRoute = MaterialPageRoute(
+                builder: (context) {
+                  final matchesBloc = MatchesProvider.of(context);
+                  final predictionBloc =
+                      BothTeamToScoreNoPredictionTrackingBloc(
+                          matchesBloc: matchesBloc);
+                  return PredictionTrackingPage(
+                    title: "BTTS No Predictions",
                     predictionBloc: predictionBloc,
                   );
                 },

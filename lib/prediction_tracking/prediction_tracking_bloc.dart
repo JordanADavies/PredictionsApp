@@ -41,28 +41,75 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   }
 
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
-    final predictedMatches =
-        allMatches.where((m) => m.homeProjectedGoals + m.awayProjectedGoals < 2).toList();
-
-    final predictedCorrectlyMatches = predictedMatches
-        .where(
-            (m) => m.hasBeenPlayed() && m.homeFinalScore + m.awayFinalScore < 3)
+    final predictedCompletedMatches = allMatches
+        .where((m) => m.hasBeenPlayed() && _under2GoalsExpected(m))
+        .toList();
+    final predictedCorrectlyCompletedMatches = predictedCompletedMatches
+        .where((m) => m.homeFinalScore + m.awayFinalScore < 3)
         .toList();
 
-    final upcomingPredictedMatches =
-        predictedMatches.where((m) => !m.hasBeenPlayed()).toList();
+    final upcomingPredictedMatches = allMatches
+        .where((m) => !m.hasBeenPlayed() && _under2GoalsExpected(m))
+        .toList();
 
-    final percentageCorrect =
-        predictedCorrectlyMatches.length / predictedMatches.length * 100;
+    final percentageCorrect = predictedCorrectlyCompletedMatches.length /
+        predictedCompletedMatches.length *
+        100;
     final summary =
-        "${predictedCorrectlyMatches.length} correct out of ${predictedMatches.length} that match this prediction method.";
+        "${predictedCorrectlyCompletedMatches.length} correct out of ${predictedCompletedMatches.length} that match this prediction method.";
 
     return PredictionTracking(
       upcomingMatches: upcomingPredictedMatches,
-      predictedMatches: predictedMatches,
-      predictedCorrectlyMatches: predictedCorrectlyMatches,
+      predictedMatches: predictedCompletedMatches,
+      predictedCorrectlyMatches: predictedCorrectlyCompletedMatches,
       percentageCorrect: percentageCorrect,
       summary: summary,
     );
+  }
+
+  static bool _under2GoalsExpected(FootballMatch match) {
+    return match.homeProjectedGoals + match.awayProjectedGoals < 2;
+  }
+}
+
+class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
+  BothTeamToScoreNoPredictionTrackingBloc({MatchesBloc matchesBloc}) {
+    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+  }
+
+  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
+    final predictionTracking = await compute(_performPrediction, allMatches);
+    _predictionTracking.add(predictionTracking);
+  }
+
+  static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
+    final predictedCompletedMatches = allMatches
+        .where((m) => m.hasBeenPlayed() && _bothTeamsProjectToNotScore(m))
+        .toList();
+    final predictedCorrectlyCompletedMatches = predictedCompletedMatches
+        .where((m) => m.homeFinalScore < 1 || m.awayFinalScore < 1)
+        .toList();
+
+    final upcomingPredictedMatches = allMatches
+        .where((m) => !m.hasBeenPlayed() && _bothTeamsProjectToNotScore(m))
+        .toList();
+
+    final percentageCorrect = predictedCorrectlyCompletedMatches.length /
+        predictedCompletedMatches.length *
+        100;
+    final summary =
+        "${predictedCorrectlyCompletedMatches.length} correct out of ${predictedCompletedMatches.length} that match this prediction method.";
+
+    return PredictionTracking(
+      upcomingMatches: upcomingPredictedMatches,
+      predictedMatches: predictedCompletedMatches,
+      predictedCorrectlyMatches: predictedCorrectlyCompletedMatches,
+      percentageCorrect: percentageCorrect,
+      summary: summary,
+    );
+  }
+
+  static bool _bothTeamsProjectToNotScore(FootballMatch match) {
+    return match.homeProjectedGoals < 0.4 || match.awayProjectedGoals < 0.4;
   }
 }
