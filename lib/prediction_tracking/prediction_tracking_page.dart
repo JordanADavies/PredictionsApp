@@ -44,7 +44,7 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
             Expanded(
               child: ListView(
                 key: PageStorageKey("Predictions"),
-                children: predictionTracking.predictedMatches
+                children: predictionTracking.upcomingMatches
                     .map((m) => _MatchListItem(
                           match: m,
                           correctlyPredicted: predictionTracking
