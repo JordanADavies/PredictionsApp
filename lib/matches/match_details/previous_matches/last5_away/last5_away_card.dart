@@ -48,11 +48,7 @@ class _Last5AwayCardState extends State<Last5AwayCard> {
         Expanded(
           child: Material(
             type: MaterialType.card,
-            child: ListView(
-              children: <Widget>[
-                _buildLast5Away(),
-              ],
-            ),
+            child: _buildLast5Away(),
           ),
         )
       ],
@@ -68,8 +64,7 @@ class _Last5AwayCardState extends State<Last5AwayCard> {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        return ListView(
           children: snapshot.data
               .map((m) => PreviousMatchListItem(match: m))
               .toList(),

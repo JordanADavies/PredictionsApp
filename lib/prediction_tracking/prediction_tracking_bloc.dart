@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/prediction_tracking/match_finder.dart';
 
 class PredictionTracking {
   final List<FootballMatch> upcomingMatches;
@@ -11,12 +12,11 @@ class PredictionTracking {
   final double percentageCorrect;
   final String summary;
 
-  PredictionTracking(
-      {this.upcomingMatches,
-      this.predictedMatches,
-      this.predictedCorrectlyMatches,
-      this.percentageCorrect,
-      this.summary});
+  PredictionTracking({this.upcomingMatches,
+    this.predictedMatches,
+    this.predictedCorrectlyMatches,
+    this.percentageCorrect,
+    this.summary});
 }
 
 abstract class PredictionTrackingBloc {
@@ -41,22 +41,27 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   }
 
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
+    final matchFinder = MatchFinder(allMatches: allMatches);
+
     final predictedCompletedMatches = allMatches
-        .where((m) => m.hasBeenPlayed() && _under2GoalsExpected(m))
+        .where((m) => m.hasBeenPlayed() && _under2GoalsExpected(m, matchFinder))
         .toList();
     final predictedCorrectlyCompletedMatches = predictedCompletedMatches
         .where((m) => m.homeFinalScore + m.awayFinalScore < 3)
         .toList();
 
     final upcomingPredictedMatches = allMatches
-        .where((m) => !m.hasBeenPlayed() && _under2GoalsExpected(m))
+        .where(
+            (m) => !m.hasBeenPlayed() && _under2GoalsExpected(m, matchFinder))
         .toList();
 
     final percentageCorrect = predictedCorrectlyCompletedMatches.length /
         predictedCompletedMatches.length *
         100;
     final summary =
-        "${predictedCorrectlyCompletedMatches.length} correct out of ${predictedCompletedMatches.length} that match this prediction method.";
+        "${predictedCorrectlyCompletedMatches
+        .length} correct out of ${predictedCompletedMatches
+        .length} that match this prediction method.";
 
     return PredictionTracking(
       upcomingMatches: upcomingPredictedMatches,
@@ -67,8 +72,24 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
     );
   }
 
-  static bool _under2GoalsExpected(FootballMatch match) {
-    return match.homeProjectedGoals + match.awayProjectedGoals < 2;
+  static bool _under2GoalsExpected(FootballMatch match, MatchFinder finder) {
+    if (match.homeProjectedGoals + match.awayProjectedGoals > 2) {
+      return false;
+    }
+
+    final foundHomeMatches = finder.findLastHomeMatchesForHomeTeam(1, match);
+    if (foundHomeMatches.isEmpty || foundHomeMatches.last.homeFinalScore +
+        foundHomeMatches.last.awayFinalScore > 2) {
+      return false;
+    }
+
+    final foundAwayMatches = finder.findLastAwayMatchesForAwayTeam(1, match);
+    if (foundAwayMatches.isEmpty || foundAwayMatches.last.homeFinalScore +
+        foundAwayMatches.last.awayFinalScore > 2) {
+      return false;
+    }
+
+    return true;
   }
 }
 
@@ -98,7 +119,9 @@ class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
         predictedCompletedMatches.length *
         100;
     final summary =
-        "${predictedCorrectlyCompletedMatches.length} correct out of ${predictedCompletedMatches.length} that match this prediction method.";
+        "${predictedCorrectlyCompletedMatches
+        .length} correct out of ${predictedCompletedMatches
+        .length} that match this prediction method.";
 
     return PredictionTracking(
       upcomingMatches: upcomingPredictedMatches,

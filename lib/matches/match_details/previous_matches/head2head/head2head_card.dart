@@ -64,8 +64,7 @@ class _Head2HeadCardState extends State<Head2HeadCard> {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        return ListView(
           children: snapshot.data
               .map((m) => PreviousMatchListItem(match: m))
               .toList(),

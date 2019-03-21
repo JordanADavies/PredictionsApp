@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/prediction_tracking/match_finder.dart';
 
 class Head2HeadBloc {
   final MatchesBloc matchesBloc;
@@ -21,9 +22,9 @@ class Head2HeadBloc {
   }
 
   void _fetchHead2HeadMatches(List<FootballMatch> allMatches) {
-    final head2HeadMatches = allMatches.where((m) => m != match && m.hasBeenPlayed() &&
-        ((m.homeTeam == match.homeTeam && m.awayTeam == match.awayTeam) ||
-        (m.homeTeam == match.awayTeam && m.awayTeam == match.homeTeam))).toList();
-    _head2HeadMatches.add(head2HeadMatches.toList().reversed.toList());
+    final finder = MatchFinder(allMatches: allMatches);
+    final head2HeadMatches =
+        finder.findLastHead2HeadMatches(match).reversed.toList();
+    _head2HeadMatches.add(head2HeadMatches);
   }
 }

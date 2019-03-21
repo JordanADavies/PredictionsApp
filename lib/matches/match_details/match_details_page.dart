@@ -33,37 +33,49 @@ class MatchDetailsPage extends StatelessWidget {
       width: double.infinity,
       color: Theme.of(context).secondaryHeaderColor,
       padding: EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Column(
         children: <Widget>[
-          Expanded(
-            child: Text(
-              match.homeTeam,
-              textAlign: TextAlign.end,
-              style: Theme.of(context)
-                  .textTheme
-                  .subhead
-                  .copyWith(color: Colors.white),
-            ),
-          ),
-          SizedBox(width: 8.0),
           Text(
-            "vs",
+            match.date,
             style: Theme.of(context)
                 .textTheme
                 .subhead
-                .copyWith(color: Colors.white),
+                .copyWith(color: Colors.white70),
           ),
-          SizedBox(width: 8.0),
-          Expanded(
-            child: Text(
-              match.awayTeam,
-              textAlign: TextAlign.start,
-              style: Theme.of(context)
-                  .textTheme
-                  .subhead
-                  .copyWith(color: Colors.white),
-            ),
+          SizedBox(height: 8.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  match.homeTeam,
+                  textAlign: TextAlign.end,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subhead
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+              SizedBox(width: 8.0),
+              Text(
+                "vs",
+                style: Theme.of(context)
+                    .textTheme
+                    .subhead
+                    .copyWith(color: Colors.white),
+              ),
+              SizedBox(width: 8.0),
+              Expanded(
+                child: Text(
+                  match.awayTeam,
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subhead
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+            ],
           ),
         ],
       ),

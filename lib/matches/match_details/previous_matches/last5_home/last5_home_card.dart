@@ -48,11 +48,7 @@ class _Last5HomeCardState extends State<Last5HomeCard> {
         Expanded(
           child: Material(
             type: MaterialType.card,
-            child: ListView(
-              children: <Widget>[
-                _buildLast5Home(),
-              ],
-            ),
+            child: _buildLast5Home(),
           ),
         )
       ],
@@ -62,14 +58,16 @@ class _Last5HomeCardState extends State<Last5HomeCard> {
   Widget _buildLast5Home() {
     return StreamBuilder<List<FootballMatch>>(
       stream: _last5Bloc.homeMatches,
-      builder: (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: snapshot.data.map((m) => PreviousMatchListItem(match: m)).toList(),
+        return ListView(
+          children: snapshot.data
+              .map((m) => PreviousMatchListItem(match: m))
+              .toList(),
         );
       },
     );

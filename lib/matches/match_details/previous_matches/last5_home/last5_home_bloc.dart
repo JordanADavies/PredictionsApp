@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/prediction_tracking/match_finder.dart';
 
 class Last5HomeBloc {
   final MatchesBloc matchesBloc;
@@ -21,12 +22,9 @@ class Last5HomeBloc {
   }
 
   void _fetchLast5Matches(List<FootballMatch> allMatches) {
-    final homeMatches = allMatches
-        .where((m) => m != match && m.homeTeam == match.homeTeam && m.hasBeenPlayed())
-        .toList();
-    final sortedHomeMatches = homeMatches.length > 5
-        ? homeMatches.sublist(homeMatches.length - 5).reversed.toList()
-        : homeMatches;
-    _homeMatches.add(sortedHomeMatches);
+    final matchFinder = MatchFinder(allMatches: allMatches);
+    final homeMatches =
+        matchFinder.findLastHomeMatchesForHomeTeam(5, match).reversed.toList();
+    _homeMatches.add(homeMatches);
   }
 }
