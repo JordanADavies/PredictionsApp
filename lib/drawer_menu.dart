@@ -26,6 +26,7 @@ class DrawerMenu extends StatelessWidget {
           ),
           _buildWinLoseDrawListItem(context),
           _buildU3ListItem(context),
+          _buildO2ListItem(context),
           _buildBttsNoListItem(context),
         ],
       ),
@@ -63,6 +64,26 @@ class DrawerMenu extends StatelessWidget {
                 Under3PredictionTrackingBloc(matchesBloc: matchesBloc);
             return PredictionTrackingPage(
               title: "U2.5 Predictions",
+              predictionBloc: predictionBloc,
+            );
+          },
+        );
+        Navigator.of(context).pushReplacement(pageRoute);
+      },
+    );
+  }
+
+  Widget _buildO2ListItem(BuildContext context) {
+    return ListTile(
+      title: Text("O2.5 Predictions"),
+      onTap: () {
+        final pageRoute = MaterialPageRoute(
+          builder: (context) {
+            final matchesBloc = MatchesProvider.of(context);
+            final predictionBloc =
+                Over2PredictionTrackingBloc(matchesBloc: matchesBloc);
+            return PredictionTrackingPage(
+              title: "O2.5 Predictions",
               predictionBloc: predictionBloc,
             );
           },

@@ -130,6 +130,51 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   }
 }
 
+class Over2PredictionTrackingBloc extends PredictionTrackingBloc {
+  Over2PredictionTrackingBloc({MatchesBloc matchesBloc}) {
+    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+  }
+
+  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
+    final predictionTracking = await compute(_performPrediction, allMatches);
+    _predictionTracking.add(predictionTracking);
+  }
+
+  static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
+    final matchFinder = MatchFinder(allMatches: allMatches);
+
+    final predictedCompletedMatches = allMatches.reversed
+        .where((m) => m.hasFinalScore() && _over3GoalsExpected(m, matchFinder))
+        .toList();
+    final predictedCorrectlyCompletedMatches = predictedCompletedMatches
+        .where((m) => m.homeFinalScore + m.awayFinalScore > 2)
+        .toList();
+
+    final upcomingPredictedMatches = allMatches
+        .where(
+            (m) => !m.isBeforeToday() && _over3GoalsExpected(m, matchFinder))
+        .toList();
+
+    final percentageCorrect = predictedCorrectlyCompletedMatches.length /
+        predictedCompletedMatches.length *
+        100;
+    final summary =
+        "${predictedCorrectlyCompletedMatches.length} correct out of ${predictedCompletedMatches.length} that match this prediction method.";
+
+    return PredictionTracking(
+      upcomingMatches: upcomingPredictedMatches,
+      predictedMatches: predictedCompletedMatches,
+      predictedCorrectlyMatches: predictedCorrectlyCompletedMatches,
+      percentageCorrect: percentageCorrect,
+      summary: summary,
+    );
+  }
+
+  static bool _over3GoalsExpected(FootballMatch match, MatchFinder finder) {
+    return match.homeProjectedGoals + match.awayProjectedGoals > 3;
+  }
+}
+
 class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
   BothTeamToScoreNoPredictionTrackingBloc({MatchesBloc matchesBloc}) {
     matchesBloc.allMatches.listen(_fetchTrackedMatches);
