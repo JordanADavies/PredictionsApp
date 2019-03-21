@@ -4,14 +4,30 @@ import 'package:flutter/foundation.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
 
+class PredictionTracking {
+  final List<FootballMatch> upcomingMatches;
+  final List<FootballMatch> predictedMatches;
+  final List<FootballMatch> predictedCorrectlyMatches;
+  final double percentageCorrect;
+  final String summary;
+
+  PredictionTracking(
+      {this.upcomingMatches,
+      this.predictedMatches,
+      this.predictedCorrectlyMatches,
+      this.percentageCorrect,
+      this.summary});
+}
+
 abstract class PredictionTrackingBloc {
-  StreamController<List<FootballMatch>> _upcomingMatches = StreamController();
+  StreamController<PredictionTracking> _predictionTracking = StreamController();
 
   void dispose() {
-    _upcomingMatches.close();
+    _predictionTracking.close();
   }
 
-  Stream<List<FootballMatch>> get upcomingMatches => _upcomingMatches.stream;
+  Stream<PredictionTracking> get predictionTracking =>
+      _predictionTracking.stream;
 }
 
 class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
@@ -20,15 +36,35 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   }
 
   Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
-    final predictionMatchedMatches = await compute(_filterList, allMatches);
-    _upcomingMatches.add(predictionMatchedMatches);
+    final predictionTracking = await compute(_performPrediction, allMatches);
+    _predictionTracking.add(predictionTracking);
   }
 
-  static List<FootballMatch> _filterList(List<FootballMatch> allMatches) {
+  static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
     final finishedMatches = allMatches.where((m) => m.hasBeenPlayed()).toList();
-    return allMatches
-        .where((m) => !m.hasBeenPlayed() && _under2Predicted(m, finishedMatches))
+    final predictedMatches =
+        allMatches.where((m) => _under2Predicted(m, finishedMatches)).toList();
+
+    final predictedCorrectlyMatches = predictedMatches
+        .where(
+            (m) => m.hasBeenPlayed() && m.homeFinalScore + m.awayFinalScore < 3)
         .toList();
+
+    final upcomingPredictedMatches =
+        predictedMatches.where((m) => !m.hasBeenPlayed()).toList();
+
+    final percentageCorrect =
+        predictedCorrectlyMatches.length / predictedMatches.length * 100;
+    final summary =
+        "${predictedCorrectlyMatches.length} correct out of ${predictedMatches.length} that match this prediction method.";
+
+    return PredictionTracking(
+      upcomingMatches: upcomingPredictedMatches,
+      predictedMatches: predictedMatches,
+      predictedCorrectlyMatches: predictedCorrectlyMatches,
+      percentageCorrect: percentageCorrect,
+      summary: summary,
+    );
   }
 
   static bool _under2Predicted(

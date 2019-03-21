@@ -30,17 +30,40 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
   }
 
   Widget _buildPredictionTrackingPage(BuildContext context) {
-    return StreamBuilder<List<FootballMatch>>(
-      stream: widget.predictionBloc.upcomingMatches,
+    return StreamBuilder<PredictionTracking>(
+      stream: widget.predictionBloc.predictionTracking,
       builder:
-          (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
+          (BuildContext context, AsyncSnapshot<PredictionTracking> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
 
-        return ListView(
-          key: PageStorageKey("Predictions"),
-          children: snapshot.data.map((m) => _MatchListItem(match: m)).toList(),
+        final predictionTracking = snapshot.data;
+        return Column(
+          children: <Widget>[
+            Expanded(
+              child: ListView(
+                key: PageStorageKey("Predictions"),
+                children: predictionTracking.predictedMatches
+                    .map((m) => _MatchListItem(
+                          match: m,
+                          correctlyPredicted: predictionTracking
+                              .predictedCorrectlyMatches
+                              .contains(m),
+                        ))
+                    .toList(),
+              ),
+            ),
+            SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                      "${predictionTracking.percentageCorrect}% correctly predicted."),
+                  Text(predictionTracking.summary),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
@@ -49,13 +72,17 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
 
 class _MatchListItem extends StatelessWidget {
   final FootballMatch match;
+  final bool correctlyPredicted;
 
-  const _MatchListItem({Key key, @required this.match}) : super(key: key);
+  const _MatchListItem(
+      {Key key, @required this.match, @required this.correctlyPredicted})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).backgroundColor,
+      color:
+          correctlyPredicted ? Colors.green : Theme.of(context).backgroundColor,
       child: ListTile(
         title: Text("${match.homeTeam} vs ${match.awayTeam}"),
         subtitle: Text(match.date),
