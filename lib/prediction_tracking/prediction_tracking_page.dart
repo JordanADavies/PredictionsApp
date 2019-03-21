@@ -60,9 +60,14 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                        "${predictionTracking.percentageCorrect.toStringAsFixed(2)}% correctly predicted."),
+                      "${predictionTracking.percentageCorrect.toStringAsFixed(2)}% correctly predicted.",
+                      style: Theme.of(context).textTheme.subhead,
+                    ),
                     SizedBox(height: 8.0),
-                    Text(predictionTracking.summary),
+                    Text(
+                      predictionTracking.summary,
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),

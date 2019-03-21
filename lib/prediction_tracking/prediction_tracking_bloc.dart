@@ -73,23 +73,7 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   }
 
   static bool _under2GoalsExpected(FootballMatch match, MatchFinder finder) {
-    if (match.homeProjectedGoals + match.awayProjectedGoals > 2) {
-      return false;
-    }
-
-    final foundHomeMatches = finder.findLastHomeMatchesForHomeTeam(1, match);
-    if (foundHomeMatches.isEmpty || foundHomeMatches.last.homeFinalScore +
-        foundHomeMatches.last.awayFinalScore > 2) {
-      return false;
-    }
-
-    final foundAwayMatches = finder.findLastAwayMatchesForAwayTeam(1, match);
-    if (foundAwayMatches.isEmpty || foundAwayMatches.last.homeFinalScore +
-        foundAwayMatches.last.awayFinalScore > 2) {
-      return false;
-    }
-
-    return true;
+    return match.homeProjectedGoals + match.awayProjectedGoals < 2;
   }
 }
 
