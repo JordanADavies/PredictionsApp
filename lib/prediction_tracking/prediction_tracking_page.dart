@@ -56,11 +56,12 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
             ),
             SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   children: <Widget>[
                     Text(
                         "${predictionTracking.percentageCorrect.toStringAsFixed(2)}% correctly predicted."),
+                    SizedBox(height: 8.0),
                     Text(predictionTracking.summary),
                   ],
                 ),
