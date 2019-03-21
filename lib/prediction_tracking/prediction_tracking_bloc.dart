@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
@@ -19,12 +20,12 @@ class PredictionTrackingBloc {
     _trackedMatches.close();
   }
 
-  void _fetchTrackedMatches(List<FootballMatch> allMatches) {
-    final predictionMatchedMatches = _filterList(allMatches);
+  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
+    final predictionMatchedMatches = await compute(_filterList, allMatches);
     _trackedMatches.add(predictionMatchedMatches);
   }
 
-  List<FootballMatch> _filterList(
+  static List<FootballMatch> _filterList(
       List<FootballMatch> allMatches) {
     final filteredList = List<FootballMatch>();
     for (int i = 0; i < allMatches.length; i++) {
@@ -38,7 +39,7 @@ class PredictionTrackingBloc {
     return filteredList;
   }
 
-  bool _under2Predicted(
+  static bool _under2Predicted(
       FootballMatch match, List<FootballMatch> allMatches) {
     final homeTeamsLastMatchGoals =
         _findGoalsInLastMatchForHomeTeam(match: match, allMatches: allMatches);
@@ -50,7 +51,7 @@ class PredictionTrackingBloc {
         awayTeamsLastMatchGoals < 2;
   }
 
-  int _findGoalsInLastMatchForHomeTeam(
+  static int _findGoalsInLastMatchForHomeTeam(
       {FootballMatch match, List<FootballMatch> allMatches}) {
     final lastMatches = allMatches
         .where((m) =>
@@ -64,7 +65,7 @@ class PredictionTrackingBloc {
     return lastMatches.last.homeFinalScore + lastMatches.last.awayFinalScore;
   }
 
-  int _findGoalsInLastMatchForAwayTeam(
+  static int _findGoalsInLastMatchForAwayTeam(
       {FootballMatch match, List<FootballMatch> allMatches}) {
     final lastMatches = allMatches
         .where((m) =>
