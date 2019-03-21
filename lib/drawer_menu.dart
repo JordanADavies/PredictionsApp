@@ -24,10 +24,31 @@ class DrawerMenu extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => MatchesPage()));
             },
           ),
+          _buildWinLoseDrawListItem(context),
           _buildU3ListItem(context),
           _buildBttsNoListItem(context),
         ],
       ),
+    );
+  }
+
+  Widget _buildWinLoseDrawListItem(BuildContext context) {
+    return ListTile(
+      title: Text("1X2 Predictions"),
+      onTap: () {
+        final pageRoute = MaterialPageRoute(
+          builder: (context) {
+            final matchesBloc = MatchesProvider.of(context);
+            final predictionBloc =
+                WinLoseDrawPredictionTrackingBloc(matchesBloc: matchesBloc);
+            return PredictionTrackingPage(
+              title: "1X2 Predictions",
+              predictionBloc: predictionBloc,
+            );
+          },
+        );
+        Navigator.of(context).pushReplacement(pageRoute);
+      },
     );
   }
 
