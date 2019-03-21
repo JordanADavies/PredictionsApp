@@ -75,8 +75,27 @@ class FootballMatch {
       this.homeAdjustedScore,
       this.awayAdjustedScore);
 
-  bool hasBeenPlayed() {
+  bool hasFinalScore() {
     return homeFinalScore != null && awayFinalScore != null;
+  }
+
+  bool isBeforeToday() {
+    final today = DateTime.now();
+    final dateStringSplit = date.split("-");
+
+    if (double.parse(dateStringSplit[0]) != today.year) {
+      return double.parse(dateStringSplit[0]) < today.year;
+    }
+
+    if (double.parse(dateStringSplit[1]) != today.month) {
+      return double.parse(dateStringSplit[1]) < today.month;
+    }
+
+    if (double.parse(dateStringSplit[2]) != today.day) {
+      return double.parse(dateStringSplit[2]) < today.day;
+    }
+
+    return false;
   }
 
   @override

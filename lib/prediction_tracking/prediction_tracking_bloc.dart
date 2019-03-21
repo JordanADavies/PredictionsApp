@@ -43,12 +43,12 @@ class WinLoseDrawPredictionTrackingBloc extends PredictionTrackingBloc {
 
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
     final predictedCompletedMatches =
-        allMatches.reversed.where((m) => m.hasBeenPlayed()).toList();
+        allMatches.reversed.where((m) => m.hasFinalScore()).toList();
     final predictedCorrectlyCompletedMatches =
         predictedCompletedMatches.where(_predictedResultCorrectly).toList();
 
     final upcomingPredictedMatches =
-        allMatches.where((m) => !m.hasBeenPlayed()).toList();
+        allMatches.where((m) => !m.isBeforeToday()).toList();
 
     final percentageCorrect = predictedCorrectlyCompletedMatches.length /
         predictedCompletedMatches.length *
@@ -99,7 +99,7 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
     final matchFinder = MatchFinder(allMatches: allMatches);
 
     final predictedCompletedMatches = allMatches.reversed
-        .where((m) => m.hasBeenPlayed() && _under2GoalsExpected(m, matchFinder))
+        .where((m) => m.hasFinalScore() && _under2GoalsExpected(m, matchFinder))
         .toList();
     final predictedCorrectlyCompletedMatches = predictedCompletedMatches
         .where((m) => m.homeFinalScore + m.awayFinalScore < 3)
@@ -107,7 +107,7 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
 
     final upcomingPredictedMatches = allMatches
         .where(
-            (m) => !m.hasBeenPlayed() && _under2GoalsExpected(m, matchFinder))
+            (m) => !m.isBeforeToday() && _under2GoalsExpected(m, matchFinder))
         .toList();
 
     final percentageCorrect = predictedCorrectlyCompletedMatches.length /
@@ -142,14 +142,14 @@ class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
 
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
     final predictedCompletedMatches = allMatches.reversed
-        .where((m) => m.hasBeenPlayed() && _bothTeamsProjectToNotScore(m))
+        .where((m) => m.hasFinalScore() && _bothTeamsProjectToNotScore(m))
         .toList();
     final predictedCorrectlyCompletedMatches = predictedCompletedMatches
         .where((m) => m.homeFinalScore < 1 || m.awayFinalScore < 1)
         .toList();
 
     final upcomingPredictedMatches = allMatches
-        .where((m) => !m.hasBeenPlayed() && _bothTeamsProjectToNotScore(m))
+        .where((m) => !m.isBeforeToday() && _bothTeamsProjectToNotScore(m))
         .toList();
 
     final percentageCorrect = predictedCorrectlyCompletedMatches.length /

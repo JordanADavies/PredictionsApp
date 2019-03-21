@@ -8,7 +8,7 @@ class PostmatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!match.hasBeenPlayed()) {
+    if (!match.hasFinalScore()) {
       return SizedBox();
     }
 

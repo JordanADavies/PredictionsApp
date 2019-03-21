@@ -161,7 +161,7 @@ class _MatchListItem extends StatelessWidget {
   }
 
   Widget _buildTrailing() {
-    return match.hasBeenPlayed()
+    return match.hasFinalScore()
         ? Text("${match.homeFinalScore}-${match.awayFinalScore}")
         : SizedBox();
   }

@@ -14,7 +14,10 @@ class MatchFinder {
     final previousMatches = allMatches.sublist(0, sublistEnd);
 
     final foundMatches = previousMatches
-        .where((m) => m.homeTeam == match.homeTeam && m.hasBeenPlayed())
+        .where((m) =>
+            m.homeTeam == match.homeTeam &&
+            m.hasFinalScore() &&
+            m.isBeforeToday())
         .toList();
     return foundMatches.length > n
         ? foundMatches.sublist(foundMatches.length - n)
@@ -29,7 +32,10 @@ class MatchFinder {
     final previousMatches = allMatches.sublist(0, sublistEnd);
 
     final foundMatches = previousMatches
-        .where((m) => m.awayTeam == match.awayTeam && m.hasBeenPlayed())
+        .where((m) =>
+            m.awayTeam == match.awayTeam &&
+            m.hasFinalScore() &&
+            m.isBeforeToday())
         .toList();
     return foundMatches.length > n
         ? foundMatches.sublist(foundMatches.length - n)
@@ -45,7 +51,8 @@ class MatchFinder {
     final foundMatches = previousMatches
         .where((m) =>
             (m.homeTeam == match.homeTeam || m.awayTeam == match.homeTeam) &&
-            m.hasBeenPlayed())
+            m.hasFinalScore() &&
+            m.isBeforeToday())
         .toList();
     return foundMatches.length > n
         ? foundMatches.sublist(foundMatches.length - n)
@@ -61,7 +68,8 @@ class MatchFinder {
     final foundMatches = previousMatches
         .where((m) =>
             (m.homeTeam == match.awayTeam || m.awayTeam == match.awayTeam) &&
-            m.hasBeenPlayed())
+            m.hasFinalScore() &&
+            m.isBeforeToday())
         .toList();
     return foundMatches.length > n
         ? foundMatches.sublist(foundMatches.length - n)
@@ -78,7 +86,8 @@ class MatchFinder {
         .where((m) =>
             m.homeTeam == match.homeTeam &&
             m.awayTeam == match.awayTeam &&
-            m.hasBeenPlayed())
+            m.hasFinalScore() &&
+            m.isBeforeToday())
         .toList();
     return foundMatches;
   }
