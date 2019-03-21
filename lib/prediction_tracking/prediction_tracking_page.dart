@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/drawer_menu.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
 import 'package:predictions/prediction_tracking/prediction_tracking_bloc.dart';
 
 class PredictionTrackingPage extends StatefulWidget {
+  final String title;
+  final PredictionTrackingBloc predictionBloc;
+
+  const PredictionTrackingPage(
+      {Key key, @required this.title, @required this.predictionBloc})
+      : super(key: key);
+
   @override
   _PredictionTrackingPageState createState() => _PredictionTrackingPageState();
 }
 
 class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
-  PredictionTrackingBloc trackingBloc;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final matchesBloc = MatchesProvider.of(context);
-    trackingBloc ??= PredictionTrackingBloc(matchesBloc: matchesBloc);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Prediction tracking"),
+        title: Text(widget.title),
         elevation: 0.0,
       ),
       drawer: DrawerMenu(),
@@ -34,7 +31,7 @@ class _PredictionTrackingPageState extends State<PredictionTrackingPage> {
 
   Widget _buildPredictionTrackingPage(BuildContext context) {
     return StreamBuilder<List<FootballMatch>>(
-      stream: trackingBloc.trackedMatches,
+      stream: widget.predictionBloc.upcomingMatches,
       builder:
           (BuildContext context, AsyncSnapshot<List<FootballMatch>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

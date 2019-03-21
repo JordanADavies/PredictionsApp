@@ -1,50 +1,42 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
 
-class PredictionTrackingBloc {
-  final MatchesBloc matchesBloc;
-
-  StreamController<List<FootballMatch>> _trackedMatches = StreamController();
-
-  PredictionTrackingBloc({@required this.matchesBloc}) {
-    matchesBloc.allMatches.listen(_fetchTrackedMatches);
-  }
-
-  Stream<List<FootballMatch>> get trackedMatches => _trackedMatches.stream;
+abstract class PredictionTrackingBloc {
+  StreamController<List<FootballMatch>> _upcomingMatches = StreamController();
 
   void dispose() {
-    _trackedMatches.close();
+    _upcomingMatches.close();
+  }
+
+  Stream<List<FootballMatch>> get upcomingMatches => _upcomingMatches.stream;
+}
+
+class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
+  Under3PredictionTrackingBloc({MatchesBloc matchesBloc}) {
+    matchesBloc.allMatches.listen(_fetchTrackedMatches);
   }
 
   Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
     final predictionMatchedMatches = await compute(_filterList, allMatches);
-    _trackedMatches.add(predictionMatchedMatches);
+    _upcomingMatches.add(predictionMatchedMatches);
   }
 
-  static List<FootballMatch> _filterList(
-      List<FootballMatch> allMatches) {
-    final filteredList = List<FootballMatch>();
-    for (int i = 0; i < allMatches.length; i++) {
-      final match = allMatches[i];
-      if (!match.hasBeenPlayed() &&
-          _under2Predicted(match, allMatches)) {
-        filteredList.add(match);
-      }
-    }
-
-    return filteredList;
+  static List<FootballMatch> _filterList(List<FootballMatch> allMatches) {
+    final finishedMatches = allMatches.where((m) => m.hasBeenPlayed()).toList();
+    return allMatches
+        .where((m) => !m.hasBeenPlayed() && _under2Predicted(m, finishedMatches))
+        .toList();
   }
 
   static bool _under2Predicted(
-      FootballMatch match, List<FootballMatch> allMatches) {
-    final homeTeamsLastMatchGoals =
-        _findGoalsInLastMatchForHomeTeam(match: match, allMatches: allMatches);
-    final awayTeamsLastMatchGoals =
-        _findGoalsInLastMatchForAwayTeam(match: match, allMatches: allMatches);
+      FootballMatch match, List<FootballMatch> finishedMatches) {
+    final homeTeamsLastMatchGoals = _findGoalsInLastMatchForHomeTeam(
+        match: match, finishedMatches: finishedMatches);
+    final awayTeamsLastMatchGoals = _findGoalsInLastMatchForAwayTeam(
+        match: match, finishedMatches: finishedMatches);
 
     return match.homeProjectedGoals + match.awayProjectedGoals < 2 &&
         homeTeamsLastMatchGoals < 2 &&
@@ -52,30 +44,24 @@ class PredictionTrackingBloc {
   }
 
   static int _findGoalsInLastMatchForHomeTeam(
-      {FootballMatch match, List<FootballMatch> allMatches}) {
-    final lastMatches = allMatches
-        .where((m) =>
-            m != match && m.hasBeenPlayed() && m.homeTeam == match.homeTeam)
-        .toList();
+      {FootballMatch match, List<FootballMatch> finishedMatches}) {
+    final lastMatch = finishedMatches.lastWhere(
+        (m) => m.homeTeam == match.homeTeam && m != match,
+        orElse: () => null);
 
-    if (lastMatches.isEmpty) {
-      return 99;
-    }
-
-    return lastMatches.last.homeFinalScore + lastMatches.last.awayFinalScore;
+    return lastMatch == null
+        ? 99
+        : lastMatch.homeFinalScore + lastMatch.awayFinalScore;
   }
 
   static int _findGoalsInLastMatchForAwayTeam(
-      {FootballMatch match, List<FootballMatch> allMatches}) {
-    final lastMatches = allMatches
-        .where((m) =>
-            m != match && m.hasBeenPlayed() && m.awayTeam == match.awayTeam)
-        .toList();
+      {FootballMatch match, List<FootballMatch> finishedMatches}) {
+    final lastMatch = finishedMatches.lastWhere(
+        (m) => m.awayTeam == match.awayTeam && m != match,
+        orElse: () => null);
 
-    if (lastMatches.isEmpty) {
-      return 99;
-    }
-
-    return lastMatches.last.homeFinalScore + lastMatches.last.awayFinalScore;
+    return lastMatch == null
+        ? 99
+        : lastMatch.homeFinalScore + lastMatch.awayFinalScore;
   }
 }

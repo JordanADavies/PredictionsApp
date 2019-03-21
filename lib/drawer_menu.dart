@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/matches/matches_page.dart';
+import 'package:predictions/prediction_tracking/prediction_tracking_bloc.dart';
 import 'package:predictions/prediction_tracking/prediction_tracking_page.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -27,10 +29,20 @@ class DrawerMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text("Prediction tracking"),
+            title: Text("U2.5 Predictions"),
             onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => PredictionTrackingPage()));
+              final pageRoute = MaterialPageRoute(
+                builder: (context) {
+                  final matchesBloc = MatchesProvider.of(context);
+                  final predictionBloc =
+                      Under3PredictionTrackingBloc(matchesBloc: matchesBloc);
+                  return PredictionTrackingPage(
+                    title: "U2.5 Predictions",
+                    predictionBloc: predictionBloc,
+                  );
+                },
+              );
+              Navigator.of(context).pushReplacement(pageRoute);
             },
           ),
         ],
