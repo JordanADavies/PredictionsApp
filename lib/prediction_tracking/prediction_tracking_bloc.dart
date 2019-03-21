@@ -43,12 +43,12 @@ class WinLoseDrawPredictionTrackingBloc extends PredictionTrackingBloc {
 
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
     final predictedCompletedMatches =
-    allMatches.where((m) => m.hasBeenPlayed()).toList();
+        allMatches.reversed.where((m) => m.hasBeenPlayed()).toList();
     final predictedCorrectlyCompletedMatches =
-    predictedCompletedMatches.where(_predictedResultCorrectly).toList();
+        predictedCompletedMatches.where(_predictedResultCorrectly).toList();
 
     final upcomingPredictedMatches =
-    allMatches.where((m) => !m.hasBeenPlayed()).toList();
+        allMatches.where((m) => !m.hasBeenPlayed()).toList();
 
     final percentageCorrect = predictedCorrectlyCompletedMatches.length /
         predictedCompletedMatches.length *
@@ -98,7 +98,7 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
     final matchFinder = MatchFinder(allMatches: allMatches);
 
-    final predictedCompletedMatches = allMatches
+    final predictedCompletedMatches = allMatches.reversed
         .where((m) => m.hasBeenPlayed() && _under2GoalsExpected(m, matchFinder))
         .toList();
     final predictedCorrectlyCompletedMatches = predictedCompletedMatches
@@ -141,7 +141,7 @@ class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
   }
 
   static PredictionTracking _performPrediction(List<FootballMatch> allMatches) {
-    final predictedCompletedMatches = allMatches
+    final predictedCompletedMatches = allMatches.reversed
         .where((m) => m.hasBeenPlayed() && _bothTeamsProjectToNotScore(m))
         .toList();
     final predictedCorrectlyCompletedMatches = predictedCompletedMatches
