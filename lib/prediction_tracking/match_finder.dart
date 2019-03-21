@@ -36,6 +36,38 @@ class MatchFinder {
         : foundMatches;
   }
 
+  List<FootballMatch> findLastMatchesForHomeTeam(int n, FootballMatch match) {
+    final currentMatchIndex = allMatches.indexOf(match);
+    final sublistEnd =
+        currentMatchIndex > 0 ? currentMatchIndex - 1 : currentMatchIndex;
+    final previousMatches = allMatches.sublist(0, sublistEnd);
+
+    final foundMatches = previousMatches
+        .where((m) =>
+            (m.homeTeam == match.homeTeam || m.awayTeam == match.homeTeam) &&
+            m.hasBeenPlayed())
+        .toList();
+    return foundMatches.length > n
+        ? foundMatches.sublist(foundMatches.length - n)
+        : foundMatches;
+  }
+
+  List<FootballMatch> findLastMatchesForAwayTeam(int n, FootballMatch match) {
+    final currentMatchIndex = allMatches.indexOf(match);
+    final sublistEnd =
+        currentMatchIndex > 0 ? currentMatchIndex - 1 : currentMatchIndex;
+    final previousMatches = allMatches.sublist(0, sublistEnd);
+
+    final foundMatches = previousMatches
+        .where((m) =>
+            (m.homeTeam == match.awayTeam || m.awayTeam == match.awayTeam) &&
+            m.hasBeenPlayed())
+        .toList();
+    return foundMatches.length > n
+        ? foundMatches.sublist(foundMatches.length - n)
+        : foundMatches;
+  }
+
   List<FootballMatch> findLastHead2HeadMatches(FootballMatch match) {
     final currentMatchIndex = allMatches.indexOf(match);
     final sublistEnd =
