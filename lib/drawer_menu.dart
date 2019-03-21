@@ -24,43 +24,50 @@ class DrawerMenu extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => MatchesPage()));
             },
           ),
-          ListTile(
-            title: Text("U2.5 Predictions"),
-            onTap: () {
-              final pageRoute = MaterialPageRoute(
-                builder: (context) {
-                  final matchesBloc = MatchesProvider.of(context);
-                  final predictionBloc =
-                      Under3PredictionTrackingBloc(matchesBloc: matchesBloc);
-                  return PredictionTrackingPage(
-                    title: "U2.5 Predictions",
-                    predictionBloc: predictionBloc,
-                  );
-                },
-              );
-              Navigator.of(context).pushReplacement(pageRoute);
-            },
-          ),
-          ListTile(
-            title: Text("BTTS No Predictions"),
-            onTap: () {
-              final pageRoute = MaterialPageRoute(
-                builder: (context) {
-                  final matchesBloc = MatchesProvider.of(context);
-                  final predictionBloc =
-                      BothTeamToScoreNoPredictionTrackingBloc(
-                          matchesBloc: matchesBloc);
-                  return PredictionTrackingPage(
-                    title: "BTTS No Predictions",
-                    predictionBloc: predictionBloc,
-                  );
-                },
-              );
-              Navigator.of(context).pushReplacement(pageRoute);
-            },
-          ),
+          _buildU3ListItem(context),
+          _buildBttsNoListItem(context),
         ],
       ),
+    );
+  }
+
+  Widget _buildU3ListItem(BuildContext context) {
+    return ListTile(
+      title: Text("U2.5 Predictions"),
+      onTap: () {
+        final pageRoute = MaterialPageRoute(
+          builder: (context) {
+            final matchesBloc = MatchesProvider.of(context);
+            final predictionBloc =
+                Under3PredictionTrackingBloc(matchesBloc: matchesBloc);
+            return PredictionTrackingPage(
+              title: "U2.5 Predictions",
+              predictionBloc: predictionBloc,
+            );
+          },
+        );
+        Navigator.of(context).pushReplacement(pageRoute);
+      },
+    );
+  }
+
+  Widget _buildBttsNoListItem(BuildContext context) {
+    return ListTile(
+      title: Text("BTTS No Predictions"),
+      onTap: () {
+        final pageRoute = MaterialPageRoute(
+          builder: (context) {
+            final matchesBloc = MatchesProvider.of(context);
+            final predictionBloc = BothTeamToScoreNoPredictionTrackingBloc(
+                matchesBloc: matchesBloc);
+            return PredictionTrackingPage(
+              title: "BTTS No Predictions",
+              predictionBloc: predictionBloc,
+            );
+          },
+        );
+        Navigator.of(context).pushReplacement(pageRoute);
+      },
     );
   }
 }
