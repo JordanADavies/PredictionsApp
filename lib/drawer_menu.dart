@@ -28,6 +28,7 @@ class DrawerMenu extends StatelessWidget {
           _buildU3ListItem(context),
           _buildO2ListItem(context),
           _buildBttsNoListItem(context),
+          _buildBttsYesListItem(context),
         ],
       ),
     );
@@ -104,6 +105,26 @@ class DrawerMenu extends StatelessWidget {
                 matchesBloc: matchesBloc);
             return PredictionTrackingPage(
               title: "BTTS No Predictions",
+              predictionBloc: predictionBloc,
+            );
+          },
+        );
+        Navigator.of(context).pushReplacement(pageRoute);
+      },
+    );
+  }
+
+  Widget _buildBttsYesListItem(BuildContext context) {
+    return ListTile(
+      title: Text("BTTS Yes Predictions"),
+      onTap: () {
+        final pageRoute = MaterialPageRoute(
+          builder: (context) {
+            final matchesBloc = MatchesProvider.of(context);
+            final predictionBloc = BothTeamToScoreYesPredictionTrackingBloc(
+                matchesBloc: matchesBloc);
+            return PredictionTrackingPage(
+              title: "BTTS yes Predictions",
               predictionBloc: predictionBloc,
             );
           },
