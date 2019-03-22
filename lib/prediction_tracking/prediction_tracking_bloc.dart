@@ -151,8 +151,7 @@ class Over2PredictionTrackingBloc extends PredictionTrackingBloc {
         .toList();
 
     final upcomingPredictedMatches = allMatches
-        .where(
-            (m) => !m.isBeforeToday() && _over3GoalsExpected(m, matchFinder))
+        .where((m) => !m.isBeforeToday() && _over3GoalsExpected(m, matchFinder))
         .toList();
 
     final percentageCorrect = predictedCorrectlyCompletedMatches.length /
