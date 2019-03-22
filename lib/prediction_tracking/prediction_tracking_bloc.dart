@@ -33,11 +33,12 @@ abstract class PredictionTrackingBloc {
 
 class WinLoseDrawPredictionTrackingBloc extends PredictionTrackingBloc {
   WinLoseDrawPredictionTrackingBloc({MatchesBloc matchesBloc}) {
-    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+    matchesBloc.matches.listen(_fetchTrackedMatches);
   }
 
-  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
-    final predictionTracking = await compute(_performPrediction, allMatches);
+  Future _fetchTrackedMatches(Matches matches) async {
+    final predictionTracking =
+        await compute(_performPrediction, matches.winLoseDrawMatches);
     _predictionTracking.add(predictionTracking);
   }
 
@@ -87,11 +88,12 @@ class WinLoseDrawPredictionTrackingBloc extends PredictionTrackingBloc {
 
 class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
   Under3PredictionTrackingBloc({MatchesBloc matchesBloc}) {
-    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+    matchesBloc.matches.listen(_fetchTrackedMatches);
   }
 
-  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
-    final predictionTracking = await compute(_performPrediction, allMatches);
+  Future _fetchTrackedMatches(Matches matches) async {
+    final predictionTracking =
+        await compute(_performPrediction, matches.under3Matches);
     _predictionTracking.add(predictionTracking);
   }
 
@@ -132,11 +134,12 @@ class Under3PredictionTrackingBloc extends PredictionTrackingBloc {
 
 class Over2PredictionTrackingBloc extends PredictionTrackingBloc {
   Over2PredictionTrackingBloc({MatchesBloc matchesBloc}) {
-    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+    matchesBloc.matches.listen(_fetchTrackedMatches);
   }
 
-  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
-    final predictionTracking = await compute(_performPrediction, allMatches);
+  Future _fetchTrackedMatches(Matches matches) async {
+    final predictionTracking =
+        await compute(_performPrediction, matches.over2Matches);
     _predictionTracking.add(predictionTracking);
   }
 
@@ -176,11 +179,12 @@ class Over2PredictionTrackingBloc extends PredictionTrackingBloc {
 
 class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
   BothTeamToScoreNoPredictionTrackingBloc({MatchesBloc matchesBloc}) {
-    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+    matchesBloc.matches.listen(_fetchTrackedMatches);
   }
 
-  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
-    final predictionTracking = await compute(_performPrediction, allMatches);
+  Future _fetchTrackedMatches(Matches matches) async {
+    final predictionTracking =
+        await compute(_performPrediction, matches.bttsNoMatches);
     _predictionTracking.add(predictionTracking);
   }
 
@@ -218,11 +222,12 @@ class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
 
 class BothTeamToScoreYesPredictionTrackingBloc extends PredictionTrackingBloc {
   BothTeamToScoreYesPredictionTrackingBloc({MatchesBloc matchesBloc}) {
-    matchesBloc.allMatches.listen(_fetchTrackedMatches);
+    matchesBloc.matches.listen(_fetchTrackedMatches);
   }
 
-  Future _fetchTrackedMatches(List<FootballMatch> allMatches) async {
-    final predictionTracking = await compute(_performPrediction, allMatches);
+  Future _fetchTrackedMatches(Matches matches) async {
+    final predictionTracking =
+        await compute(_performPrediction, matches.bttsYesMatches);
     _predictionTracking.add(predictionTracking);
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/drawer_menu.dart';
@@ -20,12 +21,10 @@ class MatchesPage extends StatelessWidget {
 
   Widget _buildMatchesPage(BuildContext context) {
     final matchesBloc = MatchesProvider.of(context);
-    return StreamBuilder<Map<String, Map<String, List<FootballMatch>>>>(
-      stream: matchesBloc.groupedMatches,
-      initialData: matchesBloc.groupedMatches.value,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Map<String, List<FootballMatch>>>>
-              snapshot) {
+    return StreamBuilder<Matches>(
+      stream: matchesBloc.matches,
+      initialData: matchesBloc.matches.value,
+      builder: (BuildContext context, AsyncSnapshot<Matches> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -34,7 +33,7 @@ class MatchesPage extends StatelessWidget {
           return Center(child: Text("${snapshot.error}"));
         }
 
-        return _buildMatchesList(snapshot.data);
+        return _buildMatchesList(snapshot.data.groupedMatches);
       },
     );
   }

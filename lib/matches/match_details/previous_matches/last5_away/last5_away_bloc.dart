@@ -12,7 +12,7 @@ class Last5AwayBloc {
   StreamController<List<FootballMatch>> _awayMatches = StreamController();
 
   Last5AwayBloc({@required this.matchesBloc, @required this.match}) {
-    matchesBloc.allMatches.listen(_fetchLast5Matches);
+    matchesBloc.matches.listen(_fetchLast5Matches);
   }
 
   Stream<List<FootballMatch>> get awayMatches => _awayMatches.stream;
@@ -21,8 +21,8 @@ class Last5AwayBloc {
     _awayMatches.close();
   }
 
-  void _fetchLast5Matches(List<FootballMatch> allMatches) {
-    final matchFinder = MatchFinder(allMatches: allMatches);
+  void _fetchLast5Matches(Matches matches) {
+    final matchFinder = MatchFinder(allMatches: matches.allMatches);
     final awayMatches =
         matchFinder.findLastMatchesForAwayTeam(5, match).reversed.toList();
     _awayMatches.add(awayMatches);

@@ -12,7 +12,7 @@ class Head2HeadBloc {
   StreamController<List<FootballMatch>> _head2HeadMatches = StreamController();
 
   Head2HeadBloc({@required this.matchesBloc, @required this.match}) {
-    matchesBloc.allMatches.listen(_fetchHead2HeadMatches);
+    matchesBloc.matches.listen(_fetchHead2HeadMatches);
   }
 
   Stream<List<FootballMatch>> get head2HeadMatches => _head2HeadMatches.stream;
@@ -21,8 +21,8 @@ class Head2HeadBloc {
     _head2HeadMatches.close();
   }
 
-  void _fetchHead2HeadMatches(List<FootballMatch> allMatches) {
-    final finder = MatchFinder(allMatches: allMatches);
+  void _fetchHead2HeadMatches(Matches matches) {
+    final finder = MatchFinder(allMatches: matches.allMatches);
     final head2HeadMatches =
         finder.findLastHead2HeadMatches(match).reversed.toList();
     _head2HeadMatches.add(head2HeadMatches);

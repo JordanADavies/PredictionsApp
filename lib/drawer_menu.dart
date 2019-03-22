@@ -124,7 +124,7 @@ class DrawerMenu extends StatelessWidget {
             final predictionBloc = BothTeamToScoreYesPredictionTrackingBloc(
                 matchesBloc: matchesBloc);
             return PredictionTrackingPage(
-              title: "BTTS yes Predictions",
+              title: "BTTS Yes Predictions",
               predictionBloc: predictionBloc,
             );
           },
