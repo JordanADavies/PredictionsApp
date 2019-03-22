@@ -212,6 +212,6 @@ class BothTeamToScoreNoPredictionTrackingBloc extends PredictionTrackingBloc {
   }
 
   static bool _bothTeamsProjectToNotScore(FootballMatch match) {
-    return match.homeProjectedGoals < 0.4 || match.awayProjectedGoals < 0.4;
+    return match.homeProjectedGoals < 0.45 || match.awayProjectedGoals < 0.45;
   }
 }

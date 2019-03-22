@@ -15,10 +15,15 @@ class MatchesBloc {
   Future _loadMatches() async {
     final api = MatchesApi();
     final matches = await api.fetchMatches();
-    allMatches.add(matches);
+    final filteredMatches = _filterMatches(matches);
+    allMatches.add(filteredMatches);
 
-    final grouped = _groupMatches(matches);
+    final grouped = _groupMatches(filteredMatches);
     groupedMatches.add(grouped);
+  }
+
+  List<FootballMatch> _filterMatches(List<FootballMatch> matches) {
+    return matches.where((m) => m.date.split("-")[0] == "2019").toList();
   }
 
   Map<String, Map<String, List<FootballMatch>>> _groupMatches(List<FootballMatch> matches) {
