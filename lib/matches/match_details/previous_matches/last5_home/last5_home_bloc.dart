@@ -24,7 +24,7 @@ class Last5HomeBloc {
   void _fetchLast5Matches(List<FootballMatch> allMatches) {
     final matchFinder = MatchFinder(allMatches: allMatches);
     final homeMatches =
-        matchFinder.findLastHomeMatchesForHomeTeam(5, match).reversed.toList();
+        matchFinder.findLastMatchesForHomeTeam(5, match).reversed.toList();
     _homeMatches.add(homeMatches);
   }
 }
