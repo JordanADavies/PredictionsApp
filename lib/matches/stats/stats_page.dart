@@ -34,10 +34,10 @@ class _StatsPageState extends State<StatsPage> {
   }
 
   Widget _buildStats() {
-    return StreamBuilder<List<PredictionStat>>(
+    return StreamBuilder<Map<String, List<PredictionStat>>>(
       stream: _statsBloc.stats.stream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<PredictionStat>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, List<PredictionStat>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -47,9 +47,20 @@ class _StatsPageState extends State<StatsPage> {
     );
   }
 
-  Widget _buildStatsResults(List<PredictionStat> stats) {
+  Widget _buildStatsResults(Map<String, List<PredictionStat>> stats) {
     return ListView(
-      children: stats.map(_buildStatsListItem).toList(),
+      children: stats.keys.map((key) {
+        final value = stats[key];
+        return Column(
+          children: <Widget>[
+            Text(key),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: value.map(_buildStatsListItem).toList(),
+            ),
+          ],
+        );
+      }).toList(),
     );
   }
 

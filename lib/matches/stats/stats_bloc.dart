@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
@@ -17,11 +18,14 @@ class PredictionStat {
 
   PredictionStat(
       {@required this.type, @required this.percentage, @required this.summary});
+
+  @override
+  String toString() => "$type - ${percentage.toStringAsFixed(2)}";
 }
 
 class StatsBloc {
-  final StreamController<List<PredictionStat>> stats =
-      StreamController<List<PredictionStat>>();
+  final StreamController<Map<String, List<PredictionStat>>> stats =
+      StreamController<Map<String, List<PredictionStat>>>();
 
   void dispose() {
     stats.close();
@@ -36,12 +40,18 @@ class StatsBloc {
     stats.add(statsList);
   }
 
-  static List<PredictionStat> _getStats(Matches matches) {
-    final winLoseDrawStats = _getWinLoseDrawStats(matches.winLoseDrawMatches);
-    final under3Stats = _getUnder3Stats(matches.under3Matches);
-    final over2Stats = _getOver2Stats(matches.over2Matches);
-    final bttsNoStats = _getBttsNoStats(matches.bttsNoMatches);
-    final bttsYesStats = _getBttsYesStats(matches.bttsYesMatches);
+  static Map<String, List<PredictionStat>> _getStats(Matches matches) {
+    final groupedMatches = groupBy(matches.allMatches, (m) => m.league);
+    return groupedMatches
+        .map((key, value) => MapEntry(key, _getLeagueStats(value)));
+  }
+
+  static List<PredictionStat> _getLeagueStats(List<FootballMatch> matches) {
+    final winLoseDrawStats = _getWinLoseDrawStats(matches);
+    final under3Stats = _getUnder3Stats(matches);
+    final over2Stats = _getOver2Stats(matches);
+    final bttsNoStats = _getBttsNoStats(matches);
+    final bttsYesStats = _getBttsYesStats(matches);
     return [
       winLoseDrawStats,
       under3Stats,
@@ -59,8 +69,9 @@ class StatsBloc {
       return checker.isPredictionCorrect();
     });
 
-    final percentage =
-        predictedCorrectly.length / predictedMatches.length * 100;
+    final percentage = predictedCorrectly.length == 0
+        ? 0.0
+        : predictedCorrectly.length / predictedMatches.length * 100;
     final summary =
         "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
 
@@ -85,8 +96,9 @@ class StatsBloc {
       return checker.isPredictionCorrect();
     });
 
-    final percentage =
-        predictedCorrectly.length / predictedMatches.length * 100;
+    final percentage = predictedCorrectly.length == 0
+        ? 0.0
+        : predictedCorrectly.length / predictedMatches.length * 100;
     final summary =
         "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
 
@@ -111,8 +123,9 @@ class StatsBloc {
       return checker.isPredictionCorrect();
     });
 
-    final percentage =
-        predictedCorrectly.length / predictedMatches.length * 100;
+    final percentage = predictedCorrectly.length == 0
+        ? 0.0
+        : predictedCorrectly.length / predictedMatches.length * 100;
     final summary =
         "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
 
@@ -137,8 +150,9 @@ class StatsBloc {
       return checker.isPredictionCorrect();
     });
 
-    final percentage =
-        predictedCorrectly.length / predictedMatches.length * 100;
+    final percentage = predictedCorrectly.length == 0
+        ? 0.0
+        : predictedCorrectly.length / predictedMatches.length * 100;
     final summary =
         "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
 
@@ -163,8 +177,9 @@ class StatsBloc {
       return checker.isPredictionCorrect();
     });
 
-    final percentage =
-        predictedCorrectly.length / predictedMatches.length * 100;
+    final percentage = predictedCorrectly.length == 0
+        ? 0.0
+        : predictedCorrectly.length / predictedMatches.length * 100;
     final summary =
         "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
 
