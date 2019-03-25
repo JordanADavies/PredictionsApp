@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/match_list_item.dart';
+import 'package:predictions/matches/stats/stats_page.dart';
 
 class MatchesPage extends StatelessWidget {
   @override
@@ -12,8 +14,23 @@ class MatchesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Matches"),
         elevation: 0.0,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(FontAwesomeIcons.chartLine),
+              onPressed: () => _showStatsPage(context)),
+        ],
       ),
       body: _buildMatchesPage(context),
+    );
+  }
+
+  void _showStatsPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => StatsPage(),
+        fullscreenDialog: true,
+      ),
     );
   }
 

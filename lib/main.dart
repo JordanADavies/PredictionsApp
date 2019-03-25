@@ -13,6 +13,11 @@ final theme = ThemeData(
   secondaryHeaderColor: Color(0xFFF9A26C),
 );
 
+final darkTheme = ThemeData.dark().copyWith(
+  primaryColor: Color(0xFFF26627),
+  scaffoldBackgroundColor: Color(0xFFF26627),
+);
+
 class PredictionsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
