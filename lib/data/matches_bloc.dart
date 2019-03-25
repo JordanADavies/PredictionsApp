@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/api/matches_api.dart';
 import 'package:predictions/data/leagues.dart';
@@ -40,8 +41,13 @@ class MatchesBloc {
     final api = MatchesApi();
     final apiMatches = await api.fetchMatches();
 
-    final thisSeasonsMatches = apiMatches.where(_isThisSeason).toList();
-    final matchesData = Matches(
+    final matchesData = await compute(_getMatchesData, apiMatches);
+    matches.add(matchesData);
+  }
+  
+  static Matches _getMatchesData(List<FootballMatch> allMatches) {
+    final thisSeasonsMatches = allMatches.where(_isThisSeason).toList();
+    return Matches(
       allMatches: thisSeasonsMatches,
       groupedMatches: _groupMatches(thisSeasonsMatches),
       winLoseDrawMatches: _getWinLoseDrawMatches(thisSeasonsMatches),
@@ -50,23 +56,22 @@ class MatchesBloc {
       bttsNoMatches: _getBttsNoMatches(thisSeasonsMatches),
       bttsYesMatches: _getBttsYesMatches(thisSeasonsMatches),
     );
-    matches.add(matchesData);
   }
 
-  bool _isThisSeason(FootballMatch match) {
+  static bool _isThisSeason(FootballMatch match) {
     final dateSplitString = match.date.split("-");
     return dateSplitString[0] == "2019" ||
         (dateSplitString[0] == "2018" && double.parse(dateSplitString[1]) > 7);
   }
 
-  Map<String, Map<String, List<FootballMatch>>> _groupMatches(
+  static Map<String, Map<String, List<FootballMatch>>> _groupMatches(
       List<FootballMatch> matches) {
     final groupedByDay = groupBy(matches, (obj) => obj.date);
     return groupedByDay.map(
         (key, value) => MapEntry(key, groupBy(value, (obj) => obj.league)));
   }
 
-  List<FootballMatch> _getWinLoseDrawMatches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getWinLoseDrawMatches(List<FootballMatch> allMatches) {
     final leaguesWithHighWinLoseDraw = [
       CHINESE_SUPER_LEAGUE,
       SCOTTISH_PREMIERSHIP,
@@ -84,7 +89,7 @@ class MatchesBloc {
         .toList();
   }
 
-  List<FootballMatch> _getUnder3Matches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getUnder3Matches(List<FootballMatch> allMatches) {
     final leaguesWithHighUnder3 = [
       JAPANESE_J_LEAGUE,
       UNITED_SOCCER_LEAGUE,
@@ -102,7 +107,7 @@ class MatchesBloc {
         .toList();
   }
 
-  List<FootballMatch> _getOver2Matches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getOver2Matches(List<FootballMatch> allMatches) {
     final leaguesWithHighOver2 = [
       CHINESE_SUPER_LEAGUE,
       UNITED_SOCCER_LEAGUE,
@@ -123,7 +128,7 @@ class MatchesBloc {
         .toList();
   }
 
-  List<FootballMatch> _getBttsNoMatches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getBttsNoMatches(List<FootballMatch> allMatches) {
     final leaguesWithHighBttsNo = [
       UNITED_SOCCER_LEAGUE,
       SOUTH_AFRICA_ABSA_PREMIER_LEAGUE,
@@ -143,7 +148,7 @@ class MatchesBloc {
         .toList();
   }
 
-  List<FootballMatch> _getBttsYesMatches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getBttsYesMatches(List<FootballMatch> allMatches) {
     final leaguesWithHighBttsYes = [
       JAPANESE_J_LEAGUE,
       CHINESE_SUPER_LEAGUE,
