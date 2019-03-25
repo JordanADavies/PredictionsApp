@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/prediction_tracking/match_finder.dart';
+import 'package:predictions/matches/match_details/previous_matches/match_finder.dart';
 
 class Head2HeadBloc {
   final MatchesBloc matchesBloc;

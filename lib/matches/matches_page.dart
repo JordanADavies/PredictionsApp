@@ -3,8 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/drawer_menu.dart';
-import 'package:predictions/matches/match_details/match_details_page.dart';
+import 'package:predictions/matches/match_list_item.dart';
 
 class MatchesPage extends StatelessWidget {
   @override
@@ -14,7 +13,6 @@ class MatchesPage extends StatelessWidget {
         title: Text("Matches"),
         elevation: 0.0,
       ),
-      drawer: DrawerMenu(),
       body: _buildMatchesPage(context),
     );
   }
@@ -135,42 +133,9 @@ class _MatchesLeagueList extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children:
-              matches.map((match) => _MatchListItem(match: match)).toList(),
+              matches.map((match) => MatchListItem(match: match)).toList(),
         ),
       ],
-    );
-  }
-}
-
-class _MatchListItem extends StatelessWidget {
-  final FootballMatch match;
-
-  const _MatchListItem({Key key, @required this.match}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).backgroundColor,
-      child: ListTile(
-        title: Text("${match.homeTeam} vs ${match.awayTeam}"),
-        trailing: _buildTrailing(),
-        onTap: () => _showMatchDetails(context),
-      ),
-    );
-  }
-
-  Widget _buildTrailing() {
-    return match.hasFinalScore()
-        ? Text("${match.homeFinalScore}-${match.awayFinalScore}")
-        : SizedBox();
-  }
-
-  void _showMatchDetails(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => MatchDetailsPage(match: match),
-      ),
     );
   }
 }

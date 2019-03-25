@@ -22,6 +22,7 @@ dependencies:
 
   csv: any
   cupertino_icons: ^0.1.2
+  font_awesome_flutter: any
   http: any
   intl: any
   rxdart: any
