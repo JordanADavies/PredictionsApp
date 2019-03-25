@@ -10,20 +10,9 @@ import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
+import 'package:predictions/matches/stats/prediction_stat.dart';
 
-class PredictionStat {
-  final String type;
-  final double percentage;
-  final String summary;
-
-  PredictionStat(
-      {@required this.type, @required this.percentage, @required this.summary});
-
-  @override
-  String toString() => "$type - ${percentage.toStringAsFixed(2)}";
-}
-
-class StatsBloc {
+class StatsAllLeaguesBloc {
   final StreamController<Map<String, List<PredictionStat>>> stats =
       StreamController<Map<String, List<PredictionStat>>>();
 
@@ -31,7 +20,7 @@ class StatsBloc {
     stats.close();
   }
 
-  StatsBloc({@required MatchesBloc matchesBloc}) {
+  StatsAllLeaguesBloc({@required MatchesBloc matchesBloc}) {
     matchesBloc.matches.listen(_loadStats);
   }
 
