@@ -42,5 +42,7 @@ class WinLoseDrawChecker {
       case WinLoseDrawResult.Unknown:
         return false;
     }
+
+    return false;
   }
 }
