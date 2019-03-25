@@ -44,7 +44,7 @@ class MatchesBloc {
     final matchesData = await compute(_getMatchesData, apiMatches);
     matches.add(matchesData);
   }
-  
+
   static Matches _getMatchesData(List<FootballMatch> allMatches) {
     final thisSeasonsMatches = allMatches.where(_isThisSeason).toList();
     return Matches(
@@ -71,9 +71,11 @@ class MatchesBloc {
         (key, value) => MapEntry(key, groupBy(value, (obj) => obj.league)));
   }
 
-  static List<FootballMatch> _getWinLoseDrawMatches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getWinLoseDrawMatches(
+      List<FootballMatch> allMatches) {
     final leaguesWithHighWinLoseDraw = [
       CHINESE_SUPER_LEAGUE,
+      SWEDISH_ALLSVENSKAN,
       SCOTTISH_PREMIERSHIP,
       MAJOR_LEAGUE_SOCCER,
       NATIONAL_WOMENS_SOCCER_LEAGUE,
@@ -94,14 +96,12 @@ class MatchesBloc {
       JAPANESE_J_LEAGUE,
       UNITED_SOCCER_LEAGUE,
       RUSSIAN_PREMIER_LEAGUE,
-      ENGLISH_LEAGUE_CHAMPIONSHIP,
-      SOUTH_AFRICA_ABSA_PREMIER_LEAGUE,
+      SWEDISH_ALLSVENSKAN,
       NATIONAL_WOMENS_SOCCER_LEAGUE,
       ITALY_SERIE_B,
       GREEK_SUPER_LEAGUE,
       UEFA_EUROPA_LEAGUE,
     ];
-
     return allMatches
         .where((m) => leaguesWithHighUnder3.contains(m.leagueId))
         .toList();
@@ -109,19 +109,11 @@ class MatchesBloc {
 
   static List<FootballMatch> _getOver2Matches(List<FootballMatch> allMatches) {
     final leaguesWithHighOver2 = [
-      CHINESE_SUPER_LEAGUE,
       UNITED_SOCCER_LEAGUE,
-      GERMAN_2_BUNDESLIGA,
+      MEXICAN_PRIMERA_DIVISION_TORNEO_APERTURA,
       MAJOR_LEAGUE_SOCCER,
-      NATIONAL_WOMENS_SOCCER_LEAGUE,
-      DUTCH_EREDIVISIE,
       FRENCH_LIGUE_1,
-      TURKISH_TURKCELL_SUPER_LIG,
-      BARCLAYS_PREMIER_LEAGUE,
-      PORTUGUESE_LIGA,
       ITALY_SERIE_A,
-      UEFA_CHAMPIONS_LEAGUE,
-      AUSTRALIAN_A_LEAGUE,
     ];
     return allMatches
         .where((m) => leaguesWithHighOver2.contains(m.leagueId))
@@ -132,15 +124,11 @@ class MatchesBloc {
     final leaguesWithHighBttsNo = [
       UNITED_SOCCER_LEAGUE,
       SOUTH_AFRICA_ABSA_PREMIER_LEAGUE,
-      ENGLISH_LEAGUE_TWO,
+      SWEDISH_ALLSVENSKAN,
       SCOTTISH_PREMIERSHIP,
-      MAJOR_LEAGUE_SOCCER,
       NATIONAL_WOMENS_SOCCER_LEAGUE,
-      FRENCH_LIGUE_1,
-      TURKISH_TURKCELL_SUPER_LIG,
       SPANISH_SEGUNDA_DIVISION,
       SPANISH_PRIMERA_DIVISION,
-      GREEK_SUPER_LEAGUE,
       UEFA_CHAMPIONS_LEAGUE,
     ];
     return allMatches
@@ -148,19 +136,17 @@ class MatchesBloc {
         .toList();
   }
 
-  static List<FootballMatch> _getBttsYesMatches(List<FootballMatch> allMatches) {
+  static List<FootballMatch> _getBttsYesMatches(
+      List<FootballMatch> allMatches) {
     final leaguesWithHighBttsYes = [
       JAPANESE_J_LEAGUE,
-      CHINESE_SUPER_LEAGUE,
-      UNITED_SOCCER_LEAGUE,
+      SWEDISH_ALLSVENSKAN,
       AUSTRIAN_T_MOBILE_BUNDESLIGA,
       SWISS_RAIFFEISEN_SUPER_LEAGUE,
       MAJOR_LEAGUE_SOCCER,
-      DUTCH_EREDIVISIE,
-      FRENCH_LIGUE_1,
       TURKISH_TURKCELL_SUPER_LIG,
+      FRENCH_LIGUE_1,
       SPANISH_SEGUNDA_DIVISION,
-      GERMAN_BUNDESLIGA,
       UEFA_CHAMPIONS_LEAGUE,
       AUSTRALIAN_A_LEAGUE,
     ];

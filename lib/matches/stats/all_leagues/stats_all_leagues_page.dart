@@ -40,7 +40,12 @@ class _StatsAllLeaguesPageState extends State<StatsAllLeaguesPage> {
         final value = stats[key];
         return Column(
           children: <Widget>[
-            Text(key),
+            Container(
+              width: double.infinity,
+              color: Colors.white.withOpacity(0.2),
+              padding: EdgeInsets.all(8.0),
+              child: Text(key),
+            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: value.map(_buildStatsListItem).toList(),

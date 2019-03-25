@@ -25,8 +25,18 @@ class StatsAllLeaguesBloc {
   }
 
   void _loadStats(Matches matches) async {
-    final statsList = await compute(_getStats, matches);
-    stats.add(statsList);
+    final statsMap = await compute(_getStats, matches);
+
+//    statsMap.forEach((key, value) {
+//      print("-- $key");
+//      value.forEach((s) {
+//        if (s.percentage > 70 || (s.percentage > 55 && s.type == "1X2")) {
+//          print("  $s");
+//        }
+//      });
+//    });
+
+    stats.add(statsMap);
   }
 
   static Map<String, List<PredictionStat>> _getStats(Matches matches) {
