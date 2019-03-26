@@ -40,7 +40,7 @@ class StatsAllLeaguesBloc {
   }
 
   static Map<String, List<PredictionStat>> _getStats(Matches matches) {
-    final groupedMatches = groupBy(matches.allMatches, (m) => m.league);
+    final groupedMatches = groupBy(matches.thisSeasonsMatches, (m) => m.league);
     return groupedMatches
         .map((key, value) => MapEntry(key, _getLeagueStats(value)));
   }

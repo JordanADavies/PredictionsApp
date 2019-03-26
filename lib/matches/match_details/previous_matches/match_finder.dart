@@ -84,10 +84,10 @@ class MatchFinder {
 
     final foundMatches = previousMatches
         .where((m) =>
-            m.homeTeam == match.homeTeam &&
-            m.awayTeam == match.awayTeam &&
             m.hasFinalScore() &&
-            m.isBeforeToday())
+            m.isBeforeToday() &&
+            ((m.homeTeam == match.homeTeam && m.awayTeam == match.awayTeam) ||
+                (m.homeTeam == match.awayTeam && m.awayTeam == match.homeTeam)))
         .toList();
     return foundMatches;
   }

@@ -35,8 +35,9 @@ class _StatsAllLeaguesPageState extends State<StatsAllLeaguesPage> {
   }
 
   Widget _buildStatsResults(Map<String, List<PredictionStat>> stats) {
+    final sortedKeys = stats.keys.toList()..sort();
     return ListView(
-      children: stats.keys.map((key) {
+      children: sortedKeys.map((key) {
         final value = stats[key];
         return Column(
           children: <Widget>[

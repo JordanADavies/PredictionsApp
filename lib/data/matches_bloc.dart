@@ -8,6 +8,7 @@ import 'package:rxdart/subjects.dart';
 
 class Matches {
   final List<FootballMatch> allMatches;
+  final List<FootballMatch> thisSeasonsMatches;
   final Map<String, Map<String, List<FootballMatch>>> groupedMatches;
 
   final List<FootballMatch> winLoseDrawMatches;
@@ -18,6 +19,7 @@ class Matches {
 
   Matches(
       {@required this.allMatches,
+      @required this.thisSeasonsMatches,
       @required this.groupedMatches,
       @required this.winLoseDrawMatches,
       @required this.under3Matches,
@@ -48,7 +50,8 @@ class MatchesBloc {
   static Matches _getMatchesData(List<FootballMatch> allMatches) {
     final thisSeasonsMatches = allMatches.where(_isThisSeason).toList();
     return Matches(
-      allMatches: thisSeasonsMatches,
+      allMatches: allMatches,
+      thisSeasonsMatches: thisSeasonsMatches,
       groupedMatches: _groupMatches(thisSeasonsMatches),
       winLoseDrawMatches: _getWinLoseDrawMatches(thisSeasonsMatches),
       under3Matches: _getUnder3Matches(thisSeasonsMatches),
