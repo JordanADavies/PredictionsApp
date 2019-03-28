@@ -59,7 +59,7 @@ class MatchListItem extends StatelessWidget {
                 opacity:
                     snapshot.data?.winLoseDrawMatches?.contains(match) ?? false
                         ? 1.0
-                        : 0.25,
+                        : 0.2,
                 child: _buildWinLoseDraw(),
               ),
               Opacity(

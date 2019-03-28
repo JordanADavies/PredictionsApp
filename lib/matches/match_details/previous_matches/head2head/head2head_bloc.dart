@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
@@ -21,10 +22,19 @@ class Head2HeadBloc {
     _head2HeadMatches.close();
   }
 
-  void _fetchHead2HeadMatches(Matches matches) {
-    final finder = MatchFinder(allMatches: matches.allMatches);
-    final head2HeadMatches =
-        finder.findLastHead2HeadMatches(match).reversed.toList();
+  void _fetchHead2HeadMatches(Matches matches) async {
+    final map = {
+      "Match": match,
+      "AllMatches": matches.allMatches,
+    };
+    final head2HeadMatches = await compute(_getHead2HeadMatches, map);
     _head2HeadMatches.add(head2HeadMatches);
+  }
+
+  static _getHead2HeadMatches(Map<String, dynamic> map) {
+    final allMatches = map["AllMatches"];
+    final finder = MatchFinder(allMatches: allMatches);
+    final match = map["Match"];
+    return finder.findLastHead2HeadMatches(match).reversed.toList();
   }
 }
