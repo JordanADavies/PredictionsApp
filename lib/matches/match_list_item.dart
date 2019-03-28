@@ -50,38 +50,40 @@ class MatchListItem extends StatelessWidget {
       stream: matchesBloc.matches,
       initialData: matchesBloc.matches.value,
       builder: (BuildContext context, AsyncSnapshot<Matches> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-
         return Padding(
           padding: EdgeInsets.only(top: 12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Opacity(
-                opacity: snapshot.data.winLoseDrawMatches.contains(match)
-                    ? 1.0
-                    : 0.25,
+                opacity:
+                    snapshot.data?.winLoseDrawMatches?.contains(match) ?? false
+                        ? 1.0
+                        : 0.25,
                 child: _buildWinLoseDraw(),
               ),
               Opacity(
-                opacity:
-                    snapshot.data.under3Matches.contains(match) ? 1.0 : 0.2,
+                opacity: snapshot.data?.under3Matches?.contains(match) ?? false
+                    ? 1.0
+                    : 0.2,
                 child: _buildUnder3(),
               ),
               Opacity(
-                opacity: snapshot.data.over2Matches.contains(match) ? 1.0 : 0.2,
+                opacity: snapshot.data?.over2Matches?.contains(match) ?? false
+                    ? 1.0
+                    : 0.2,
                 child: _buildOver2(),
               ),
               Opacity(
-                opacity:
-                    snapshot.data.bttsNoMatches.contains(match) ? 1.0 : 0.2,
+                opacity: snapshot.data?.bttsNoMatches?.contains(match) ?? false
+                    ? 1.0
+                    : 0.2,
                 child: _buildBttsNo(),
               ),
               Opacity(
-                opacity:
-                    snapshot.data.bttsYesMatches.contains(match) ? 1.0 : 0.2,
+                opacity: snapshot.data?.bttsYesMatches?.contains(match) ?? false
+                    ? 1.0
+                    : 0.2,
                 child: _buildBttsYes(),
               ),
             ],
@@ -107,7 +109,9 @@ class MatchListItem extends StatelessWidget {
           height: 23,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+            color: checker.isPredictionCorrect()
+                ? Colors.green
+                : Color(0xFF325D79),
           ),
           child: Center(
             child: Text(
@@ -133,7 +137,8 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color:
+              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("U2.5"),
@@ -151,7 +156,8 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color:
+              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("O2.5"),
@@ -169,7 +175,8 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color:
+              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("BTTSN"),
@@ -187,7 +194,8 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color:
+              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("BTTSY"),

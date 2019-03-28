@@ -26,7 +26,7 @@ class PrematchCard extends StatelessWidget {
           _buildProjectedGoalsCard(),
           _buildRatingCard(),
           _buildImportanceCard(),
-          _buildProbabilityCard(),
+          _buildProbabilityCard(context),
         ],
       ),
     );
@@ -81,6 +81,10 @@ class PrematchCard extends StatelessWidget {
   }
 
   Widget _buildImportanceCard() {
+    if (match.homeImportance == null || match.awayImportance == null) {
+      return SizedBox();
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -104,15 +108,69 @@ class PrematchCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProbabilityCard() {
+  Widget _buildProbabilityCard(BuildContext context) {
+    final homeWin = match.homeWinProbability * 100;
+    final draw = match.drawProbability * 100;
+    final awayWin = match.awayWinProbability * 100;
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 12.0,
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Text("${match.homeWinProbability}%"),
-          Text("${match.drawProbability}%"),
-          Text("${match.awayWinProbability}%"),
+          Expanded(
+            flex: homeWin.toInt(),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  bottomLeft: Radius.circular(8.0),
+                ),
+              ),
+              child: Text(
+                "${homeWin.toStringAsFixed(0)}%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: draw.toInt(),
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Text(
+                "${draw.toStringAsFixed(0)}%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: awayWin.toInt(),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF325D79),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(8.0),
+                  bottomRight: Radius.circular(8.0),
+                ),
+              ),
+              child: Text(
+                "${awayWin.toStringAsFixed(0)}%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
