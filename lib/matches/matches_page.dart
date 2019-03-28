@@ -16,11 +16,20 @@ class MatchesPage extends StatelessWidget {
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
-              icon: Icon(FontAwesomeIcons.chartLine),
-              onPressed: () => _showStatsPage(context)),
+            icon: Icon(FontAwesomeIcons.chartLine),
+            onPressed: () => _showStatsPage(context),
+          ),
         ],
       ),
-      body: _buildMatchesPage(context),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            color: Theme.of(context).primaryColor,
+            height: 120.0,
+          ),
+          _buildMatchesPage(context),
+        ],
+      ),
     );
   }
 
@@ -97,15 +106,27 @@ class _MatchesDayList extends StatelessWidget {
       children: <Widget>[
         Container(
           width: double.infinity,
-          color: Theme.of(context).secondaryHeaderColor,
           padding: EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .subhead
-                .copyWith(color: Colors.white),
+          child: Row(
+            children: <Widget>[
+              Spacer(),
+              Icon(
+                FontAwesomeIcons.caretLeft,
+                color: Colors.white.withOpacity(0.6),
+              ),
+              SizedBox(width: 20.0),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.display1,
+              ),
+              SizedBox(width: 20.0),
+              Icon(
+                FontAwesomeIcons.caretRight,
+                color: Colors.white.withOpacity(0.6),
+              ),
+              Spacer(),
+            ],
           ),
         ),
         Expanded(
@@ -144,7 +165,7 @@ class _MatchesLeagueList extends StatelessWidget {
           child: Text(
             leagueName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+            style: Theme.of(context).textTheme.headline,
           ),
         ),
         Column(

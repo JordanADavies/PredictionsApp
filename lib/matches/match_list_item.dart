@@ -17,13 +17,23 @@ class MatchListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).backgroundColor,
-      child: ListTile(
-        title: Text("${match.homeTeam} vs ${match.awayTeam}"),
-        subtitle: _buildSubtitle(context),
-        trailing: _buildTrailing(),
-        onTap: () => _showMatchDetails(context),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        bottom: 12.0,
+      ),
+      child: Material(
+        color: Theme.of(context).backgroundColor,
+        borderRadius: BorderRadius.circular(8.0),
+        elevation: 4.0,
+        shadowColor: Colors.black.withOpacity(0.15),
+        child: ListTile(
+          title: Text("${match.homeTeam} vs ${match.awayTeam}"),
+          subtitle: _buildSubtitle(context),
+          trailing: _buildTrailing(),
+          onTap: () => _showMatchDetails(context),
+        ),
       ),
     );
   }
@@ -45,7 +55,7 @@ class MatchListItem extends StatelessWidget {
         }
 
         return Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: 12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -97,12 +107,13 @@ class MatchListItem extends StatelessWidget {
           height: 23,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            color: checker.isPredictionCorrect() ? Colors.green : Colors.black,
+            color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
           ),
           child: Center(
             child: Text(
               text,
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
             ),
           ),
         ),
@@ -122,7 +133,7 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Colors.black,
+          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("U2.5"),
@@ -140,7 +151,7 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Colors.black,
+          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("O2.5"),
@@ -158,7 +169,7 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Colors.black,
+          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("BTTSN"),
@@ -176,7 +187,7 @@ class MatchListItem extends StatelessWidget {
       children: <Widget>[
         Icon(
           icon,
-          color: checker.isPredictionCorrect() ? Colors.green : Colors.black,
+          color: checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
         ),
         SizedBox(height: 4.0),
         Text("BTTSY"),

@@ -11,6 +11,24 @@ final theme = ThemeData(
   canvasColor: Color(0xFFEFEEEE),
   scaffoldBackgroundColor: Color(0xFFEFEEEE),
   secondaryHeaderColor: Color(0xFFF9A26C),
+  textTheme: TextTheme(
+    display1: TextStyle(
+      fontSize: 18.0,
+      fontWeight: FontWeight.w400,
+      color: Color(0xFFFFFFFF),
+    ),
+    headline: TextStyle(
+      fontSize: 18.0,
+      fontWeight: FontWeight.w600,
+      color: Color(0xFFF9A26C),
+    ),
+    subhead: TextStyle(
+      color: Color(0xFF325D79),
+    ),
+    body1: TextStyle(
+      color: Color(0xFF325D79),
+    )
+  ),
 );
 
 final darkTheme = ThemeData.dark().copyWith(
