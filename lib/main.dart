@@ -17,6 +17,14 @@ final theme = ThemeData(
       fontWeight: FontWeight.w400,
       color: Color(0xFFFFFFFF),
     ),
+    display2: TextStyle(
+      fontSize: 19.0,
+      color: Color(0xFF325D79),
+    ),
+    display3: TextStyle(
+      fontSize: 36.0,
+      color: Color(0xFFF9A26C),
+    ),
     headline: TextStyle(
       fontSize: 18.0,
       fontWeight: FontWeight.w600,
@@ -27,7 +35,7 @@ final theme = ThemeData(
     ),
     body1: TextStyle(
       color: Color(0xFF325D79),
-    )
+    ),
   ),
 );
 

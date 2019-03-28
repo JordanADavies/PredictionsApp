@@ -12,12 +12,35 @@ class PreviousMatchesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: PageView(
-        children: <Widget>[
-          Last5HomeCard(match: match),
-          Last5AwayCard(match: match),
-          Head2HeadCard(match: match),
-        ],
+      child: SafeArea(
+        child: PageView(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                bottom: 12.0,
+              ),
+              child: Last5HomeCard(match: match),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                bottom: 12.0,
+              ),
+              child: Last5AwayCard(match: match),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                bottom: 12.0,
+              ),
+              child: Head2HeadCard(match: match),
+            ),
+          ],
+        ),
       ),
     );
   }

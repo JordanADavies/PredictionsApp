@@ -8,29 +8,27 @@ class PrematchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            "Pre match",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle,
+    return Material(
+      color: Colors.white,
+      elevation: 4.0,
+      shadowColor: Colors.black.withOpacity(0.15),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Pre match",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline,
+            ),
           ),
-        ),
-        Material(
-          type: MaterialType.card,
-          child: Column(
-            children: <Widget>[
-              _buildProjectedGoalsCard(),
-              _buildRatingCard(),
-              _buildImportanceCard(),
-              _buildProbabilityCard(),
-            ],
-          ),
-        )
-      ],
+          _buildProjectedGoalsCard(),
+          _buildRatingCard(),
+          _buildImportanceCard(),
+          _buildProbabilityCard(),
+        ],
+      ),
     );
   }
 
