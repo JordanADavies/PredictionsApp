@@ -117,6 +117,10 @@ class PreviousMatchListItem extends StatelessWidget {
   }
 
   Widget _buildImportanceRow() {
+    if (match.homeImportance == null || match.awayImportance == null) {
+      return SizedBox();
+    }
+
     return Row(
       children: <Widget>[
         Expanded(
