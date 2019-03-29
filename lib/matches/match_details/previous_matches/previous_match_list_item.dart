@@ -14,7 +14,8 @@ class PreviousMatchListItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(match.date),
-          _buildScoreRow(),
+          SizedBox(height: 4.0),
+          _buildScoreRow(context),
           _buildExpectedGoalsRow(),
           _buildProjectGoalsRow(),
           _buildSpiRatingRow(),
@@ -24,22 +25,27 @@ class PreviousMatchListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreRow() {
+  Widget _buildScoreRow(BuildContext context) {
     return Row(
       children: <Widget>[
         Expanded(
           child: Text(
             match.homeTeam,
             textAlign: TextAlign.end,
+            style: Theme.of(context).textTheme.subtitle,
           ),
         ),
         SizedBox(width: 8.0),
-        Text("${match.homeFinalScore}-${match.awayFinalScore}"),
+        Text(
+          "${match.homeFinalScore}-${match.awayFinalScore}",
+          style: Theme.of(context).textTheme.subtitle,
+        ),
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
             match.awayTeam,
             textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.subtitle,
           ),
         ),
       ],
@@ -57,15 +63,20 @@ class PreviousMatchListItem extends StatelessWidget {
           child: Text(
             "${match.homeExpectedGoals}",
             textAlign: TextAlign.end,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
         SizedBox(width: 8.0),
-        Text("xG"),
+        Text(
+          "xG",
+          style: TextStyle(color: Colors.grey),
+        ),
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
             "${match.awayExpectedGoals}",
             textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],
@@ -79,15 +90,20 @@ class PreviousMatchListItem extends StatelessWidget {
           child: Text(
             "${match.homeProjectedGoals}",
             textAlign: TextAlign.end,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
         SizedBox(width: 8.0),
-        Text("proj."),
+        Text(
+          "proj.",
+          style: TextStyle(color: Colors.grey),
+        ),
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
             "${match.awayProjectedGoals}",
             textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],
@@ -101,15 +117,20 @@ class PreviousMatchListItem extends StatelessWidget {
           child: Text(
             "${match.homeSpiRating}",
             textAlign: TextAlign.end,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
         SizedBox(width: 8.0),
-        Text("SPI"),
+        Text(
+          "SPI",
+          style: TextStyle(color: Colors.grey),
+        ),
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
             "${match.awaySpiRating}",
             textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],
@@ -127,15 +148,20 @@ class PreviousMatchListItem extends StatelessWidget {
           child: Text(
             "${match.homeImportance}",
             textAlign: TextAlign.end,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
         SizedBox(width: 8.0),
-        Text("imp."),
+        Text(
+          "imp.",
+          style: TextStyle(color: Colors.grey),
+        ),
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
             "${match.awayImportance}",
             textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],

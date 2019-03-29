@@ -33,6 +33,10 @@ final theme = ThemeData(
     subhead: TextStyle(
       color: Color(0xFF325D79),
     ),
+    subtitle: TextStyle(
+      fontSize: 15.0,
+      color: Color(0xFF325D79),
+    ),
     body1: TextStyle(
       color: Color(0xFF325D79),
     ),

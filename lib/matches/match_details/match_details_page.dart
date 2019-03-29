@@ -117,13 +117,15 @@ class MatchDetailsPage extends StatelessWidget {
           child: Text(
             "${match.homeExpectedGoals}",
             textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
-        Text("xG"),
+        Text("xG", style: TextStyle(color: Colors.grey)),
         Expanded(
           child: Text(
             "${match.awayExpectedGoals}",
             textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],

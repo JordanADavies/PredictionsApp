@@ -18,8 +18,9 @@ class StatsPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TabBar(
+                indicatorColor: Theme.of(context).canvasColor,
                 tabs: [
-                  Tab(text: "Selected Leagues"),
+                  Tab(text: "Highlighted Leagues"),
                   Tab(text: "All Leagues"),
                 ],
               ),
