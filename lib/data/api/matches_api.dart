@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:predictions/data/model/football_match.dart';
 
@@ -9,7 +10,11 @@ class MatchesApi {
 
   Future<List<FootballMatch>> fetchMatches() async {
     final response = await get(_url);
-    final csvString = utf8.decode(response.bodyBytes);
+    return await compute(_getMatches, response.bodyBytes);
+  }
+
+  static List<FootballMatch> _getMatches(List<int> bytes) {
+    final csvString = utf8.decode(bytes);
 
     final result = CsvToListConverter(eol: "\n").convert(csvString);
     result.removeAt(0); //Remove headings
@@ -17,7 +22,7 @@ class MatchesApi {
     return _parseMatches(result);
   }
 
-  Future<List<FootballMatch>> _parseMatches(List csvMatches) async {
+  static List<FootballMatch> _parseMatches(List csvMatches) {
     return csvMatches.map((match) => FootballMatch.fromCsv(match)).toList();
   }
 }
