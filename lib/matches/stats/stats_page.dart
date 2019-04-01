@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:predictions/main.dart';
 import 'package:predictions/matches/stats/all_leagues/stats_all_leagues_page.dart';
+import 'package:predictions/matches/stats/all_teams/stats_all_teams_page.dart';
 import 'package:predictions/matches/stats/selected_leagues/stats_selected_leagues_page.dart';
 
 class StatsPage extends StatelessWidget {
@@ -14,14 +15,15 @@ class StatsPage extends StatelessWidget {
           elevation: 0.0,
         ),
         body: DefaultTabController(
-          length: 2,
+          length: 3,
           child: Column(
             children: <Widget>[
               TabBar(
                 indicatorColor: Theme.of(context).canvasColor,
                 tabs: [
-                  Tab(text: "Highlighted Leagues"),
+                  Tab(text: "Highlighted"),
                   Tab(text: "All Leagues"),
+                  Tab(text: "All Teams"),
                 ],
               ),
               Expanded(
@@ -29,6 +31,7 @@ class StatsPage extends StatelessWidget {
                   children: [
                     StatsSelectedLeaguesPage(),
                     StatsAllLeaguesPage(),
+                    StatsAllTeamsPage(),
                   ],
                 ),
               ),
