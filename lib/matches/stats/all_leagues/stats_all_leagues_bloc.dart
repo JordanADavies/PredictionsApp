@@ -28,10 +28,10 @@ class StatsAllLeaguesBloc {
     final statsMap = await compute(_getStats, matches);
 
 //    statsMap.forEach((key, value) {
-//      print("-- $key");
 //      value.forEach((s) {
-//        if (s.percentage > 70 || (s.percentage > 55 && s.type == "1X2")) {
-//          print("  $s");
+//        if (s.percentage > 70 || (s.percentage > 58 && s.type == "1X2")) {
+//          print("-- $s");
+//          print("    $key");
 //        }
 //      });
 //    });
