@@ -36,10 +36,10 @@ class StatsAllTeamsBloc {
 //      value.forEach((s) {
 //        if (s.type == "1X2" && s.percentage > 70) {
 //          winLoseDrawTeams.add(key);
-//        } else if (s.type == "Over 2.5" && s.percentage > 80) {
-//          over2Teams.add(key);
 //        } else if (s.type == "Under 2.5" && s.percentage > 80) {
 //          under3Teams.add(key);
+//        } else if (s.type == "Over 2.5" && s.percentage > 80) {
+//          over2Teams.add(key);
 //        } else if (s.type == "BTTS No" && s.percentage > 80) {
 //          bttsNoTeams.add(key);
 //        } else if (s.type == "BTTS Yes" && s.percentage > 80) {
@@ -50,10 +50,10 @@ class StatsAllTeamsBloc {
 //
 //    print("---- 1X2");
 //    winLoseDrawTeams.forEach((s) => print(s));
-//    print("---- O2.5");
-//    over2Teams.forEach((s) => print(s));
 //    print("---- U2.5");
 //    under3Teams.forEach((s) => print(s));
+//    print("---- O2.5");
+//    over2Teams.forEach((s) => print(s));
 //    print("---- BTTS No");
 //    bttsNoTeams.forEach((s) => print(s));
 //    print("---- BTTS Yes");
