@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/matches/stats/all_teams/stats_all_teams_bloc.dart';
 import 'package:predictions/matches/stats/prediction_stat.dart';
@@ -21,16 +22,50 @@ class _StatsAllTeamsPageState extends State<StatsAllTeamsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Map<String, List<PredictionStat>>>(
-      stream: _statsBloc.stats.stream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, List<PredictionStat>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+    return Column(
+      children: <Widget>[
+        _buildSearchTextField(context),
+        Expanded(
+          child: StreamBuilder<Map<String, List<PredictionStat>>>(
+            stream: _statsBloc.stats.stream,
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<String, List<PredictionStat>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-        return _buildStatsResults(snapshot.data);
-      },
+              return _buildStatsResults(snapshot.data);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchTextField(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 12.0,
+      ),
+      child: TextField(
+        onChanged: _statsBloc.search,
+        style: TextStyle(color: Theme.of(context).primaryColor),
+        decoration: InputDecoration(
+          hintStyle: TextStyle(color: Colors.grey),
+          contentPadding: EdgeInsets.all(12.0),
+          hintText: "Search...",
+          icon: Icon(
+            FontAwesomeIcons.search,
+            size: 16.0,
+          ),
+          fillColor: Colors.white,
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+      ),
     );
   }
 

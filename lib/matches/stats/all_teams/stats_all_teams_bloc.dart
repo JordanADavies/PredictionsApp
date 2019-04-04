@@ -15,6 +15,7 @@ import 'package:predictions/matches/stats/prediction_stat.dart';
 class StatsAllTeamsBloc {
   final StreamController<Map<String, List<PredictionStat>>> stats =
       StreamController<Map<String, List<PredictionStat>>>();
+  Map<String, List<PredictionStat>> _cachedStatsMap;
 
   void dispose() {
     stats.close();
@@ -25,7 +26,7 @@ class StatsAllTeamsBloc {
   }
 
   void _loadStats(Matches matches) async {
-    final statsMap = await compute(_getStats, matches);
+    _cachedStatsMap = await compute(_getStats, matches);
 
 //    final winLoseDrawTeams = [];
 //    final under3Teams = [];
@@ -59,7 +60,7 @@ class StatsAllTeamsBloc {
 //    print("---- BTTS Yes");
 //    bttsYesTeams.forEach((s) => print(s));
 
-    stats.add(statsMap);
+    stats.add(_cachedStatsMap);
   }
 
   static Map<String, List<PredictionStat>> _getStats(Matches matches) {
@@ -211,5 +212,13 @@ class StatsAllTeamsBloc {
       percentage: percentage,
       summary: summary,
     );
+  }
+
+  void search(String searchTerm) {
+    final filteredKeys = _cachedStatsMap.keys
+        .where((key) => key.toLowerCase().contains(searchTerm.toLowerCase()));
+    final filteredResults = Map.fromEntries(
+        filteredKeys.map((key) => MapEntry(key, _cachedStatsMap[key])));
+    stats.add(filteredResults);
   }
 }

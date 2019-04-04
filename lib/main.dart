@@ -46,6 +46,7 @@ final theme = ThemeData(
 final darkTheme = ThemeData.dark().copyWith(
   primaryColor: Color(0xFFF26627),
   scaffoldBackgroundColor: Color(0xFFF26627),
+  accentColor: Colors.white,
 );
 
 class PredictionsApp extends StatelessWidget {
