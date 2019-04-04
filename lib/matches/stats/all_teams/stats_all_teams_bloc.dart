@@ -33,7 +33,7 @@ class StatsAllTeamsBloc {
 //    final over2Teams = [];
 //    final bttsNoTeams = [];
 //    final bttsYesTeams = [];
-//    statsMap.forEach((key, value) {
+//    _cachedStatsMap.forEach((key, value) {
 //      value.forEach((s) {
 //        if (s.type == "1X2" && s.percentage > 70) {
 //          winLoseDrawTeams.add(key);
@@ -64,10 +64,19 @@ class StatsAllTeamsBloc {
   }
 
   static Map<String, List<PredictionStat>> _getStats(Matches matches) {
-    final groupedMatches =
+    final groupedHomeMatches =
         groupBy(matches.thisSeasonsMatches, (m) => m.homeTeam);
-    return groupedMatches
-        .map((key, value) => MapEntry(key, _getLeagueStats(value)));
+    final groupedHomeMatchesStats = groupedHomeMatches
+        .map((key, value) => MapEntry("(H) $key", _getLeagueStats(value)));
+
+    final groupedAwayMatches =
+        groupBy(matches.thisSeasonsMatches, (m) => m.awayTeam);
+    final groupedAwayMatchesStats = groupedAwayMatches
+        .map((key, value) => MapEntry("(A) $key", _getLeagueStats(value)));
+
+    return Map()
+      ..addAll(groupedHomeMatchesStats)
+      ..addAll(groupedAwayMatchesStats);
   }
 
   static List<PredictionStat> _getLeagueStats(List<FootballMatch> matches) {
