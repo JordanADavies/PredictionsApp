@@ -111,7 +111,7 @@ class MatchListItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.0),
             color: checker.isPredictionCorrect()
                 ? Colors.green
-                : Color(0xFF325D79),
+                : match.hasFinalScore() ? Colors.red : Color(0xFF325D79),
           ),
           child: Center(
             child: Text(
