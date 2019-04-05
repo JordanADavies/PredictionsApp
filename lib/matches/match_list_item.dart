@@ -133,12 +133,16 @@ class MatchListItem extends StatelessWidget {
         ? FontAwesomeIcons.solidCheckCircle
         : FontAwesomeIcons.solidTimesCircle;
 
+    final finishedColor = checker.getPrediction() && match.hasFinalScore()
+        ? Colors.red
+        : Color(0xFF325D79);
+    final color = checker.isPredictionCorrect() ? Colors.green : finishedColor;
+
     return Column(
       children: <Widget>[
         Icon(
           icon,
-          color:
-              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color: color,
         ),
         SizedBox(height: 4.0),
         Text("U2.5"),
@@ -152,12 +156,16 @@ class MatchListItem extends StatelessWidget {
         ? FontAwesomeIcons.solidCheckCircle
         : FontAwesomeIcons.solidTimesCircle;
 
+    final finishedColor = checker.getPrediction() && match.hasFinalScore()
+        ? Colors.red
+        : Color(0xFF325D79);
+    final color = checker.isPredictionCorrect() ? Colors.green : finishedColor;
+
     return Column(
       children: <Widget>[
         Icon(
           icon,
-          color:
-              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color: color,
         ),
         SizedBox(height: 4.0),
         Text("O2.5"),
@@ -171,12 +179,16 @@ class MatchListItem extends StatelessWidget {
         ? FontAwesomeIcons.solidCheckCircle
         : FontAwesomeIcons.solidTimesCircle;
 
+    final finishedColor = checker.getPrediction() && match.hasFinalScore()
+        ? Colors.red
+        : Color(0xFF325D79);
+    final color = checker.isPredictionCorrect() ? Colors.green : finishedColor;
+
     return Column(
       children: <Widget>[
         Icon(
           icon,
-          color:
-              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color: color,
         ),
         SizedBox(height: 4.0),
         Text("BTTSN"),
@@ -190,12 +202,16 @@ class MatchListItem extends StatelessWidget {
         ? FontAwesomeIcons.solidCheckCircle
         : FontAwesomeIcons.solidTimesCircle;
 
+    final finishedColor = checker.getPrediction() && match.hasFinalScore()
+        ? Colors.red
+        : Color(0xFF325D79);
+    final color = checker.isPredictionCorrect() ? Colors.green : finishedColor;
+
     return Column(
       children: <Widget>[
         Icon(
           icon,
-          color:
-              checker.isPredictionCorrect() ? Colors.green : Color(0xFF325D79),
+          color: color,
         ),
         SizedBox(height: 4.0),
         Text("BTTSY"),
