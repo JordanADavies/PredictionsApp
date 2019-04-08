@@ -54,13 +54,11 @@ class StatsSelectedLeaguesBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "1X2",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -81,13 +79,11 @@ class StatsSelectedLeaguesBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "Under 2.5",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -108,13 +104,11 @@ class StatsSelectedLeaguesBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "Over 2.5",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -135,13 +129,11 @@ class StatsSelectedLeaguesBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "BTTS No",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -162,13 +154,11 @@ class StatsSelectedLeaguesBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "BTTS Yes",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 }

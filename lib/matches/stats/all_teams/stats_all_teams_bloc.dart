@@ -35,20 +35,20 @@ class StatsAllTeamsBloc {
 //    final bttsYesTeams = [];
 //    _cachedStatsMap.forEach((key, value) {
 //      value.forEach((s) {
-//        if (s.type == "1X2" && s.percentage > 80) {
+//        if (s.type == "1X2" && s.percentage > 80 && s.total > 2) {
 //          winLoseDrawTeams.add(key);
-//        } else if (s.type == "Under 2.5" && s.percentage > 90) {
+//        } else if (s.type == "Under 2.5" && s.percentage > 90 && s.total > 1) {
 //          under3Teams.add(key);
-//        } else if (s.type == "Over 2.5" && s.percentage > 90) {
+//        } else if (s.type == "Over 2.5" && s.percentage > 90 && s.total > 1) {
 //          over2Teams.add(key);
-//        } else if (s.type == "BTTS No" && s.percentage > 90) {
+//        } else if (s.type == "BTTS No" && s.percentage > 90 && s.total > 1) {
 //          bttsNoTeams.add(key);
-//        } else if (s.type == "BTTS Yes" && s.percentage > 90) {
+//        } else if (s.type == "BTTS Yes" && s.percentage > 90 && s.total > 1) {
 //          bttsYesTeams.add(key);
 //        }
 //      });
 //    });
-//
+
 //    print("---- 1X2");
 //    winLoseDrawTeams.forEach((s) => print(s));
 //    print("---- U2.5");
@@ -105,13 +105,11 @@ class StatsAllTeamsBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "1X2",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -132,13 +130,11 @@ class StatsAllTeamsBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "Under 2.5",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -159,13 +155,11 @@ class StatsAllTeamsBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "Over 2.5",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -186,13 +180,11 @@ class StatsAllTeamsBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "BTTS No",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
@@ -213,13 +205,11 @@ class StatsAllTeamsBloc {
     final percentage = predictedCorrectly.length == 0
         ? 0.0
         : predictedCorrectly.length / predictedMatches.length * 100;
-    final summary =
-        "${predictedCorrectly.length} predicted correctly out of ${predictedMatches.length} matches that matched this prediction method.";
-
     return PredictionStat(
       type: "BTTS Yes",
       percentage: percentage,
-      summary: summary,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 
