@@ -28,27 +28,27 @@ class StatsAllTeamsBloc {
   void _loadStats(Matches matches) async {
     _cachedStatsMap = await compute(_getStats, matches);
 
-    final winLoseDrawTeams = [];
-    final under3Teams = [];
-    final over2Teams = [];
-    final bttsNoTeams = [];
-    final bttsYesTeams = [];
-    _cachedStatsMap.forEach((key, value) {
-      value.forEach((s) {
-        if (s.type == "1X2" && s.percentage > 75) {
-          winLoseDrawTeams.add(key);
-        } else if (s.type == "Under 2.5" && s.percentage > 80) {
-          under3Teams.add(key);
-        } else if (s.type == "Over 2.5" && s.percentage > 80) {
-          over2Teams.add(key);
-        } else if (s.type == "BTTS No" && s.percentage > 80) {
-          bttsNoTeams.add(key);
-        } else if (s.type == "BTTS Yes" && s.percentage > 80) {
-          bttsYesTeams.add(key);
-        }
-      });
-    });
-
+//    final winLoseDrawTeams = [];
+//    final under3Teams = [];
+//    final over2Teams = [];
+//    final bttsNoTeams = [];
+//    final bttsYesTeams = [];
+//    _cachedStatsMap.forEach((key, value) {
+//      value.forEach((s) {
+//        if (s.type == "1X2" && s.percentage > 80) {
+//          winLoseDrawTeams.add(key);
+//        } else if (s.type == "Under 2.5" && s.percentage > 90) {
+//          under3Teams.add(key);
+//        } else if (s.type == "Over 2.5" && s.percentage > 90) {
+//          over2Teams.add(key);
+//        } else if (s.type == "BTTS No" && s.percentage > 90) {
+//          bttsNoTeams.add(key);
+//        } else if (s.type == "BTTS Yes" && s.percentage > 90) {
+//          bttsYesTeams.add(key);
+//        }
+//      });
+//    });
+//
 //    print("---- 1X2");
 //    winLoseDrawTeams.forEach((s) => print(s));
 //    print("---- U2.5");
