@@ -37,13 +37,13 @@ class StatsAllTeamsBloc {
 //      value.forEach((s) {
 //        if (s.type == "1X2" && s.percentage > 80 && s.total > 2) {
 //          winLoseDrawTeams.add(key);
-//        } else if (s.type == "Under 2.5" && s.percentage > 90 && s.total > 1) {
+//        } else if (s.type == "Under 2.5" && s.percentage > 90 && s.total > 3) {
 //          under3Teams.add(key);
-//        } else if (s.type == "Over 2.5" && s.percentage > 90 && s.total > 1) {
+//        } else if (s.type == "Over 2.5" && s.percentage > 90 && s.total > 3) {
 //          over2Teams.add(key);
-//        } else if (s.type == "BTTS No" && s.percentage > 90 && s.total > 1) {
+//        } else if (s.type == "BTTS No" && s.percentage > 90 && s.total > 3) {
 //          bttsNoTeams.add(key);
-//        } else if (s.type == "BTTS Yes" && s.percentage > 90 && s.total > 1) {
+//        } else if (s.type == "BTTS Yes" && s.percentage > 90 && s.total > 3) {
 //          bttsYesTeams.add(key);
 //        }
 //      });
