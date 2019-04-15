@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:predictions/data/api/matches_api.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/data/teams.dart';
-import 'package:predictions/matches/predictions/btts_no_checker.dart';
 import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
@@ -126,13 +125,13 @@ class MatchesBloc {
 
   static List<FootballMatch> _getBttsNoMatches(List<FootballMatch> allMatches) {
     return allMatches.where((m) {
-      if (underPerformingTeams.contains("(H) ${m.homeTeam}") &&
-          underPerformingTeams.contains("(A) ${m.awayTeam}")) {
-        final checker = BttsNoChecker(match: m);
-        return checker.getPrediction();
-      }
+      final roundedHomeGoals = Utils.roundProjectedGoals(m.homeProjectedGoals);
+      final roundedAwayGoals = Utils.roundProjectedGoals(m.awayProjectedGoals);
 
-      return false;
+      return (roundedHomeGoals == 0 &&
+              underPerformingTeams.contains("(H) ${m.homeTeam}")) ||
+          (roundedAwayGoals == 0 &&
+              underPerformingTeams.contains("(A) ${m.awayTeam}"));
     }).toList();
   }
 
