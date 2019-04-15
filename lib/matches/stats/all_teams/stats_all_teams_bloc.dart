@@ -46,12 +46,12 @@ class StatsAllTeamsBloc {
 
   static Map<String, List<PredictionStat>> _getStats(Matches matches) {
     final groupedHomeMatches =
-        groupBy(matches.thisSeasonsMatches, (m) => m.homeTeam);
+        groupBy(matches.allMatches, (m) => m.homeTeam);
     final groupedHomeMatchesStats = groupedHomeMatches
         .map((key, value) => MapEntry("(H) $key", _getLeagueStats(key, value)));
 
     final groupedAwayMatches =
-        groupBy(matches.thisSeasonsMatches, (m) => m.awayTeam);
+        groupBy(matches.allMatches, (m) => m.awayTeam);
     final groupedAwayMatchesStats = groupedAwayMatches
         .map((key, value) => MapEntry("(A) $key", _getLeagueStats(key, value)));
 
@@ -65,7 +65,9 @@ class StatsAllTeamsBloc {
     final playedMatches =
         matches.where((m) => m.hasFinalScore() && m.isBeforeToday()).toList();
     final end = playedMatches.length > 4 ? 4 : playedMatches.length;
-    final last5Matches = playedMatches.sublist(0, end);
+    final last5Matches = playedMatches.reversed.toList().sublist(0, end);
+
+    print(last5Matches);
 
     final lessThanProjectedStats =
         _getLessOrEqualThanProjectedStats(team, last5Matches);
