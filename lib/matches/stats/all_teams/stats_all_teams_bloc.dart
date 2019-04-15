@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/stats/prediction_stat.dart';
+import 'package:predictions/util/utils.dart';
 
 class StatsAllTeamsBloc {
   final StreamController<Map<String, List<PredictionStat>>> stats =
@@ -27,14 +28,14 @@ class StatsAllTeamsBloc {
 //    final overPerformingTeams = [];
 //    _cachedStatsMap.forEach((key, value) {
 //      value.forEach((s) {
-//        if (s.type == "Less than or Equal Projected" && s.percentage == 100 && s.total > 2) {
+//        if (s.type == "Less than or Equal Projected" && s.percentage == 100 && s.total > 1) {
 //          underPerformingTeams.add(key);
-//        } else if (s.type == "More than or Equal Projected" && s.percentage == 100 && s.total > 2) {
+//        } else if (s.type == "More than or Equal Projected" && s.percentage == 100 && s.total > 1) {
 //          overPerformingTeams.add(key);
 //        }
 //      });
 //    });
-
+//
 //    print("-- Underperforming");
 //    underPerformingTeams.forEach((t) => print(t));
 //    print("-- Overperforming");
@@ -61,10 +62,10 @@ class StatsAllTeamsBloc {
 
   static List<PredictionStat> _getLeagueStats(
       String team, List<FootballMatch> matches) {
-    final unplayedMatches =
+    final playedMatches =
         matches.where((m) => m.hasFinalScore() && m.isBeforeToday()).toList();
-    final end = unplayedMatches.length > 4 ? 4 : unplayedMatches.length;
-    final last5Matches = unplayedMatches.reversed.toList().sublist(0, end);
+    final end = playedMatches.length > 4 ? 4 : playedMatches.length;
+    final last5Matches = playedMatches.sublist(0, end);
 
     final lessThanProjectedStats =
         _getLessOrEqualThanProjectedStats(team, last5Matches);
@@ -81,11 +82,11 @@ class StatsAllTeamsBloc {
       String team, List<FootballMatch> matches) {
     final lessThanPredicted = matches.where((m) {
       if (team == m.homeTeam) {
-        return m.homeFinalScore <= _roundProjectedGoals(m.homeProjectedGoals);
+        return m.homeFinalScore <= Utils.roundProjectedGoals(m.homeProjectedGoals);
       }
 
       if (team == m.awayTeam) {
-        return m.awayFinalScore <= _roundProjectedGoals(m.awayProjectedGoals);
+        return m.awayFinalScore <= Utils.roundProjectedGoals(m.awayProjectedGoals);
       }
 
       return false;
@@ -102,24 +103,15 @@ class StatsAllTeamsBloc {
     );
   }
 
-  static int _roundProjectedGoals(double predictedScore) {
-    final decimals = (predictedScore - predictedScore.floor());
-    if (decimals > 0.65) {
-      return predictedScore.round();
-    }
-
-    return predictedScore.floor();
-  }
-
   static PredictionStat _getMoreThanOrEqualProjectedStats(
       String team, List<FootballMatch> matches) {
     final moreThanPredicted = matches.where((m) {
       if (team == m.homeTeam) {
-        return m.homeFinalScore >= _roundProjectedGoals(m.homeProjectedGoals);
+        return m.homeFinalScore >= Utils.roundProjectedGoals(m.homeProjectedGoals);
       }
 
       if (team == m.awayTeam) {
-        return m.awayFinalScore >= _roundProjectedGoals(m.awayProjectedGoals);
+        return m.awayFinalScore >= Utils.roundProjectedGoals(m.awayProjectedGoals);
       }
 
       return false;

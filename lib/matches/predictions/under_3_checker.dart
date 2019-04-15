@@ -7,7 +7,7 @@ class Under3Checker {
   Under3Checker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals + match.awayProjectedGoals < 2.5;
+    return match.homeProjectedGoals + match.awayProjectedGoals < 2.25;
   }
 
   bool isPredictionCorrect() {

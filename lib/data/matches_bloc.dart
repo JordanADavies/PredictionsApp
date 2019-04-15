@@ -8,6 +8,7 @@ import 'package:predictions/matches/predictions/btts_no_checker.dart';
 import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
+import 'package:predictions/util/utils.dart';
 import 'package:rxdart/subjects.dart';
 
 class Matches {
@@ -79,7 +80,24 @@ class MatchesBloc {
 
   static List<FootballMatch> _getWinLoseDrawMatches(
       List<FootballMatch> allMatches) {
-    return allMatches;
+    return allMatches.where((m) {
+      final roundedHomeGoals = Utils.roundProjectedGoals(m.homeProjectedGoals);
+      final roundedAwayGoals = Utils.roundProjectedGoals(m.awayProjectedGoals);
+
+      if (roundedHomeGoals > roundedAwayGoals &&
+          (overPerformingTeams.contains("(H) ${m.homeTeam}") ||
+              underPerformingTeams.contains("(A) ${m.awayTeam}"))) {
+        return true;
+      }
+
+      if (roundedAwayGoals > roundedHomeGoals &&
+          (overPerformingTeams.contains("(A) ${m.awayTeam}") ||
+              underPerformingTeams.contains("(H) ${m.homeTeam}"))) {
+        return true;
+      }
+
+      return false;
+    }).toList();
   }
 
   static List<FootballMatch> _getUnder3Matches(List<FootballMatch> allMatches) {
