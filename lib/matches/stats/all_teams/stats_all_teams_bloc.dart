@@ -67,8 +67,6 @@ class StatsAllTeamsBloc {
     final end = playedMatches.length > 4 ? 4 : playedMatches.length;
     final last5Matches = playedMatches.reversed.toList().sublist(0, end);
 
-    print(last5Matches);
-
     final lessThanProjectedStats =
         _getLessOrEqualThanProjectedStats(team, last5Matches);
     final moreThanProjectedStats =
