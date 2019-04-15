@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/util/utils.dart';
 
 class BttsNoChecker {
   final FootballMatch match;
@@ -7,7 +8,9 @@ class BttsNoChecker {
   BttsNoChecker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals < 0.65 || match.awayProjectedGoals < 0.65;
+    final roundedHomeGoals = Utils.roundProjectedGoals(match.homeProjectedGoals);
+    final roundedAwayGoals = Utils.roundProjectedGoals(match.awayProjectedGoals);
+    return roundedHomeGoals < 1 || roundedAwayGoals < 1;
   }
 
   bool isPredictionCorrect() {

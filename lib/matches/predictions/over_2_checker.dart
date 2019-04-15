@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/util/utils.dart';
 
 class Over2Checker {
   final FootballMatch match;
@@ -7,7 +8,9 @@ class Over2Checker {
   Over2Checker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals + match.awayProjectedGoals > 2.75;
+    final roundedHomeGoals = Utils.roundProjectedGoals(match.homeProjectedGoals);
+    final roundedAwayGoals = Utils.roundProjectedGoals(match.awayProjectedGoals);
+    return roundedHomeGoals + roundedAwayGoals > 2;
   }
 
   bool isPredictionCorrect() {
