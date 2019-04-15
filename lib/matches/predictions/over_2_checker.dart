@@ -7,7 +7,7 @@ class Over2Checker {
   Over2Checker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals + match.awayProjectedGoals > 2.5;
+    return match.homeProjectedGoals + match.awayProjectedGoals > 3;
   }
 
   bool isPredictionCorrect() {

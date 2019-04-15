@@ -5,11 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/matches/predictions/btts_no_checker.dart';
-import 'package:predictions/matches/predictions/btts_yes_checker.dart';
-import 'package:predictions/matches/predictions/over_2_checker.dart';
-import 'package:predictions/matches/predictions/under_3_checker.dart';
-import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
 import 'package:predictions/matches/stats/prediction_stat.dart';
 
 class StatsAllTeamsBloc {
@@ -28,37 +23,22 @@ class StatsAllTeamsBloc {
   void _loadStats(Matches matches) async {
     _cachedStatsMap = await compute(_getStats, matches);
 
-//    final winLoseDrawTeams = [];
-//    final under3Teams = [];
-//    final over2Teams = [];
-//    final bttsNoTeams = [];
-//    final bttsYesTeams = [];
+//    final underPerformingTeams = [];
+//    final overPerformingTeams = [];
 //    _cachedStatsMap.forEach((key, value) {
 //      value.forEach((s) {
-//        if (s.type == "1X2" && s.percentage > 80 && s.total > 2) {
-//          winLoseDrawTeams.add(key);
-//        } else if (s.type == "Under 2.5" && s.percentage > 90 && s.total > 3) {
-//          under3Teams.add(key);
-//        } else if (s.type == "Over 2.5" && s.percentage > 90 && s.total > 3) {
-//          over2Teams.add(key);
-//        } else if (s.type == "BTTS No" && s.percentage > 90 && s.total > 3) {
-//          bttsNoTeams.add(key);
-//        } else if (s.type == "BTTS Yes" && s.percentage > 90 && s.total > 3) {
-//          bttsYesTeams.add(key);
+//        if (s.type == "Less than or Equal Projected" && s.percentage == 100 && s.total > 2) {
+//          underPerformingTeams.add(key);
+//        } else if (s.type == "More than or Equal Projected" && s.percentage == 100 && s.total > 2) {
+//          overPerformingTeams.add(key);
 //        }
 //      });
 //    });
 
-//    print("---- 1X2");
-//    winLoseDrawTeams.forEach((s) => print(s));
-//    print("---- U2.5");
-//    under3Teams.forEach((s) => print(s));
-//    print("---- O2.5");
-//    over2Teams.forEach((s) => print(s));
-//    print("---- BTTS No");
-//    bttsNoTeams.forEach((s) => print(s));
-//    print("---- BTTS Yes");
-//    bttsYesTeams.forEach((s) => print(s));
+//    print("-- Underperforming");
+//    underPerformingTeams.forEach((t) => print(t));
+//    print("-- Overperforming");
+//    overPerformingTeams.forEach((t) => print(t));
 
     stats.add(_cachedStatsMap);
   }
@@ -67,149 +47,92 @@ class StatsAllTeamsBloc {
     final groupedHomeMatches =
         groupBy(matches.thisSeasonsMatches, (m) => m.homeTeam);
     final groupedHomeMatchesStats = groupedHomeMatches
-        .map((key, value) => MapEntry("(H) $key", _getLeagueStats(value)));
+        .map((key, value) => MapEntry("(H) $key", _getLeagueStats(key, value)));
 
     final groupedAwayMatches =
         groupBy(matches.thisSeasonsMatches, (m) => m.awayTeam);
     final groupedAwayMatchesStats = groupedAwayMatches
-        .map((key, value) => MapEntry("(A) $key", _getLeagueStats(value)));
+        .map((key, value) => MapEntry("(A) $key", _getLeagueStats(key, value)));
 
     return Map()
       ..addAll(groupedHomeMatchesStats)
       ..addAll(groupedAwayMatchesStats);
   }
 
-  static List<PredictionStat> _getLeagueStats(List<FootballMatch> matches) {
-    final winLoseDrawStats = _getWinLoseDrawStats(matches);
-    final under3Stats = _getUnder3Stats(matches);
-    final over2Stats = _getOver2Stats(matches);
-    final bttsNoStats = _getBttsNoStats(matches);
-    final bttsYesStats = _getBttsYesStats(matches);
+  static List<PredictionStat> _getLeagueStats(
+      String team, List<FootballMatch> matches) {
+    final unplayedMatches =
+        matches.where((m) => m.hasFinalScore() && m.isBeforeToday()).toList();
+    final end = unplayedMatches.length > 4 ? 4 : unplayedMatches.length;
+    final last5Matches = unplayedMatches.reversed.toList().sublist(0, end);
+
+    final lessThanProjectedStats =
+        _getLessOrEqualThanProjectedStats(team, last5Matches);
+    final moreThanProjectedStats =
+        _getMoreThanOrEqualProjectedStats(team, last5Matches);
+
     return [
-      winLoseDrawStats,
-      under3Stats,
-      over2Stats,
-      bttsNoStats,
-      bttsYesStats,
+      lessThanProjectedStats,
+      moreThanProjectedStats,
     ]..sort((left, right) => right.percentage.compareTo(left.percentage));
   }
 
-  static PredictionStat _getWinLoseDrawStats(List<FootballMatch> matches) {
-    final predictedMatches =
-        matches.where((m) => m.hasFinalScore() && m.isBeforeToday());
-    final predictedCorrectly = matches.where((m) {
-      final checker = WinLoseDrawChecker(match: m);
-      return checker.isPredictionCorrect();
+  static PredictionStat _getLessOrEqualThanProjectedStats(
+      String team, List<FootballMatch> matches) {
+    final lessThanPredicted = matches.where((m) {
+      if (team == m.homeTeam) {
+        return m.homeFinalScore <= _roundProjectedGoals(m.homeProjectedGoals);
+      }
+
+      if (team == m.awayTeam) {
+        return m.awayFinalScore <= _roundProjectedGoals(m.awayProjectedGoals);
+      }
+
+      return false;
     });
 
-    final percentage = predictedCorrectly.length == 0
+    final percentage = lessThanPredicted.length == 0
         ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
+        : lessThanPredicted.length / matches.length * 100;
     return PredictionStat(
-      type: "1X2",
+      type: "Less than or Equal Projected",
       percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
+      total: matches.length,
+      totalCorrect: lessThanPredicted.length,
     );
   }
 
-  static PredictionStat _getUnder3Stats(List<FootballMatch> matches) {
-    final predictedMatches = matches.where((m) {
-      if (!m.hasFinalScore() || !m.isBeforeToday()) {
-        return false;
-      }
+  static int _roundProjectedGoals(double predictedScore) {
+    final decimals = (predictedScore - predictedScore.floor());
+    if (decimals > 0.65) {
+      return predictedScore.round();
+    }
 
-      final checker = Under3Checker(match: m);
-      return checker.getPrediction();
-    });
-    final predictedCorrectly = predictedMatches.where((m) {
-      final checker = Under3Checker(match: m);
-      return checker.isPredictionCorrect();
-    });
-
-    final percentage = predictedCorrectly.length == 0
-        ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
-    return PredictionStat(
-      type: "Under 2.5",
-      percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
-    );
+    return predictedScore.floor();
   }
 
-  static PredictionStat _getOver2Stats(List<FootballMatch> matches) {
-    final predictedMatches = matches.where((m) {
-      if (!m.hasFinalScore() || !m.isBeforeToday()) {
-        return false;
+  static PredictionStat _getMoreThanOrEqualProjectedStats(
+      String team, List<FootballMatch> matches) {
+    final moreThanPredicted = matches.where((m) {
+      if (team == m.homeTeam) {
+        return m.homeFinalScore >= _roundProjectedGoals(m.homeProjectedGoals);
       }
 
-      final checker = Over2Checker(match: m);
-      return checker.getPrediction();
-    });
-    final predictedCorrectly = predictedMatches.where((m) {
-      final checker = Over2Checker(match: m);
-      return checker.isPredictionCorrect();
-    });
-
-    final percentage = predictedCorrectly.length == 0
-        ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
-    return PredictionStat(
-      type: "Over 2.5",
-      percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
-    );
-  }
-
-  static PredictionStat _getBttsNoStats(List<FootballMatch> matches) {
-    final predictedMatches = matches.where((m) {
-      if (!m.hasFinalScore() || !m.isBeforeToday()) {
-        return false;
+      if (team == m.awayTeam) {
+        return m.awayFinalScore >= _roundProjectedGoals(m.awayProjectedGoals);
       }
 
-      final checker = BttsNoChecker(match: m);
-      return checker.getPrediction();
-    });
-    final predictedCorrectly = predictedMatches.where((m) {
-      final checker = BttsNoChecker(match: m);
-      return checker.isPredictionCorrect();
+      return false;
     });
 
-    final percentage = predictedCorrectly.length == 0
+    final percentage = moreThanPredicted.length == 0
         ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
+        : moreThanPredicted.length / matches.length * 100;
     return PredictionStat(
-      type: "BTTS No",
+      type: "More than or Equal Projected",
       percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
-    );
-  }
-
-  static PredictionStat _getBttsYesStats(List<FootballMatch> matches) {
-    final predictedMatches = matches.where((m) {
-      if (!m.hasFinalScore() || !m.isBeforeToday()) {
-        return false;
-      }
-
-      final checker = BttsYesChecker(match: m);
-      return checker.getPrediction();
-    });
-    final predictedCorrectly = predictedMatches.where((m) {
-      final checker = BttsYesChecker(match: m);
-      return checker.isPredictionCorrect();
-    });
-
-    final percentage = predictedCorrectly.length == 0
-        ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
-    return PredictionStat(
-      type: "BTTS Yes",
-      percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
+      total: matches.length,
+      totalCorrect: moreThanPredicted.length,
     );
   }
 

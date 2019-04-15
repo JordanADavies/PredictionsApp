@@ -16,5 +16,5 @@ class PredictionStat {
   String get summary => "$totalCorrect predicted correctly out of $total matches that matched this prediction method.";
 
   @override
-  String toString() => "$type - ${percentage.toStringAsFixed(2)}";
+  String toString() => "$type - ${percentage.toStringAsFixed(2)} - $total - $totalCorrect";
 }

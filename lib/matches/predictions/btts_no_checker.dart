@@ -7,7 +7,7 @@ class BttsNoChecker {
   BttsNoChecker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals < 1 || match.awayProjectedGoals < 1;
+    return match.homeProjectedGoals < 0.65 || match.awayProjectedGoals < 0.65;
   }
 
   bool isPredictionCorrect() {

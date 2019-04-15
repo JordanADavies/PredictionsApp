@@ -7,7 +7,7 @@ class BttsYesChecker {
   BttsYesChecker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals > 1 && match.awayProjectedGoals > 1;
+    return match.homeProjectedGoals > 1.2 && match.awayProjectedGoals > 1.2;
   }
 
   bool isPredictionCorrect() {
