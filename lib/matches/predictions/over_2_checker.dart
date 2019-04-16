@@ -22,8 +22,8 @@ class Over2Checker {
       return false;
     }
 
-    return overPerformingTeams.contains("(H) ${match.homeTeam}") &&
-        overPerformingTeams.contains("(A) ${match.awayTeam}");
+    return overPerformingGoalsTeams.contains("(H) ${match.homeTeam}") &&
+        overPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
   }
 
   bool isPredictionCorrect() {

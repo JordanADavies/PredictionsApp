@@ -21,9 +21,9 @@ class BttsNoChecker {
     final roundedAwayGoals = Utils.roundProjectedGoals(match.awayProjectedGoals);
 
     return (roundedHomeGoals < 1 &&
-            underPerformingTeams.contains("(H) ${match.homeTeam}")) ||
+            underPerformingGoalsTeams.contains("(H) ${match.homeTeam}")) ||
         (roundedAwayGoals < 1 &&
-            underPerformingTeams.contains("(A) ${match.awayTeam}"));
+            underPerformingGoalsTeams.contains("(A) ${match.awayTeam}"));
   }
 
   bool isPredictionCorrect() {

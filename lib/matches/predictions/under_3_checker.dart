@@ -22,8 +22,8 @@ class Under3Checker {
       return false;
     }
 
-    return underPerformingTeams.contains("(H) ${match.homeTeam}") &&
-        underPerformingTeams.contains("(A) ${match.awayTeam}");
+    return underPerformingGoalsTeams.contains("(H) ${match.homeTeam}") &&
+        underPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
   }
 
   bool isPredictionCorrect() {

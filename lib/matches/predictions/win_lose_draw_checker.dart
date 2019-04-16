@@ -32,20 +32,18 @@ class WinLoseDrawChecker {
     final prediction = getPrediction();
 
     if (prediction == WinLoseDrawResult.HomeWin &&
-        overPerformingTeams.contains("(H) ${match.homeTeam}")) {
+        asExpectedResultTeams.contains("(H) ${match.homeTeam}")) {
       return WinLoseDrawResult.HomeWin;
     }
 
     if (prediction == WinLoseDrawResult.Draw &&
-        ((overPerformingTeams.contains("(H) ${match.homeTeam}") &&
-                overPerformingTeams.contains("(A) ${match.awayTeam}")) ||
-            (underPerformingTeams.contains("(H) ${match.homeTeam}") &&
-                underPerformingTeams.contains("(A) ${match.awayTeam}")))) {
+        asExpectedResultTeams.contains("(H) ${match.homeTeam}") &&
+        asExpectedResultTeams.contains("(A) ${match.awayTeam}")) {
       return WinLoseDrawResult.Draw;
     }
 
     if (prediction == WinLoseDrawResult.AwayWin &&
-        overPerformingTeams.contains("(A) ${match.awayTeam}")) {
+        asExpectedResultTeams.contains("(A) ${match.awayTeam}")) {
       return WinLoseDrawResult.AwayWin;
     }
 
