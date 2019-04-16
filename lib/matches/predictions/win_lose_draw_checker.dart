@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/data/teams.dart';
 
 enum WinLoseDrawResult { HomeWin, Draw, AwayWin, Unknown }
 
@@ -21,6 +22,30 @@ class WinLoseDrawChecker {
 
     if (match.awayWinProbability > match.drawProbability &&
         match.awayWinProbability > match.homeWinProbability) {
+      return WinLoseDrawResult.AwayWin;
+    }
+
+    return WinLoseDrawResult.Unknown;
+  }
+
+  WinLoseDrawResult getPredictionIncludingPerformance() {
+    final prediction = getPrediction();
+
+    if (prediction == WinLoseDrawResult.HomeWin &&
+        overPerformingTeams.contains("(H) ${match.homeTeam}")) {
+      return WinLoseDrawResult.HomeWin;
+    }
+
+    if (prediction == WinLoseDrawResult.Draw &&
+        ((overPerformingTeams.contains("(H) ${match.homeTeam}") &&
+                overPerformingTeams.contains("(A) ${match.awayTeam}")) ||
+            (underPerformingTeams.contains("(H) ${match.homeTeam}") &&
+                underPerformingTeams.contains("(A) ${match.awayTeam}")))) {
+      return WinLoseDrawResult.Draw;
+    }
+
+    if (prediction == WinLoseDrawResult.AwayWin &&
+        overPerformingTeams.contains("(A) ${match.awayTeam}")) {
       return WinLoseDrawResult.AwayWin;
     }
 

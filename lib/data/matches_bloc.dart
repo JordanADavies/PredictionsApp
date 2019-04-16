@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/api/matches_api.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/data/teams.dart';
+import 'package:predictions/matches/predictions/btts_no_checker.dart';
 import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
-import 'package:predictions/util/utils.dart';
+import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
 import 'package:rxdart/subjects.dart';
 
 class Matches {
@@ -80,71 +80,38 @@ class MatchesBloc {
   static List<FootballMatch> _getWinLoseDrawMatches(
       List<FootballMatch> allMatches) {
     return allMatches.where((m) {
-      final roundedHomeGoals = Utils.roundProjectedGoals(m.homeProjectedGoals);
-      final roundedAwayGoals = Utils.roundProjectedGoals(m.awayProjectedGoals);
-
-      if (roundedHomeGoals > roundedAwayGoals &&
-          (overPerformingTeams.contains("(H) ${m.homeTeam}") ||
-              underPerformingTeams.contains("(A) ${m.awayTeam}"))) {
-        return true;
-      }
-
-      if (roundedAwayGoals > roundedHomeGoals &&
-          (overPerformingTeams.contains("(A) ${m.awayTeam}") ||
-              underPerformingTeams.contains("(H) ${m.homeTeam}"))) {
-        return true;
-      }
-
-      return false;
+      final checker = WinLoseDrawChecker(match: m);
+      return checker.getPredictionIncludingPerformance() !=
+          WinLoseDrawResult.Unknown;
     }).toList();
   }
 
   static List<FootballMatch> _getUnder3Matches(List<FootballMatch> allMatches) {
     return allMatches.where((m) {
-      if (underPerformingTeams.contains("(H) ${m.homeTeam}") &&
-          underPerformingTeams.contains("(A) ${m.awayTeam}")) {
-        final checker = Under3Checker(match: m);
-        return checker.getPrediction();
-      }
-
-      return false;
+      final checker = Under3Checker(match: m);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 
   static List<FootballMatch> _getOver2Matches(List<FootballMatch> allMatches) {
     return allMatches.where((m) {
-      if (overPerformingTeams.contains("(H) ${m.homeTeam}") &&
-          overPerformingTeams.contains("(A) ${m.awayTeam}")) {
-        final checker = Over2Checker(match: m);
-        return checker.getPrediction();
-      }
-
-      return false;
+      final checker = Over2Checker(match: m);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 
   static List<FootballMatch> _getBttsNoMatches(List<FootballMatch> allMatches) {
     return allMatches.where((m) {
-      final roundedHomeGoals = Utils.roundProjectedGoals(m.homeProjectedGoals);
-      final roundedAwayGoals = Utils.roundProjectedGoals(m.awayProjectedGoals);
-
-      return (roundedHomeGoals == 0 &&
-              underPerformingTeams.contains("(H) ${m.homeTeam}")) ||
-          (roundedAwayGoals == 0 &&
-              underPerformingTeams.contains("(A) ${m.awayTeam}"));
+      final checker = BttsNoChecker(match: m);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 
   static List<FootballMatch> _getBttsYesMatches(
       List<FootballMatch> allMatches) {
     return allMatches.where((m) {
-      if (overPerformingTeams.contains("(H) ${m.homeTeam}") &&
-          overPerformingTeams.contains("(A) ${m.awayTeam}")) {
-        final checker = BttsYesChecker(match: m);
-        return checker.getPrediction();
-      }
-
-      return false;
+      final checker = BttsYesChecker(match: m);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 }
