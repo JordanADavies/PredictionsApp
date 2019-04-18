@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
+import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/data/teams.dart';
-import 'package:predictions/util/utils.dart';
 
 class BttsNoChecker {
   final FootballMatch match;
@@ -9,21 +8,9 @@ class BttsNoChecker {
   BttsNoChecker({@required this.match});
 
   bool getPrediction() {
-    final roundedHomeGoals =
-        Utils.roundProjectedGoals(match.homeProjectedGoals);
-    final roundedAwayGoals =
-        Utils.roundProjectedGoals(match.awayProjectedGoals);
-    return roundedHomeGoals < 1 || roundedAwayGoals < 1;
-  }
-
-  bool getPredictionIncludingPerformance() {
-    final roundedHomeGoals = Utils.roundProjectedGoals(match.homeProjectedGoals);
-    final roundedAwayGoals = Utils.roundProjectedGoals(match.awayProjectedGoals);
-
-    return (roundedHomeGoals < 1 &&
-            underPerformingGoalsTeams.contains("(H) ${match.homeTeam}")) ||
-        (roundedAwayGoals < 1 &&
-            underPerformingGoalsTeams.contains("(A) ${match.awayTeam}"));
+    final leagueToNotScoreAverage = toNotScoreAverages[match.leagueId] - 0.45;
+    return match.homeProjectedGoals < leagueToNotScoreAverage ||
+        match.awayProjectedGoals < leagueToNotScoreAverage;
   }
 
   bool isPredictionCorrect() {

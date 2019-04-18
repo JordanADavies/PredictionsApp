@@ -29,8 +29,8 @@ class StatsAllLeaguesBloc {
 
 //    statsMap.forEach((key, value) {
 //      value.forEach((s) {
-//        if (s.percentage > 70 || (s.percentage > 58 && s.type == "1X2")) {
-//          print("-- $s");
+//        if (s.percentage > 70) {
+//          print("-- ${s.type}");
 //          print("    $key");
 //        }
 //      });

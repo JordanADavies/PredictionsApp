@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
+import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/data/teams.dart';
-import 'package:predictions/util/utils.dart';
 
 class Under3Checker {
   final FootballMatch match;
@@ -9,21 +8,9 @@ class Under3Checker {
   Under3Checker({@required this.match});
 
   bool getPrediction() {
-    final roundedHomeGoals =
-        Utils.roundProjectedGoals(match.homeProjectedGoals);
-    final roundedAwayGoals =
-        Utils.roundProjectedGoals(match.awayProjectedGoals);
-    return roundedHomeGoals + roundedAwayGoals < 3;
-  }
-
-  bool getPredictionIncludingPerformance() {
-    final prediction = getPrediction();
-    if (!prediction) {
-      return false;
-    }
-
-    return underPerformingGoalsTeams.contains("(H) ${match.homeTeam}") &&
-        underPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
+    final predictedTotal = match.homeProjectedGoals + match.awayProjectedGoals;
+    final leagueAverage = under3Averages[match.leagueId] - 0.25;
+    return predictedTotal < leagueAverage;
   }
 
   bool isPredictionCorrect() {
