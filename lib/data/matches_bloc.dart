@@ -67,7 +67,8 @@ class MatchesBloc {
 
   static bool _isThisSeason(FootballMatch match) {
     final dateSplitString = match.date.split("-");
-    return dateSplitString[0] == "2019";
+    return dateSplitString[0] == "2019" ||
+        (dateSplitString[0] == "2018" && double.parse(dateSplitString[1]) >= 8);
   }
 
   static Map<String, Map<String, List<FootballMatch>>> _groupMatches(

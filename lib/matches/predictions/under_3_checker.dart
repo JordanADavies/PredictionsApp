@@ -9,8 +9,9 @@ class Under3Checker {
   Under3Checker({@required this.match});
 
   bool getPrediction() {
+    final leagueAverage = goalAverages[match.leagueId];
     final predictedTotal = match.homeProjectedGoals + match.awayProjectedGoals;
-    return predictedTotal < 3;
+    return leagueAverage < 2.45 && predictedTotal < 2.45;
   }
 
   bool getPredictionIncludingPerformance() {
@@ -19,10 +20,8 @@ class Under3Checker {
       return false;
     }
 
-    final leagueAverage = goalAverages[match.leagueId];
-    return leagueAverage < 2.5 &&
-        (underPerformingGoalsTeams.contains("(H) ${match.homeTeam}") ||
-            underPerformingGoalsTeams.contains("(A) ${match.awayTeam}"));
+    return underPerformingGoalsTeams.contains("(H) ${match.homeTeam}") ||
+        underPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
   }
 
   bool isPredictionCorrect() {

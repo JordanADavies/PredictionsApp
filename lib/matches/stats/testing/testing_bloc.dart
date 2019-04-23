@@ -19,7 +19,10 @@ class TestingBloc {
 
         final values = grouped[k];
         final averagePerGame = _getAverageGoalsPerGame(values);
-        print("Average goals per game - ${averagePerGame.toStringAsFixed(2)}");
+        print("    Average goals per game - ${averagePerGame.toStringAsFixed(2)}");
+
+        final bttsYesPercentage = _getBttsPercentage(values);
+        print("    BTTS percentage - ${bttsYesPercentage.toStringAsFixed(2)}");
       });
   }
 
@@ -29,5 +32,14 @@ class TestingBloc {
     final average = goalsTotal.reduce((value, element) => value += element) /
         goalsTotal.length;
     return average;
+  }
+
+  double _getBttsPercentage(List<FootballMatch> matches) {
+    final bttsYesGames =
+        matches.where((m) => m.homeFinalScore > 0 && m.awayFinalScore > 0);
+    final percentage = bttsYesGames.length == 0
+        ? 0.0
+        : bttsYesGames.length / matches.length * 100;
+    return percentage;
   }
 }

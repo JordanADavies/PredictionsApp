@@ -10,7 +10,8 @@ class Over2Checker {
 
   bool getPrediction() {
     final predictedTotal = match.homeProjectedGoals + match.awayProjectedGoals;
-    return predictedTotal > 2.5;
+    final leagueAverage = goalAverages[match.leagueId];
+    return leagueAverage > 3 && predictedTotal > 3;
   }
 
   bool getPredictionIncludingPerformance() {
@@ -19,10 +20,8 @@ class Over2Checker {
       return false;
     }
 
-    final leagueAverage = goalAverages[match.leagueId];
-    return leagueAverage > 2.5 &&
-        (overPerformingGoalsTeams.contains("(H) ${match.homeTeam}") ||
-            overPerformingGoalsTeams.contains("(A) ${match.awayTeam}"));
+    return overPerformingGoalsTeams.contains("(H) ${match.homeTeam}") ||
+        overPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
   }
 
   bool isPredictionCorrect() {

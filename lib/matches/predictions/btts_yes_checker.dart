@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/data/teams.dart';
 
@@ -8,7 +9,10 @@ class BttsYesChecker {
   BttsYesChecker({@required this.match});
 
   bool getPrediction() {
-    return match.homeProjectedGoals > 1 && match.awayProjectedGoals > 1;
+    final bttsPercentage = bttsPercentages[match.leagueId];
+    return bttsPercentage > 55 &&
+        match.homeProjectedGoals > 0.8 &&
+        match.awayProjectedGoals > 0.8;
   }
 
   bool getPredictionIncludingPerformance() {
