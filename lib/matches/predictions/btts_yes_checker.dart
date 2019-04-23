@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/data/teams.dart';
 
 class BttsYesChecker {
   final FootballMatch match;
@@ -8,9 +8,17 @@ class BttsYesChecker {
   BttsYesChecker({@required this.match});
 
   bool getPrediction() {
-    final leagueToScoreAverage = toScoreAverages[match.leagueId];
-    return match.homeProjectedGoals > leagueToScoreAverage &&
-        match.awayProjectedGoals > leagueToScoreAverage;
+    return match.homeProjectedGoals > 1 && match.awayProjectedGoals > 1;
+  }
+
+  bool getPredictionIncludingPerformance() {
+    final prediction = getPrediction();
+    if (!prediction) {
+      return false;
+    }
+
+    return overPerformingGoalsTeams.contains("(H) ${match.homeTeam}") &&
+        overPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
   }
 
   bool isPredictionCorrect() {

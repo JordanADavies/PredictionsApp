@@ -3,6 +3,7 @@ import 'package:predictions/main.dart';
 import 'package:predictions/matches/stats/all_leagues/stats_all_leagues_page.dart';
 import 'package:predictions/matches/stats/all_teams/stats_all_teams_page.dart';
 import 'package:predictions/matches/stats/selected_leagues/stats_selected_leagues_page.dart';
+import 'package:predictions/matches/stats/testing/testing_page.dart';
 
 class StatsPage extends StatelessWidget {
   @override
@@ -15,7 +16,7 @@ class StatsPage extends StatelessWidget {
           elevation: 0.0,
         ),
         body: DefaultTabController(
-          length: 3,
+          length: 4,
           child: Column(
             children: <Widget>[
               TabBar(
@@ -24,6 +25,7 @@ class StatsPage extends StatelessWidget {
                   Tab(text: "Highlighted"),
                   Tab(text: "All Leagues"),
                   Tab(text: "All Teams"),
+                  Tab(text: "Testing"),
                 ],
               ),
               Expanded(
@@ -32,6 +34,7 @@ class StatsPage extends StatelessWidget {
                     StatsSelectedLeaguesPage(),
                     StatsAllLeaguesPage(),
                     StatsAllTeamsPage(),
+                    TestingPage(),
                   ],
                 ),
               ),

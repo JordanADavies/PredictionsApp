@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/api/matches_api.dart';
-import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/predictions/btts_no_checker.dart';
 import 'package:predictions/matches/predictions/btts_yes_checker.dart';
@@ -88,67 +87,31 @@ class MatchesBloc {
   }
 
   static List<FootballMatch> _getUnder3Matches(List<FootballMatch> allMatches) {
-    final leagues = [
-      AUSTRALIAN_A_LEAGUE,
-      PORTUGUESE_LIGA,
-      SPANISH_SEGUNDA_DIVISION,
-      FRENCH_LIGUE_1,
-      ITALY_SERIE_B,
-      SWISS_RAIFFEISEN_SUPER_LEAGUE,
-      JAPANESE_J_LEAGUE,
-      SWEDISH_ALLSVENSKAN,
-    ];
-
     return allMatches.where((m) {
       final checker = Under3Checker(match: m);
-      return checker.getPrediction() && leagues.contains(m.leagueId);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 
   static List<FootballMatch> _getOver2Matches(List<FootballMatch> allMatches) {
-    final leagues = [
-      AUSTRALIAN_A_LEAGUE,
-      FRENCH_LIGUE_1,
-      GREEK_SUPER_LEAGUE,
-      BELGIAN_JUPILER_LEAGUE,
-      ARGENTINA_PRIMERA_DIVISION,
-      UNITED_SOCCER_LEAGUE,
-      NORWEGIAN_TIPPELIGAEN,
-    ];
-
     return allMatches.where((m) {
       final checker = Over2Checker(match: m);
-      return checker.getPrediction() && leagues.contains(m.leagueId);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 
   static List<FootballMatch> _getBttsNoMatches(List<FootballMatch> allMatches) {
-    final leagues = [
-      MEXICAN_PRIMERA_DIVISION_TORNEO_CLAUSURA,
-      SCOTTISH_PREMIERSHIP,
-      UEFA_CHAMPIONS_LEAGUE,
-      AUSTRIAN_T_MOBILE_BUNDESLIGA,
-      NATIONAL_WOMENS_SOCCER_LEAGUE,
-    ];
     return allMatches.where((m) {
       final checker = BttsNoChecker(match: m);
-      return checker.getPrediction() && leagues.contains(m.leagueId);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 
   static List<FootballMatch> _getBttsYesMatches(
       List<FootballMatch> allMatches) {
-    final leagues = [
-      AUSTRALIAN_A_LEAGUE,
-      GERMAN_BUNDESLIGA,
-      BELGIAN_JUPILER_LEAGUE,
-      DANISH_SAS_LIGAEN,
-      UEFA_CHAMPIONS_LEAGUE,
-      UNITED_SOCCER_LEAGUE,
-    ];
     return allMatches.where((m) {
       final checker = BttsYesChecker(match: m);
-      return checker.getPrediction() && leagues.contains(m.leagueId);
+      return checker.getPredictionIncludingPerformance();
     }).toList();
   }
 }
