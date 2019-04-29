@@ -52,21 +52,24 @@ class MatchListItem extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(top: 12.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              SizedBox(width: 28.0),
               _buildWinLoseDraw(),
+              SizedBox(width: 28.0),
               Opacity(
                 opacity: snapshot.data?.under3Matches?.contains(match) ?? false
                     ? 1.0
                     : 0.2,
                 child: _buildUnder3(),
               ),
+              SizedBox(width: 28.0),
               Opacity(
                 opacity: snapshot.data?.over2Matches?.contains(match) ?? false
                     ? 1.0
                     : 0.2,
                 child: _buildOver2(),
               ),
+              SizedBox(width: 28.0),
               _buildValue(),
             ],
           ),
