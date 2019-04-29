@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/data/teams.dart';
 
 class Under3Checker {
   final FootballMatch match;
@@ -9,9 +8,8 @@ class Under3Checker {
   Under3Checker({@required this.match});
 
   bool getPrediction() {
-    final leagueAverage = goalAverages[match.leagueId];
     final predictedTotal = match.homeProjectedGoals + match.awayProjectedGoals;
-    return leagueAverage < 2.45 && predictedTotal < 2.45;
+    return predictedTotal < 2;
   }
 
   bool getPredictionIncludingPerformance() {
@@ -20,8 +18,7 @@ class Under3Checker {
       return false;
     }
 
-    return underPerformingGoalsTeams.contains("(H) ${match.homeTeam}") ||
-        underPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
+    return highPerformingUnder3Leagues.contains(match.leagueId);
   }
 
   bool isPredictionCorrect() {

@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/data/teams.dart';
 
 class Over2Checker {
   final FootballMatch match;
@@ -10,8 +9,7 @@ class Over2Checker {
 
   bool getPrediction() {
     final predictedTotal = match.homeProjectedGoals + match.awayProjectedGoals;
-    final leagueAverage = goalAverages[match.leagueId];
-    return leagueAverage > 3 && predictedTotal > 3;
+    return predictedTotal > 3;
   }
 
   bool getPredictionIncludingPerformance() {
@@ -20,8 +18,7 @@ class Over2Checker {
       return false;
     }
 
-    return overPerformingGoalsTeams.contains("(H) ${match.homeTeam}") ||
-        overPerformingGoalsTeams.contains("(A) ${match.awayTeam}");
+    return highPerformingOver2Leagues.contains(match.leagueId);
   }
 
   bool isPredictionCorrect() {

@@ -27,9 +27,9 @@ class StatsAllLeaguesBloc {
 
 //    statsMap.forEach((key, value) {
 //      value.forEach((s) {
-//        if (s.percentage > 70) {
-//          print("-- ${s.type}");
-//          print("    $key");
+//        if (s.percentage > 70 || (s.type == "1X2" && s.percentage > 60)) {
+//          print("-- $key");
+//          print("    ${s.type}");
 //        }
 //      });
 //    });
@@ -68,8 +68,8 @@ class StatsAllLeaguesBloc {
     return PredictionStat(
       type: "1X2",
       percentage: percentage,
-        total: predictedMatches.length,
-        totalCorrect: predictedCorrectly.length,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
     );
   }
 

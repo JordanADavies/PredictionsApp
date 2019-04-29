@@ -75,8 +75,7 @@ class MatchesBloc {
       List<FootballMatch> allMatches) {
     return allMatches.where((m) {
       final checker = WinLoseDrawChecker(match: m);
-      return checker.getPredictionIncludingPerformance() !=
-          WinLoseDrawResult.Unknown;
+      return checker.getPrediction() != WinLoseDrawResult.Unknown;
     }).toList();
   }
 
