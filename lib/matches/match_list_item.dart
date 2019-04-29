@@ -6,6 +6,7 @@ import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
+import 'package:predictions/matches/predictions/value_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
 
 class MatchListItem extends StatelessWidget {
@@ -66,6 +67,7 @@ class MatchListItem extends StatelessWidget {
                     : 0.2,
                 child: _buildOver2(),
               ),
+              _buildValue(),
             ],
           ),
         );
@@ -149,6 +151,34 @@ class MatchListItem extends StatelessWidget {
         ),
         SizedBox(height: 4.0),
         Text("O2.5"),
+      ],
+    );
+  }
+
+  Widget _buildValue() {
+    final checker = ValueChecker(match: match);
+    final value =  checker.getValue();
+
+    return Column(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Colors.grey[400],
+          ),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 8.0),
+              child: Text(
+                value,
+                style:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 4.0),
+        Text("Value"),
       ],
     );
   }
