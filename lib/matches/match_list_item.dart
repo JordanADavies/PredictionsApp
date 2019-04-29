@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
-import 'package:predictions/matches/predictions/btts_no_checker.dart';
-import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MatchListItem extends StatelessWidget {
   final FootballMatch match;
@@ -55,13 +53,7 @@ class MatchListItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Opacity(
-                opacity:
-                    snapshot.data?.winLoseDrawMatches?.contains(match) ?? false
-                        ? 1.0
-                        : 0.2,
-                child: _buildWinLoseDraw(),
-              ),
+              _buildWinLoseDraw(),
               Opacity(
                 opacity: snapshot.data?.under3Matches?.contains(match) ?? false
                     ? 1.0
@@ -73,18 +65,6 @@ class MatchListItem extends StatelessWidget {
                     ? 1.0
                     : 0.2,
                 child: _buildOver2(),
-              ),
-              Opacity(
-                opacity: snapshot.data?.bttsNoMatches?.contains(match) ?? false
-                    ? 1.0
-                    : 0.2,
-                child: _buildBttsNo(),
-              ),
-              Opacity(
-                opacity: snapshot.data?.bttsYesMatches?.contains(match) ?? false
-                    ? 1.0
-                    : 0.2,
-                child: _buildBttsYes(),
               ),
             ],
           ),
@@ -169,52 +149,6 @@ class MatchListItem extends StatelessWidget {
         ),
         SizedBox(height: 4.0),
         Text("O2.5"),
-      ],
-    );
-  }
-
-  Widget _buildBttsNo() {
-    final checker = BttsNoChecker(match: match);
-    final icon = checker.getPrediction()
-        ? FontAwesomeIcons.solidCheckCircle
-        : FontAwesomeIcons.solidTimesCircle;
-
-    final finishedColor = checker.getPrediction() && match.hasFinalScore()
-        ? Colors.red
-        : Color(0xFF325D79);
-    final color = checker.isPredictionCorrect() ? Colors.green : finishedColor;
-
-    return Column(
-      children: <Widget>[
-        Icon(
-          icon,
-          color: color,
-        ),
-        SizedBox(height: 4.0),
-        Text("BTTSN"),
-      ],
-    );
-  }
-
-  Widget _buildBttsYes() {
-    final checker = BttsYesChecker(match: match);
-    final icon = checker.getPrediction()
-        ? FontAwesomeIcons.solidCheckCircle
-        : FontAwesomeIcons.solidTimesCircle;
-
-    final finishedColor = checker.getPrediction() && match.hasFinalScore()
-        ? Colors.red
-        : Color(0xFF325D79);
-    final color = checker.isPredictionCorrect() ? Colors.green : finishedColor;
-
-    return Column(
-      children: <Widget>[
-        Icon(
-          icon,
-          color: color,
-        ),
-        SizedBox(height: 4.0),
-        Text("BTTSY"),
       ],
     );
   }

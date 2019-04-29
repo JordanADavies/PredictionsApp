@@ -4,8 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/matches/predictions/btts_no_checker.dart';
-import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
@@ -32,14 +30,10 @@ class StatsSelectedLeaguesBloc {
     final winLoseDrawStats = _getWinLoseDrawStats(matches.winLoseDrawMatches);
     final under3Stats = _getUnder3Stats(matches.under3Matches);
     final over2Stats = _getOver2Stats(matches.over2Matches);
-    final bttsNoStats = _getBttsNoStats(matches.bttsNoMatches);
-    final bttsYesStats = _getBttsYesStats(matches.bttsYesMatches);
     return [
       winLoseDrawStats,
       under3Stats,
       over2Stats,
-      bttsNoStats,
-      bttsYesStats,
     ]..sort((left, right) => right.percentage.compareTo(left.percentage));
   }
 
@@ -106,56 +100,6 @@ class StatsSelectedLeaguesBloc {
         : predictedCorrectly.length / predictedMatches.length * 100;
     return PredictionStat(
       type: "Over 2.5",
-      percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
-    );
-  }
-
-  static PredictionStat _getBttsNoStats(List<FootballMatch> matches) {
-    final predictedMatches = matches.where((m) {
-      if (!m.hasFinalScore() || !m.isBeforeToday()) {
-        return false;
-      }
-
-      final checker = BttsNoChecker(match: m);
-      return checker.getPrediction();
-    });
-    final predictedCorrectly = predictedMatches.where((m) {
-      final checker = BttsNoChecker(match: m);
-      return checker.isPredictionCorrect();
-    });
-
-    final percentage = predictedCorrectly.length == 0
-        ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
-    return PredictionStat(
-      type: "BTTS No",
-      percentage: percentage,
-      total: predictedMatches.length,
-      totalCorrect: predictedCorrectly.length,
-    );
-  }
-
-  static PredictionStat _getBttsYesStats(List<FootballMatch> matches) {
-    final predictedMatches = matches.where((m) {
-      if (!m.hasFinalScore() || !m.isBeforeToday()) {
-        return false;
-      }
-
-      final checker = BttsYesChecker(match: m);
-      return checker.getPrediction();
-    });
-    final predictedCorrectly = predictedMatches.where((m) {
-      final checker = BttsYesChecker(match: m);
-      return checker.isPredictionCorrect();
-    });
-
-    final percentage = predictedCorrectly.length == 0
-        ? 0.0
-        : predictedCorrectly.length / predictedMatches.length * 100;
-    return PredictionStat(
-      type: "BTTS Yes",
       percentage: percentage,
       total: predictedMatches.length,
       totalCorrect: predictedCorrectly.length,

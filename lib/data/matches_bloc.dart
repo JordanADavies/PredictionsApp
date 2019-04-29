@@ -3,8 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/api/matches_api.dart';
 import 'package:predictions/data/model/football_match.dart';
-import 'package:predictions/matches/predictions/btts_no_checker.dart';
-import 'package:predictions/matches/predictions/btts_yes_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
@@ -18,18 +16,15 @@ class Matches {
   final List<FootballMatch> winLoseDrawMatches;
   final List<FootballMatch> under3Matches;
   final List<FootballMatch> over2Matches;
-  final List<FootballMatch> bttsNoMatches;
-  final List<FootballMatch> bttsYesMatches;
 
-  Matches(
-      {@required this.allMatches,
-      @required this.thisSeasonsMatches,
-      @required this.groupedMatches,
-      @required this.winLoseDrawMatches,
-      @required this.under3Matches,
-      @required this.over2Matches,
-      @required this.bttsNoMatches,
-      @required this.bttsYesMatches});
+  Matches({
+    @required this.allMatches,
+    @required this.thisSeasonsMatches,
+    @required this.groupedMatches,
+    @required this.winLoseDrawMatches,
+    @required this.under3Matches,
+    @required this.over2Matches,
+  });
 }
 
 class MatchesBloc {
@@ -60,8 +55,6 @@ class MatchesBloc {
       winLoseDrawMatches: _getWinLoseDrawMatches(thisSeasonsMatches),
       under3Matches: _getUnder3Matches(thisSeasonsMatches),
       over2Matches: _getOver2Matches(thisSeasonsMatches),
-      bttsNoMatches: _getBttsNoMatches(thisSeasonsMatches),
-      bttsYesMatches: _getBttsYesMatches(thisSeasonsMatches),
     );
   }
 
@@ -97,21 +90,6 @@ class MatchesBloc {
   static List<FootballMatch> _getOver2Matches(List<FootballMatch> allMatches) {
     return allMatches.where((m) {
       final checker = Over2Checker(match: m);
-      return checker.getPredictionIncludingPerformance();
-    }).toList();
-  }
-
-  static List<FootballMatch> _getBttsNoMatches(List<FootballMatch> allMatches) {
-    return allMatches.where((m) {
-      final checker = BttsNoChecker(match: m);
-      return checker.getPredictionIncludingPerformance();
-    }).toList();
-  }
-
-  static List<FootballMatch> _getBttsYesMatches(
-      List<FootballMatch> allMatches) {
-    return allMatches.where((m) {
-      final checker = BttsYesChecker(match: m);
       return checker.getPredictionIncludingPerformance();
     }).toList();
   }
