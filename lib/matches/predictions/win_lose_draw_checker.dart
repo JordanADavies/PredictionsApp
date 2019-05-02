@@ -1,7 +1,15 @@
 import 'package:meta/meta.dart';
 import 'package:predictions/data/model/football_match.dart';
 
-enum WinLoseDrawResult { HomeWin, Draw, AwayWin, Unknown }
+enum WinLoseDrawResult {
+  HomeWin,
+  HomeWinOrDraw,
+  Draw,
+  AwayWinOrDraw,
+  AwayWin,
+  HomeOrAwayWin,
+  Unknown
+}
 
 class WinLoseDrawChecker {
   final FootballMatch match;
@@ -11,17 +19,26 @@ class WinLoseDrawChecker {
   WinLoseDrawResult getPrediction() {
     if (match.homeWinProbability > match.drawProbability &&
         match.homeWinProbability > match.awayWinProbability) {
-      return WinLoseDrawResult.HomeWin;
+      return match.homeWinProbability >
+              match.drawProbability + match.awayWinProbability
+          ? WinLoseDrawResult.HomeWin
+          : WinLoseDrawResult.AwayWinOrDraw;
     }
 
     if (match.drawProbability > match.homeWinProbability &&
         match.drawProbability > match.awayWinProbability) {
-      return WinLoseDrawResult.Draw;
+      return match.drawProbability >
+              match.homeWinProbability + match.awayWinProbability
+          ? WinLoseDrawResult.Draw
+          : WinLoseDrawResult.HomeOrAwayWin;
     }
 
     if (match.awayWinProbability > match.drawProbability &&
         match.awayWinProbability > match.homeWinProbability) {
-      return WinLoseDrawResult.AwayWin;
+      return match.awayWinProbability >
+              match.drawProbability + match.homeWinProbability
+          ? WinLoseDrawResult.AwayWin
+          : WinLoseDrawResult.HomeWinOrDraw;
     }
 
     return WinLoseDrawResult.Unknown;
@@ -35,10 +52,16 @@ class WinLoseDrawChecker {
     switch (getPrediction()) {
       case WinLoseDrawResult.HomeWin:
         return match.homeFinalScore > match.awayFinalScore;
+      case WinLoseDrawResult.HomeWinOrDraw:
+        return match.homeFinalScore >= match.awayFinalScore;
       case WinLoseDrawResult.Draw:
         return match.homeFinalScore == match.awayFinalScore;
       case WinLoseDrawResult.AwayWin:
         return match.homeFinalScore < match.awayFinalScore;
+      case WinLoseDrawResult.AwayWinOrDraw:
+        return match.homeFinalScore <= match.awayFinalScore;
+      case WinLoseDrawResult.HomeOrAwayWin:
+        return match.homeFinalScore != match.awayFinalScore;
       case WinLoseDrawResult.Unknown:
         return false;
     }

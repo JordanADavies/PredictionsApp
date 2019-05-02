@@ -29,7 +29,7 @@ class StatsAllLeaguesBloc {
 //      value.forEach((s) {
 //        if (s.percentage > 70 || (s.type == "1X2" && s.percentage > 60)) {
 //          print("-- $key");
-//          print("    ${s.type}");
+//          print("    ${s.type} - ${s.percentage}");
 //        }
 //      });
 //    });

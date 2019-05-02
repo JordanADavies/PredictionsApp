@@ -82,8 +82,11 @@ class MatchListItem extends StatelessWidget {
     final checker = WinLoseDrawChecker(match: match);
     final text = {
       WinLoseDrawResult.HomeWin: "1",
+      WinLoseDrawResult.HomeWinOrDraw: "1X",
       WinLoseDrawResult.Draw: "X",
       WinLoseDrawResult.AwayWin: "2",
+      WinLoseDrawResult.AwayWinOrDraw: "X2",
+      WinLoseDrawResult.HomeOrAwayWin: "12",
       WinLoseDrawResult.Unknown: "?"
     }[checker.getPrediction()];
 
