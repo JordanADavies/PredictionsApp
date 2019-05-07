@@ -54,7 +54,13 @@ class MatchListItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               SizedBox(width: 28.0),
-              _buildWinLoseDraw(),
+              Opacity(
+                opacity:
+                    snapshot.data?.winLoseDrawMatches?.contains(match) ?? false
+                        ? 1.0
+                        : 0.2,
+                child: _buildWinLoseDraw(),
+              ),
               SizedBox(width: 28.0),
               Opacity(
                 opacity: snapshot.data?.under3Matches?.contains(match) ?? false
@@ -163,7 +169,7 @@ class MatchListItem extends StatelessWidget {
 
   Widget _buildValue() {
     final checker = ValueChecker(match: match);
-    final value =  checker.getValue();
+    final value = checker.getValue();
 
     return Column(
       children: <Widget>[
@@ -178,7 +184,7 @@ class MatchListItem extends StatelessWidget {
               child: Text(
                 value,
                 style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
 
 enum WinLoseDrawResult {
@@ -42,6 +43,17 @@ class WinLoseDrawChecker {
     }
 
     return WinLoseDrawResult.Unknown;
+  }
+
+  WinLoseDrawResult getPredictionIncludingPerformance() {
+    final prediction = getPrediction();
+    if (prediction == WinLoseDrawResult.Unknown) {
+      return WinLoseDrawResult.Unknown;
+    }
+
+    return highPerformingResultLeagues.contains(match.leagueId)
+        ? prediction
+        : WinLoseDrawResult.Unknown;
   }
 
   bool isPredictionCorrect() {

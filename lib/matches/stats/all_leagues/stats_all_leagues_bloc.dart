@@ -25,14 +25,14 @@ class StatsAllLeaguesBloc {
   void _loadStats(Matches matches) async {
     final statsMap = await compute(_getStats, matches);
 
-//    statsMap.forEach((key, value) {
-//      value.forEach((s) {
-//        if (s.percentage > 70 || (s.type == "1X2" && s.percentage > 60)) {
-//          print("-- $key");
-//          print("    ${s.type} - ${s.percentage}");
-//        }
-//      });
-//    });
+    statsMap.forEach((key, value) {
+      value.forEach((s) {
+        if (s.percentage > 70 || (s.type == "1X2" && s.percentage > 62)) {
+          print("-- $key");
+          print("    ${s.type} - ${s.percentage}");
+        }
+      });
+    });
 
     stats.add(statsMap);
   }
