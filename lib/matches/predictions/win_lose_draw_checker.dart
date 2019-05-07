@@ -22,33 +22,42 @@ class WinLoseDrawChecker {
         match.homeWinProbability > match.awayWinProbability) {
       return match.homeWinProbability >= 0.60
           ? WinLoseDrawResult.HomeWin
-          : _findMostLikelyResult();
+          : _findMostLikelyResult(match.homeWinProbability);
     }
 
     if (match.drawProbability > match.homeWinProbability &&
         match.drawProbability > match.awayWinProbability) {
       return match.drawProbability >= 0.60
           ? WinLoseDrawResult.Draw
-          : _findMostLikelyResult();
+          : _findMostLikelyResult(match.drawProbability);
     }
 
     if (match.awayWinProbability > match.drawProbability &&
         match.awayWinProbability > match.homeWinProbability) {
       return match.awayWinProbability >= 0.60
           ? WinLoseDrawResult.AwayWin
-          : _findMostLikelyResult();
+          : _findMostLikelyResult(match.awayWinProbability);
     }
 
     return WinLoseDrawResult.Unknown;
   }
 
-  WinLoseDrawResult _findMostLikelyResult() {
-    if (match.homeWinProbability + match.drawProbability >= 0.60) {
+  WinLoseDrawResult _findMostLikelyResult(double highestProbability) {
+    if (match.homeWinProbability == highestProbability &&
+        match.homeWinProbability + match.drawProbability >= 0.60) {
       return WinLoseDrawResult.HomeWinOrDraw;
     }
 
-    if (match.awayWinProbability + match.drawProbability >= 0.60) {
+    if (match.awayWinProbability == highestProbability &&
+        match.awayWinProbability + match.drawProbability >= 0.60) {
       return WinLoseDrawResult.AwayWinOrDraw;
+    }
+
+    if (match.drawProbability == highestProbability) {
+      return match.drawProbability + match.homeWinProbability >
+              match.drawProbability + match.awayWinProbability
+          ? WinLoseDrawResult.HomeWinOrDraw
+          : WinLoseDrawResult.AwayWinOrDraw;
     }
 
     return WinLoseDrawResult.Unknown;

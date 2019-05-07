@@ -24,16 +24,7 @@ class StatsAllLeaguesBloc {
 
   void _loadStats(Matches matches) async {
     final statsMap = await compute(_getStats, matches);
-
-    statsMap.forEach((key, value) {
-      value.forEach((s) {
-        if (s.percentage > 70) {
-          print("-- $key");
-          print("    ${s.type} - ${s.percentage}");
-        }
-      });
-    });
-
+//    _printDebugStuff(statsMap);
     stats.add(statsMap);
   }
 
@@ -121,5 +112,33 @@ class StatsAllLeaguesBloc {
       total: predictedMatches.length,
       totalCorrect: predictedCorrectly.length,
     );
+  }
+
+  void _printDebugStuff(Map<String, List<PredictionStat>> statsMap) {
+    final results = [];
+    final unders = [];
+    final overs = [];
+    statsMap.forEach((key, value) {
+      value.forEach((s) {
+        if (s.type == "1X2" && s.percentage > 72) {
+          results.add(key);
+        }
+
+        if (s.type == "Under 2.5" && s.percentage > 70) {
+          unders.add(key);
+        }
+
+        if (s.type == "Over 2.5" && s.percentage > 70) {
+          overs.add(key);
+        }
+      });
+    });
+
+    print("Results");
+    results.forEach((r) => print("    $r"));
+    print("Unders");
+    unders.forEach((u) => print("    $u"));
+    print("Overs");
+    overs.forEach((o) => print("    $o"));
   }
 }
