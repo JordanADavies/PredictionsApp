@@ -20,26 +20,35 @@ class WinLoseDrawChecker {
   WinLoseDrawResult getPrediction() {
     if (match.homeWinProbability > match.drawProbability &&
         match.homeWinProbability > match.awayWinProbability) {
-      return match.homeWinProbability >
-              match.drawProbability + match.awayWinProbability
+      return match.homeWinProbability >= 0.60
           ? WinLoseDrawResult.HomeWin
-          : WinLoseDrawResult.AwayWinOrDraw;
+          : _findMostLikelyResult();
     }
 
     if (match.drawProbability > match.homeWinProbability &&
         match.drawProbability > match.awayWinProbability) {
-      return match.drawProbability >
-              match.homeWinProbability + match.awayWinProbability
+      return match.drawProbability >= 0.60
           ? WinLoseDrawResult.Draw
-          : WinLoseDrawResult.HomeOrAwayWin;
+          : _findMostLikelyResult();
     }
 
     if (match.awayWinProbability > match.drawProbability &&
         match.awayWinProbability > match.homeWinProbability) {
-      return match.awayWinProbability >
-              match.drawProbability + match.homeWinProbability
+      return match.awayWinProbability >= 0.60
           ? WinLoseDrawResult.AwayWin
-          : WinLoseDrawResult.HomeWinOrDraw;
+          : _findMostLikelyResult();
+    }
+
+    return WinLoseDrawResult.Unknown;
+  }
+
+  WinLoseDrawResult _findMostLikelyResult() {
+    if (match.homeWinProbability + match.drawProbability >= 0.60) {
+      return WinLoseDrawResult.HomeWinOrDraw;
+    }
+
+    if (match.awayWinProbability + match.drawProbability >= 0.60) {
+      return WinLoseDrawResult.AwayWinOrDraw;
     }
 
     return WinLoseDrawResult.Unknown;
