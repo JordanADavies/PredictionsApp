@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
 
 enum WinLoseDrawResult {
@@ -19,9 +20,15 @@ class WinLoseDrawChecker {
   WinLoseDrawResult getPrediction() {
     if (match.homeWinProbability > match.drawProbability &&
         match.homeWinProbability > match.awayWinProbability) {
-      return awayTeamMoreLikelyToWin()
-          ? WinLoseDrawResult.AwayWinOrDraw
-          : WinLoseDrawResult.HomeWin;
+      if (awayTeamMoreLikelyToWin()) {
+        return WinLoseDrawResult.AwayWinOrDraw;
+      }
+
+      if (match.homeWinProbability + match.drawProbability < 0.65) {
+        return WinLoseDrawResult.HomeWinOrDraw;
+      }
+
+      return WinLoseDrawResult.HomeWin;
     }
 
     if (match.drawProbability > match.homeWinProbability &&
@@ -31,18 +38,23 @@ class WinLoseDrawChecker {
 
     if (match.awayWinProbability > match.drawProbability &&
         match.awayWinProbability > match.homeWinProbability) {
-      return homeTeamMoreLikelyToWin()
-          ? WinLoseDrawResult.HomeWinOrDraw
-          : WinLoseDrawResult.AwayWin;
+      if (homeTeamMoreLikelyToWin()) {
+        return WinLoseDrawResult.HomeWinOrDraw;
+      }
+
+      if (match.awayWinProbability + match.drawProbability < 0.65) {
+        return WinLoseDrawResult.AwayWinOrDraw;
+      }
+
+      return WinLoseDrawResult.AwayWin;
     }
 
     return WinLoseDrawResult.Unknown;
   }
 
   bool awayTeamMoreLikelyToWin() {
-    if ((match.homeImportance >= match.awayImportance &&
-            match.homeSpiRating >= match.awaySpiRating) ||
-        match.homeSpiRating > match.awaySpiRating + 10) {
+    if ((match.homeImportance > match.awayImportance &&
+            match.homeSpiRating > match.awaySpiRating)) {
       return false;
     }
 
@@ -50,9 +62,8 @@ class WinLoseDrawChecker {
   }
 
   bool homeTeamMoreLikelyToWin() {
-    if ((match.awayImportance >= match.homeImportance &&
-            match.awaySpiRating >= match.homeSpiRating) ||
-        match.awaySpiRating > match.homeSpiRating + 10) {
+    if ((match.awayImportance > match.homeImportance &&
+            match.awaySpiRating > match.homeSpiRating)) {
       return false;
     }
 
@@ -60,7 +71,9 @@ class WinLoseDrawChecker {
   }
 
   WinLoseDrawResult getPredictionIncludingPerformance() {
-    if ((match.homeImportance < 1.0 && match.awayImportance < 1.0) ||
+    if (!highPerformingResultLeagues.contains(match.leagueId) ||
+        match.homeImportance == 0.0 ||
+        match.awayImportance == 0.0 ||
         match.homeWinProbability > 0.60 ||
         match.drawProbability > 0.60 ||
         match.awayWinProbability > 0.60) {

@@ -24,7 +24,7 @@ class StatsAllLeaguesBloc {
 
   void _loadStats(Matches matches) async {
     final statsMap = await compute(_getStats, matches);
-//    _printDebugStuff(statsMap);
+    _printDebugStuff(statsMap);
     stats.add(statsMap);
   }
 
@@ -120,7 +120,7 @@ class StatsAllLeaguesBloc {
     final overs = [];
     statsMap.forEach((key, value) {
       value.forEach((s) {
-        if (s.type == "1X2" && s.percentage > 72) {
+        if (s.type == "1X2" && s.percentage > 55) {
           results.add(key);
         }
 
