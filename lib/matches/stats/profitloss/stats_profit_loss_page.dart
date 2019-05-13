@@ -20,9 +20,9 @@ class _StatsProfitLossPageState extends State<StatsProfitLossPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<double>(
+    return StreamBuilder<ProfitLoss>(
       stream: _statsBloc.profitLoss.stream,
-      builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<ProfitLoss> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -32,11 +32,31 @@ class _StatsProfitLossPageState extends State<StatsProfitLossPage> {
     );
   }
 
-  Widget _buildProfitLoss(double profitLoss) {
+  Widget _buildProfitLoss(ProfitLoss profitLoss) {
     return Center(
-      child: Text(
-        "${profitLoss.toStringAsFixed(2)}u",
-        style: TextStyle(fontSize: 32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Won: ${profitLoss.won}",
+            style: TextStyle(fontSize: 30.0),
+          ),
+          Divider(),
+          Text(
+            "Lost: ${profitLoss.lost}",
+            style: TextStyle(fontSize: 30.0),
+          ),
+          Divider(),
+          Text(
+            "Total: ${profitLoss.profitLoss.toStringAsFixed(2)}u",
+            style: TextStyle(fontSize: 32.0),
+          ),
+          Divider(),
+          Text(
+            "ROI: ${profitLoss.roi.toStringAsFixed(2)}%",
+            style: TextStyle(fontSize: 32.0),
+          ),
+        ],
       ),
     );
   }

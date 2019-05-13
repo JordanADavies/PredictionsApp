@@ -5,8 +5,23 @@ import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/matches/predictions/value_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
 
+class ProfitLoss {
+  final double profitLoss;
+  final int won;
+  final int lost;
+  final double roi;
+
+  ProfitLoss(
+    this.profitLoss,
+    this.won,
+    this.lost,
+    this.roi,
+  );
+}
+
 class StatsProfitLossBloc {
-  final StreamController<double> profitLoss = StreamController<double>();
+  final StreamController<ProfitLoss> profitLoss =
+      StreamController<ProfitLoss>();
 
   void dispose() {
     profitLoss.close();
@@ -21,17 +36,27 @@ class StatsProfitLossBloc {
         .where((m) => m.hasFinalScore() && m.isBeforeToday())
         .toList();
 
-    double resultTotal = 0;
+    double total = 0;
+    int won = 0;
+    int lost = 0;
     predictedMatches.forEach((m) {
       final resultChecker = WinLoseDrawChecker(match: m);
       if (resultChecker.isPredictionCorrect()) {
         final value = double.parse(ValueChecker(match: m).getValue());
-        resultTotal += value;
+        total += value;
+        won += 1;
       } else {
-        resultTotal -= 1;
+        total -= 1;
+        lost += 1;
       }
     });
 
-    profitLoss.add(resultTotal);
+    final result = ProfitLoss(
+      total,
+      won,
+      lost,
+      (total - won) / won,
+    );
+    profitLoss.add(result);
   }
 }
