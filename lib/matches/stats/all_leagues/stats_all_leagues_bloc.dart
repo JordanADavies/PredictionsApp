@@ -24,7 +24,7 @@ class StatsAllLeaguesBloc {
 
   void _loadStats(Matches matches) async {
     final statsMap = await compute(_getStats, matches);
-    _printDebugStuff(statsMap);
+    //_printDebugStuff(statsMap);
     stats.add(statsMap);
   }
 
