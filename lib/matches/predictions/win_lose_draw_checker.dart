@@ -40,12 +40,8 @@ class WinLoseDrawChecker {
   }
 
   bool awayTeamMoreLikelyToWin() {
-    if (match.homeWinProbability > 0.60) {
-      return false;
-    }
-
     if ((match.homeImportance >= match.awayImportance &&
-            match.homeSpiRating + 1.5 >= match.awaySpiRating) ||
+            match.homeSpiRating >= match.awaySpiRating) ||
         match.homeSpiRating > match.awaySpiRating + 10) {
       return false;
     }
@@ -54,12 +50,8 @@ class WinLoseDrawChecker {
   }
 
   bool homeTeamMoreLikelyToWin() {
-    if (match.awayWinProbability > 0.60) {
-      return false;
-    }
-
     if ((match.awayImportance >= match.homeImportance &&
-            match.awaySpiRating + 1.5 >= match.homeSpiRating) ||
+            match.awaySpiRating >= match.homeSpiRating) ||
         match.awaySpiRating > match.homeSpiRating + 10) {
       return false;
     }
@@ -68,17 +60,31 @@ class WinLoseDrawChecker {
   }
 
   WinLoseDrawResult getPredictionIncludingPerformance() {
-    final matchIsOneSided = (match.homeSpiRating > match.awaySpiRating &&
-            match.homeImportance > match.awayImportance) ||
-        (match.awaySpiRating > match.homeSpiRating &&
-            match.awayImportance > match.homeImportance);
-    if (match.homeImportance > 1.0 &&
-        match.awayImportance > 1.0 &&
-        matchIsOneSided) {
-      return getPrediction();
+    if ((match.homeImportance < 1.0 && match.awayImportance < 1.0) ||
+        match.homeWinProbability > 0.60 ||
+        match.drawProbability > 0.60 ||
+        match.awayWinProbability > 0.60) {
+      return WinLoseDrawResult.Unknown;
     }
 
-    return WinLoseDrawResult.Unknown;
+    final prediction = getPrediction();
+    if (prediction == WinLoseDrawResult.HomeWin ||
+        prediction == WinLoseDrawResult.HomeWinOrDraw) {
+      return match.homeSpiRating > match.awaySpiRating &&
+              match.homeImportance > match.awayImportance
+          ? prediction
+          : WinLoseDrawResult.Unknown;
+    }
+
+    if (prediction == WinLoseDrawResult.AwayWin ||
+        prediction == WinLoseDrawResult.AwayWinOrDraw) {
+      return match.awaySpiRating > match.homeSpiRating &&
+              match.awayImportance > match.homeImportance
+          ? prediction
+          : WinLoseDrawResult.Unknown;
+    }
+
+    return prediction;
   }
 
   bool isPredictionCorrect() {
