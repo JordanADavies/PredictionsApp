@@ -14,7 +14,7 @@ class StatsPage extends StatelessWidget {
           elevation: 0.0,
         ),
         body: DefaultTabController(
-          length: 4,
+          length: 2,
           child: Column(
             children: <Widget>[
               TabBar(

@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:predictions/data/leagues.dart';
 import 'package:predictions/data/model/football_match.dart';
 
 enum WinLoseDrawResult {
@@ -20,58 +19,66 @@ class WinLoseDrawChecker {
   WinLoseDrawResult getPrediction() {
     if (match.homeWinProbability > match.drawProbability &&
         match.homeWinProbability > match.awayWinProbability) {
-      return match.homeWinProbability >= 0.60
-          ? WinLoseDrawResult.HomeWin
-          : _findMostLikelyResult(match.homeWinProbability);
+      return awayTeamMoreLikelyToWin()
+          ? WinLoseDrawResult.AwayWinOrDraw
+          : WinLoseDrawResult.HomeWin;
     }
 
     if (match.drawProbability > match.homeWinProbability &&
         match.drawProbability > match.awayWinProbability) {
-      return match.drawProbability >= 0.60
-          ? WinLoseDrawResult.Draw
-          : _findMostLikelyResult(match.drawProbability);
+      return WinLoseDrawResult.Draw;
     }
 
     if (match.awayWinProbability > match.drawProbability &&
         match.awayWinProbability > match.homeWinProbability) {
-      return match.awayWinProbability >= 0.60
-          ? WinLoseDrawResult.AwayWin
-          : _findMostLikelyResult(match.awayWinProbability);
+      return homeTeamMoreLikelyToWin()
+          ? WinLoseDrawResult.HomeWinOrDraw
+          : WinLoseDrawResult.AwayWin;
     }
 
     return WinLoseDrawResult.Unknown;
   }
 
-  WinLoseDrawResult _findMostLikelyResult(double highestProbability) {
-    if (match.homeWinProbability == highestProbability &&
-        match.homeWinProbability + match.drawProbability >= 0.60) {
-      return WinLoseDrawResult.HomeWinOrDraw;
+  bool awayTeamMoreLikelyToWin() {
+    if (match.homeWinProbability > 0.60) {
+      return false;
     }
 
-    if (match.awayWinProbability == highestProbability &&
-        match.awayWinProbability + match.drawProbability >= 0.60) {
-      return WinLoseDrawResult.AwayWinOrDraw;
+    if ((match.homeImportance >= match.awayImportance &&
+            match.homeSpiRating + 1.5 >= match.awaySpiRating) ||
+        match.homeSpiRating > match.awaySpiRating + 10) {
+      return false;
     }
 
-    if (match.drawProbability == highestProbability) {
-      return match.drawProbability + match.homeWinProbability >
-              match.drawProbability + match.awayWinProbability
-          ? WinLoseDrawResult.HomeWinOrDraw
-          : WinLoseDrawResult.AwayWinOrDraw;
+    return true;
+  }
+
+  bool homeTeamMoreLikelyToWin() {
+    if (match.awayWinProbability > 0.60) {
+      return false;
     }
 
-    return WinLoseDrawResult.Unknown;
+    if ((match.awayImportance >= match.homeImportance &&
+            match.awaySpiRating + 1.5 >= match.homeSpiRating) ||
+        match.awaySpiRating > match.homeSpiRating + 10) {
+      return false;
+    }
+
+    return true;
   }
 
   WinLoseDrawResult getPredictionIncludingPerformance() {
-    final prediction = getPrediction();
-    if (prediction == WinLoseDrawResult.Unknown) {
-      return WinLoseDrawResult.Unknown;
+    final matchIsOneSided = (match.homeSpiRating > match.awaySpiRating &&
+            match.homeImportance > match.awayImportance) ||
+        (match.awaySpiRating > match.homeSpiRating &&
+            match.awayImportance > match.homeImportance);
+    if (match.homeImportance > 1.0 &&
+        match.awayImportance > 1.0 &&
+        matchIsOneSided) {
+      return getPrediction();
     }
 
-    return highPerformingResultLeagues.contains(match.leagueId)
-        ? prediction
-        : WinLoseDrawResult.Unknown;
+    return WinLoseDrawResult.Unknown;
   }
 
   bool isPredictionCorrect() {
