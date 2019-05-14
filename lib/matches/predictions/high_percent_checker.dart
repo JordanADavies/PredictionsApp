@@ -31,15 +31,28 @@ class HighPercentChecker {
       return HighPercentResult.AwayWin;
     }
 
-    if (match.homeWinProbability + match.drawProbability > THRESHOLD) {
+    final homeOrDrawProbability =
+        match.homeWinProbability + match.drawProbability;
+    final homeOrAwayProbability =
+        match.homeWinProbability + match.awayWinProbability;
+    final awayOrDrawProbability =
+        match.awayWinProbability + match.drawProbability;
+
+    if (homeOrDrawProbability > THRESHOLD &&
+        homeOrDrawProbability > homeOrAwayProbability &&
+        homeOrDrawProbability > awayOrDrawProbability) {
       return HighPercentResult.HomeWinOrDraw;
     }
 
-    if (match.homeWinProbability + match.awayWinProbability > THRESHOLD) {
+    if (homeOrAwayProbability > THRESHOLD &&
+        homeOrAwayProbability > homeOrDrawProbability &&
+        homeOrAwayProbability > awayOrDrawProbability) {
       return HighPercentResult.HomeOrAwayWin;
     }
 
-    if (match.awayWinProbability + match.drawProbability > THRESHOLD) {
+    if (awayOrDrawProbability > THRESHOLD &&
+        awayOrDrawProbability > homeOrDrawProbability &&
+        awayOrDrawProbability > homeOrAwayProbability) {
       return HighPercentResult.AwayWinOrDraw;
     }
 
