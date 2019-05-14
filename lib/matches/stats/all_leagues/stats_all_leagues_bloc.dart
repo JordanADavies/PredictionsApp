@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/model/football_match.dart';
+import 'package:predictions/matches/predictions/high_percent_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
 import 'package:predictions/matches/predictions/win_lose_draw_checker.dart';
@@ -36,10 +37,12 @@ class StatsAllLeaguesBloc {
 
   static List<PredictionStat> _getLeagueStats(List<FootballMatch> matches) {
     final winLoseDrawStats = _getWinLoseDrawStats(matches);
+    final highPercentStats = _getHighPercentStats(matches);
     final under3Stats = _getUnder3Stats(matches);
     final over2Stats = _getOver2Stats(matches);
     return [
       winLoseDrawStats,
+      highPercentStats,
       under3Stats,
       over2Stats,
     ]..sort((left, right) => right.percentage.compareTo(left.percentage));
@@ -58,6 +61,31 @@ class StatsAllLeaguesBloc {
         : predictedCorrectly.length / predictedMatches.length * 100;
     return PredictionStat(
       type: "1X2",
+      percentage: percentage,
+      total: predictedMatches.length,
+      totalCorrect: predictedCorrectly.length,
+    );
+  }
+
+  static PredictionStat _getHighPercentStats(List<FootballMatch> matches) {
+    final predictedMatches = matches.where((m) {
+      if (!m.hasFinalScore() || !m.isBeforeToday()) {
+        return false;
+      }
+
+      final checker = HighPercentChecker(match: m);
+      return checker.getPrediction() != HighPercentResult.Unknown;
+    });
+    final predictedCorrectly = matches.where((m) {
+      final checker = HighPercentChecker(match: m);
+      return checker.isPredictionCorrect();
+    });
+
+    final percentage = predictedCorrectly.length == 0
+        ? 0.0
+        : predictedCorrectly.length / predictedMatches.length * 100;
+    return PredictionStat(
+      type: "High",
       percentage: percentage,
       total: predictedMatches.length,
       totalCorrect: predictedCorrectly.length,
