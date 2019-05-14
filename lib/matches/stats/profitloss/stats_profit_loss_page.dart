@@ -20,9 +20,10 @@ class _StatsProfitLossPageState extends State<StatsProfitLossPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProfitLoss>(
+    return StreamBuilder<List<ProfitLoss>>(
       stream: _statsBloc.profitLoss.stream,
-      builder: (BuildContext context, AsyncSnapshot<ProfitLoss> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ProfitLoss>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -32,29 +33,46 @@ class _StatsProfitLossPageState extends State<StatsProfitLossPage> {
     );
   }
 
-  Widget _buildProfitLoss(ProfitLoss profitLoss) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildProfitLoss(List<ProfitLoss> profitLoss) {
+    return ListView(
+      padding: EdgeInsets.all(12.0),
+      children: profitLoss.map((p) => _buildProfitLossItem(p)).toList(),
+    );
+  }
+
+  Widget _buildProfitLossItem(ProfitLoss profitLoss) {
+    return ListTile(
+      contentPadding: EdgeInsets.all(12.0),
+      title: Text(
+        profitLoss.type,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 17.0,
+        ),
+      ),
+      trailing: Text(
+        "${profitLoss.roi.toStringAsFixed(2)}%",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.0,
+        ),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Won: ${profitLoss.won}",
-            style: TextStyle(fontSize: 30.0),
+            style: TextStyle(fontSize: 16.0),
           ),
-          Divider(),
+          SizedBox(height: 4.0),
           Text(
             "Lost: ${profitLoss.lost}",
-            style: TextStyle(fontSize: 30.0),
+            style: TextStyle(fontSize: 16.0),
           ),
-          Divider(),
+          SizedBox(height: 4.0),
           Text(
             "Total: ${profitLoss.profitLoss.toStringAsFixed(2)}u",
-            style: TextStyle(fontSize: 32.0),
-          ),
-          Divider(),
-          Text(
-            "ROI: ${profitLoss.roi.toStringAsFixed(2)}%",
-            style: TextStyle(fontSize: 32.0),
+            style: TextStyle(fontSize: 16.0),
           ),
         ],
       ),

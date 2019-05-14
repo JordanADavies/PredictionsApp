@@ -4,6 +4,7 @@ import 'package:predictions/data/matches_bloc.dart';
 import 'package:predictions/data/matches_provider.dart';
 import 'package:predictions/data/model/football_match.dart';
 import 'package:predictions/matches/match_details/match_details_page.dart';
+import 'package:predictions/matches/predictions/high_percent_checker.dart';
 import 'package:predictions/matches/predictions/over_2_checker.dart';
 import 'package:predictions/matches/predictions/under_3_checker.dart';
 import 'package:predictions/matches/predictions/value_checker.dart';
@@ -63,6 +64,15 @@ class MatchListItem extends StatelessWidget {
               ),
               SizedBox(width: 28.0),
               Opacity(
+                opacity:
+                    snapshot.data?.highPercentChanceMatches?.contains(match) ??
+                            false
+                        ? 1.0
+                        : 0.2,
+                child: _buildHighPercentChance(),
+              ),
+              SizedBox(width: 28.0),
+              Opacity(
                 opacity: snapshot.data?.under3Matches?.contains(match) ?? false
                     ? 1.0
                     : 0.2,
@@ -76,7 +86,7 @@ class MatchListItem extends StatelessWidget {
                 child: _buildOver2(),
               ),
               SizedBox(width: 28.0),
-              _buildValue(),
+              _buildValue(snapshot.data),
             ],
           ),
         );
@@ -117,6 +127,43 @@ class MatchListItem extends StatelessWidget {
         ),
         SizedBox(height: 4.0),
         Text("1X2"),
+      ],
+    );
+  }
+
+  Widget _buildHighPercentChance() {
+    final checker = HighPercentChecker(match: match);
+    final text = {
+      HighPercentResult.HomeWin: "1",
+      HighPercentResult.HomeWinOrDraw: "1X",
+      HighPercentResult.Draw: "X",
+      HighPercentResult.AwayWin: "2",
+      HighPercentResult.AwayWinOrDraw: "X2",
+      HighPercentResult.HomeOrAwayWin: "12",
+      HighPercentResult.Unknown: "?"
+    }[checker.getPrediction()];
+
+    return Column(
+      children: <Widget>[
+        Container(
+          width: 23,
+          height: 23,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: checker.isPredictionCorrect()
+                ? Colors.green
+                : match.hasFinalScore() ? Colors.red : Color(0xFF325D79),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
+            ),
+          ),
+        ),
+        SizedBox(height: 4.0),
+        Text("High"),
       ],
     );
   }
@@ -167,9 +214,11 @@ class MatchListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildValue() {
+  Widget _buildValue(Matches matches) {
     final checker = ValueChecker(match: match);
-    final value = checker.getValue();
+    final value = matches?.highPercentChanceMatches?.contains(match) ?? false
+        ? checker.getHighChanceValue()
+        : checker.getWinLoseDrawValue();
 
     return Column(
       children: <Widget>[
