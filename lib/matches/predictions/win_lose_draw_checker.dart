@@ -53,21 +53,21 @@ class WinLoseDrawChecker {
   }
 
   bool awayTeamMoreLikelyToWin() {
-    if ((match.homeImportance > match.awayImportance &&
-            match.homeSpiRating > match.awaySpiRating)) {
-      return false;
+    if ((match.awayImportance > match.homeImportance &&
+            match.awaySpiRating > match.homeSpiRating)) {
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   bool homeTeamMoreLikelyToWin() {
-    if ((match.awayImportance > match.homeImportance &&
-            match.awaySpiRating > match.homeSpiRating)) {
-      return false;
+    if ((match.homeImportance > match.awayImportance &&
+            match.homeSpiRating > match.awaySpiRating)) {
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   WinLoseDrawResult getPredictionIncludingPerformance() {
