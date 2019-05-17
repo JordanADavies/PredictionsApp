@@ -33,7 +33,10 @@ class WinLoseDrawChecker {
 
     if (match.drawProbability > match.homeWinProbability &&
         match.drawProbability > match.awayWinProbability) {
-      return WinLoseDrawResult.Draw;
+      return match.drawProbability + match.homeWinProbability >
+              match.drawProbability + match.awayWinProbability
+          ? WinLoseDrawResult.HomeWinOrDraw
+          : WinLoseDrawResult.AwayWinOrDraw;
     }
 
     if (match.awayWinProbability > match.drawProbability &&
@@ -54,7 +57,7 @@ class WinLoseDrawChecker {
 
   bool awayTeamMoreLikelyToWin() {
     if ((match.awayImportance > match.homeImportance &&
-            match.awaySpiRating > match.homeSpiRating)) {
+        match.awaySpiRating > match.homeSpiRating)) {
       return true;
     }
 
@@ -63,7 +66,7 @@ class WinLoseDrawChecker {
 
   bool homeTeamMoreLikelyToWin() {
     if ((match.homeImportance > match.awayImportance &&
-            match.homeSpiRating > match.awaySpiRating)) {
+        match.homeSpiRating > match.awaySpiRating)) {
       return true;
     }
 
